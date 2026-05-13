@@ -13,6 +13,8 @@
       --line: #dfe4ec;
       --blue: #2563eb;
       --green: #0f9f6e;
+      --yellow: #f4b740;
+      --coral: #d95f59;
     }
 
     * {
@@ -104,18 +106,33 @@
       letter-spacing: 0;
     }
 
-    .empty-state {
+    .game-grid {
       display: grid;
-      gap: 14px;
-      max-width: 680px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .game-card {
+      display: grid;
+      gap: 18px;
+      min-height: 260px;
       padding: 28px;
       border: 1px solid var(--line);
       border-radius: 8px;
       background: var(--panel);
       box-shadow: 0 18px 40px rgba(23, 32, 51, 0.08);
+      color: inherit;
+      text-decoration: none;
+      transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
     }
 
-    .empty-art {
+    .game-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(37, 99, 235, 0.38);
+      box-shadow: 0 24px 52px rgba(23, 32, 51, 0.13);
+    }
+
+    .game-art {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 8px;
@@ -124,20 +141,42 @@
       min-height: 72px;
     }
 
-    .tile {
+    .word-block {
       min-height: 48px;
       border-radius: 8px;
-      border: 1px dashed rgba(37, 99, 235, 0.42);
-      background: rgba(37, 99, 235, 0.07);
+      border: 1px solid rgba(37, 99, 235, 0.28);
+      background: rgba(37, 99, 235, 0.1);
     }
 
-    .tile:nth-child(2),
-    .tile:nth-child(4) {
-      background: rgba(15, 159, 110, 0.08);
-      border-color: rgba(15, 159, 110, 0.42);
+    .word-block:nth-child(1) {
+      height: 44px;
     }
 
-    .empty-state p {
+    .word-block:nth-child(2) {
+      height: 62px;
+      background: rgba(15, 159, 110, 0.12);
+      border-color: rgba(15, 159, 110, 0.3);
+    }
+
+    .word-block:nth-child(3) {
+      height: 76px;
+      background: rgba(244, 183, 64, 0.18);
+      border-color: rgba(244, 183, 64, 0.36);
+    }
+
+    .word-block:nth-child(4) {
+      height: 54px;
+      background: rgba(217, 95, 89, 0.11);
+      border-color: rgba(217, 95, 89, 0.3);
+    }
+
+    .game-card h3 {
+      margin: 0 0 8px;
+      font-size: 1.45rem;
+      letter-spacing: 0;
+    }
+
+    .game-card p {
       margin: 0;
       color: var(--muted);
       line-height: 1.55;
@@ -189,7 +228,7 @@
           <p class="subtitle">Short browser games for private English lessons, with student results sent to the teacher sheet.</p>
         </div>
       </div>
-      <div class="status">Ready for first game</div>
+      <div class="status">1 game ready</div>
     </header>
 
     <main>
@@ -197,22 +236,25 @@
         <h2>Game Library</h2>
       </div>
 
-      <div class="empty-state">
-        <div class="empty-art" aria-hidden="true">
-          <div class="tile"></div>
-          <div class="tile"></div>
-          <div class="tile"></div>
-          <div class="tile"></div>
-        </div>
-        <div>
-          <h3>No games published yet</h3>
-          <p>New games will appear here after they are added to the project. Each game can still use the same Google Sheet submission backend.</p>
-        </div>
-        <div class="meta">
-          <span class="tag">Fresh start</span>
-          <span class="tag">Google Sheets ready</span>
-          <span class="tag">GitHub Pages ready</span>
-        </div>
+      <div class="game-grid">
+        <a class="game-card" href="games/word-order-workshop/">
+          <div class="game-art" aria-hidden="true">
+            <div class="word-block"></div>
+            <div class="word-block"></div>
+            <div class="word-block"></div>
+            <div class="word-block"></div>
+          </div>
+          <div>
+            <h3>Word Order Workshop</h3>
+            <p>A1 practice for subject + verb, verb + object, frequency adverbs, and place before time.</p>
+          </div>
+          <div class="meta">
+            <span class="tag">Grammar</span>
+            <span class="tag">20 questions</span>
+            <span class="tag">Results tracked</span>
+            <span class="open">Open</span>
+          </div>
+        </a>
       </div>
     </main>
   </div>

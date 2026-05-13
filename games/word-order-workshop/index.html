@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Word Order Workshop</title>
+  <style>
+    :root {
+      --ink: #182235;
+      --muted: #667085;
+      --paper: #f8f5ee;
+      --panel: #ffffff;
+      --line: #d8dee8;
+      --blue: #2f6feb;
+      --green: #12805c;
+      --yellow: #f4b740;
+      --coral: #d95f59;
+      --soft-blue: #eaf1ff;
+      --soft-green: #e8f6ef;
+      --soft-yellow: #fff6dd;
+      --soft-coral: #fff0ee;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        linear-gradient(180deg, rgba(47, 111, 235, 0.08), rgba(18, 128, 92, 0.08)),
+        var(--paper);
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .shell {
+      width: min(1080px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 20px 0 42px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      padding: 14px 0 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .mark {
+      display: grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 8px;
+      color: white;
+      background: var(--ink);
+      font-weight: 900;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      margin-bottom: 4px;
+      font-size: clamp(1.7rem, 4vw, 3rem);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    .subtitle,
+    .muted {
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .status-pill {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 10px 14px;
+      background: rgba(255, 255, 255, 0.75);
+      color: var(--muted);
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: 0 22px 60px rgba(24, 34, 53, 0.1);
+      overflow: hidden;
+    }
+
+    .screen {
+      display: none;
+      padding: clamp(20px, 4vw, 34px);
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    .start-layout {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 26px;
+      align-items: center;
+    }
+
+    .word-board {
+      display: grid;
+      gap: 10px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--soft-blue), var(--soft-green));
+    }
+
+    .sentence-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      min-height: 54px;
+      padding: 10px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.82);
+      border: 1px solid rgba(24, 34, 53, 0.09);
+    }
+
+    .word-tile {
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: white;
+      border: 1px solid var(--line);
+      font-weight: 900;
+      box-shadow: 0 8px 18px rgba(24, 34, 53, 0.08);
+    }
+
+    .word-tile.subject {
+      background: var(--soft-blue);
+      color: #184fc2;
+    }
+
+    .word-tile.verb {
+      background: var(--soft-green);
+      color: var(--green);
+    }
+
+    .word-tile.object {
+      background: var(--soft-yellow);
+      color: #8a5a00;
+    }
+
+    .word-tile.extra {
+      background: var(--soft-coral);
+      color: var(--coral);
+    }
+
+    .start-form {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    input {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px 15px;
+      color: var(--ink);
+      background: white;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: rgba(47, 111, 235, 0.8);
+      box-shadow: 0 0 0 4px rgba(47, 111, 235, 0.14);
+    }
+
+    .button {
+      border: 0;
+      border-radius: 8px;
+      padding: 14px 18px;
+      color: white;
+      background: var(--blue);
+      font-weight: 900;
+      cursor: pointer;
+      transition: transform 160ms ease, filter 160ms ease;
+    }
+
+    .button:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.04);
+    }
+
+    .button.secondary {
+      color: var(--ink);
+      background: var(--soft-blue);
+      border: 1px solid rgba(47, 111, 235, 0.22);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .stat {
+      padding: 14px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: white;
+    }
+
+    .stat span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .stat strong {
+      display: block;
+      margin-top: 5px;
+      font-size: 1.2rem;
+    }
+
+    .progress {
+      height: 12px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #e7ecf4;
+      margin-bottom: 22px;
+    }
+
+    #progress-fill {
+      width: 0;
+      height: 100%;
+      background: linear-gradient(90deg, var(--green), var(--blue));
+      transition: width 240ms ease;
+    }
+
+    .question-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 10px;
+      color: var(--muted);
+      background: white;
+      font-size: 0.86rem;
+      font-weight: 800;
+    }
+
+    .question {
+      margin-bottom: 18px;
+      font-size: clamp(1.35rem, 3vw, 2.1rem);
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    .answers {
+      display: grid;
+      gap: 10px;
+    }
+
+    .answer {
+      width: 100%;
+      min-height: 58px;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: var(--ink);
+      background: white;
+      text-align: left;
+      cursor: pointer;
+      font-weight: 800;
+      line-height: 1.35;
+    }
+
+    .answer:hover:not(:disabled) {
+      border-color: rgba(47, 111, 235, 0.48);
+      background: var(--soft-blue);
+    }
+
+    .answer.correct {
+      border-color: rgba(18, 128, 92, 0.45);
+      background: var(--soft-green);
+      color: var(--green);
+    }
+
+    .answer.wrong {
+      border-color: rgba(217, 95, 89, 0.46);
+      background: var(--soft-coral);
+      color: var(--coral);
+    }
+
+    .feedback {
+      min-height: 64px;
+      margin-top: 16px;
+      padding: 14px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      color: var(--muted);
+      background: #f6f8fb;
+      line-height: 1.55;
+      font-weight: 750;
+    }
+
+    .feedback.correct {
+      border-color: rgba(18, 128, 92, 0.28);
+      color: var(--green);
+      background: var(--soft-green);
+    }
+
+    .feedback.wrong {
+      border-color: rgba(217, 95, 89, 0.28);
+      color: var(--coral);
+      background: var(--soft-coral);
+    }
+
+    .feedback-actions,
+    .result-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-top: 14px;
+    }
+
+    .feedback-actions {
+      display: none;
+    }
+
+    .feedback-actions.active {
+      display: flex;
+    }
+
+    .result-wrap {
+      text-align: center;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .result-badge {
+      display: grid;
+      place-items: center;
+      width: 92px;
+      height: 92px;
+      margin: 0 auto 16px;
+      border-radius: 8px;
+      color: white;
+      background: var(--ink);
+      font-size: 2.4rem;
+      font-weight: 900;
+    }
+
+    .scoreline {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin: 22px 0;
+    }
+
+    .score-chip {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 10px 13px;
+      background: white;
+      font-weight: 900;
+    }
+
+    .submit-status {
+      min-height: 28px;
+      color: var(--muted);
+      font-weight: 800;
+      margin-bottom: 14px;
+    }
+
+    .submit-status.success {
+      color: var(--green);
+    }
+
+    .submit-status.warning {
+      color: #946200;
+    }
+
+    .explanation-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin: 18px 0;
+    }
+
+    .rule {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      background: white;
+    }
+
+    .rule h3 {
+      margin-bottom: 8px;
+      font-size: 1.05rem;
+      letter-spacing: 0;
+    }
+
+    .rule p {
+      margin-bottom: 0;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    @media (max-width: 780px) {
+      .topbar,
+      .question-head {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .start-layout,
+      .explanation-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .start-form {
+        grid-template-columns: 1fr;
+      }
+
+      .status-pill {
+        white-space: normal;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .stats {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="mark">WO</div>
+        <div>
+          <h1>Word Order Workshop</h1>
+          <p class="subtitle">Build clear A1 English sentences by choosing the best word order.</p>
+        </div>
+      </div>
+      <div class="status-pill" id="top-status">Ready</div>
+    </header>
+
+    <section class="panel">
+      <div class="screen active" id="start-screen">
+        <div class="start-layout">
+          <div>
+            <h2>Start The Workshop</h2>
+            <p class="muted">Write your name, then answer 20 sentence-order questions. Read each explanation before moving on.</p>
+            <div class="start-form">
+              <input id="student-name" maxlength="28" autocomplete="off" placeholder="Student name" />
+              <button class="button" id="start-button" type="button">Start</button>
+            </div>
+          </div>
+          <div class="word-board" aria-hidden="true">
+            <div class="sentence-strip">
+              <span class="word-tile subject">She</span>
+              <span class="word-tile verb">plays</span>
+              <span class="word-tile object">the guitar</span>
+              <span class="word-tile extra">after school</span>
+            </div>
+            <div class="sentence-strip">
+              <span class="word-tile subject">We</span>
+              <span class="word-tile extra">often</span>
+              <span class="word-tile verb">study</span>
+              <span class="word-tile object">English</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="screen" id="quiz-screen">
+        <div class="stats">
+          <div class="stat"><span>Student</span><strong id="stat-student">-</strong></div>
+          <div class="stat"><span>Score</span><strong id="stat-score">0</strong></div>
+          <div class="stat"><span>Streak</span><strong id="stat-streak">0</strong></div>
+          <div class="stat"><span>Correct</span><strong id="stat-correct">0</strong></div>
+        </div>
+
+        <div class="progress"><div id="progress-fill"></div></div>
+
+        <div class="question-head">
+          <span class="tag" id="question-count">Question 1 / 20</span>
+          <span class="tag" id="question-type">Choose the best sentence</span>
+        </div>
+
+        <h2 class="question" id="question-text">Loading...</h2>
+        <div class="answers" id="answers"></div>
+        <div class="feedback" id="feedback"></div>
+        <div class="feedback-actions" id="feedback-actions">
+          <button class="button" id="next-button" type="button">Next</button>
+        </div>
+      </div>
+
+      <div class="screen" id="result-screen">
+        <div class="result-wrap">
+          <div class="result-badge" id="result-badge">A</div>
+          <h2 id="result-title">Workshop Complete</h2>
+          <p class="muted" id="result-message">Your result will appear here.</p>
+          <div class="scoreline">
+            <div class="score-chip" id="final-score">Score: 0</div>
+            <div class="score-chip" id="final-correct">Correct: 0 / 20</div>
+            <div class="score-chip" id="final-rank">Rank: Builder</div>
+          </div>
+          <div class="submit-status" id="submit-status">Submitting result...</div>
+          <div class="result-actions">
+            <button class="button secondary" id="play-again" type="button">Play Again</button>
+            <button class="button" id="explanation-button" type="button">Explanation</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="screen" id="explanation-screen">
+        <h2>Brief Explanation</h2>
+        <p class="muted">These are the basic word-order rules practised in the game.</p>
+        <div class="explanation-grid">
+          <div class="rule">
+            <h3>Subject + Verb</h3>
+            <p>Most English sentences need a subject before the verb: <strong>She works</strong>, <strong>They live here</strong>. Use <strong>it</strong> or <strong>they</strong> when the subject was already mentioned.</p>
+          </div>
+          <div class="rule">
+            <h3>Verb + Object</h3>
+            <p>The object comes after the verb. Keep the verb and object close together: <strong>I like music very much</strong>, not <strong>I like very much music</strong>.</p>
+          </div>
+          <div class="rule">
+            <h3>Frequency Adverbs</h3>
+            <p>Words like <strong>always</strong>, <strong>often</strong>, and <strong>usually</strong> usually go before the main verb: <strong>We often cook</strong>. With <strong>be</strong>, they go after it: <strong>She is always early</strong>.</p>
+          </div>
+          <div class="rule">
+            <h3>Place + Time</h3>
+            <p>When a sentence has both place and time, English normally puts place first, then time: <strong>We met at the cafe yesterday</strong>.</p>
+          </div>
+        </div>
+        <div class="result-actions">
+          <button class="button secondary" id="back-results" type="button">Back To Result</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const SUBMISSION_URL = "https://script.google.com/macros/s/AKfycbzemuwABx_r378H23gNRkisj2n_LW92T97voS5NwMfuLjH6O8sfW2bifcfUXYMlQzMcpg/exec";
+    const GAME_TITLE = "Word Order Workshop";
+
+    const questions = [
+      {
+        prompt: "Choose the sentence with the normal subject + verb order.",
+        options: ["Is tired my brother.", "My brother is tired.", "Tired is my brother.", "My is brother tired."],
+        answer: "My brother is tired.",
+        note: "The subject normally comes before the verb: my brother + is."
+      },
+      {
+        prompt: "Choose the best sentence.",
+        options: ["We watch TV after dinner.", "Watch we TV after dinner.", "We TV watch after dinner.", "After dinner watch TV we."],
+        answer: "We watch TV after dinner.",
+        note: "Use subject + verb + object: we + watch + TV."
+      },
+      {
+        prompt: "Which sentence keeps the verb and object together?",
+        options: ["I like very much this song.", "I like this song very much.", "I this song like very much.", "Very much I like this song."],
+        answer: "I like this song very much.",
+        note: "The object comes after the verb. Extra information can come after the object."
+      },
+      {
+        prompt: "Choose the correct place + time order.",
+        options: ["They played yesterday in the park.", "They played in the park yesterday.", "They yesterday played in the park.", "In the park they yesterday played."],
+        answer: "They played in the park yesterday.",
+        note: "When we mention place and time, place usually comes before time."
+      },
+      {
+        prompt: "Choose the correct sentence with an adverb of frequency.",
+        options: ["Sam drinks often coffee.", "Sam often drinks coffee.", "Often Sam coffee drinks.", "Sam drinks coffee often in the morning."],
+        answer: "Sam often drinks coffee.",
+        note: "Frequency adverbs usually go before the main verb."
+      },
+      {
+        prompt: "Choose the correct sentence with the verb be.",
+        options: ["Lina always is kind.", "Lina is always kind.", "Always Lina is kind.", "Lina kind is always."],
+        answer: "Lina is always kind.",
+        note: "With the verb be, frequency adverbs go after the verb."
+      },
+      {
+        prompt: "Choose the sentence with a clear object after the verb.",
+        options: ["Marta reads every night a book.", "Marta reads a book every night.", "A book Marta reads every night.", "Marta a book reads every night."],
+        answer: "Marta reads a book every night.",
+        note: "Keep reads + a book together, then add the time phrase."
+      },
+      {
+        prompt: "Choose the best sentence.",
+        options: ["The children are in the garden now.", "The children in the garden are now.", "Are the children now in the garden.", "Now are in the garden the children."],
+        answer: "The children are in the garden now.",
+        note: "The subject comes before the verb: the children + are."
+      },
+      {
+        prompt: "Choose the correct word order.",
+        options: ["My sister speaks English very well.", "My sister speaks very well English.", "English my sister speaks very well.", "My sister very well speaks English."],
+        answer: "My sister speaks English very well.",
+        note: "The object English comes directly after the verb speaks."
+      },
+      {
+        prompt: "Choose the correct sentence.",
+        options: ["We usually are at home on Sundays.", "We are usually at home on Sundays.", "Usually we at home are on Sundays.", "We are at home usually on Sundays."],
+        answer: "We are usually at home on Sundays.",
+        note: "With be, the adverb usually goes after are."
+      },
+      {
+        prompt: "Choose the sentence with place before time.",
+        options: ["I saw Ali yesterday at the station.", "I saw Ali at the station yesterday.", "I saw at the station Ali yesterday.", "Yesterday I at the station saw Ali."],
+        answer: "I saw Ali at the station yesterday.",
+        note: "The object Ali follows saw, then place, then time."
+      },
+      {
+        prompt: "Choose the best sentence.",
+        options: ["It is very interesting.", "Is very interesting.", "Very interesting is.", "It very interesting is."],
+        answer: "It is very interesting.",
+        note: "English normally needs a subject. Use it when talking about a thing already mentioned."
+      },
+      {
+        prompt: "Choose the correct imperative sentence.",
+        options: ["You open the window, please.", "Open the window, please.", "The window open, please.", "Please the window open."],
+        answer: "Open the window, please.",
+        note: "Imperatives do not need a subject. Start with the verb."
+      },
+      {
+        prompt: "Choose the sentence with the object in the right place.",
+        options: ["He finished quickly the homework.", "He finished the homework quickly.", "He the homework finished quickly.", "Quickly he the homework finished."],
+        answer: "He finished the homework quickly.",
+        note: "The object the homework comes after finished."
+      },
+      {
+        prompt: "Choose the correct sentence.",
+        options: ["My friends go often to the cinema.", "My friends often go to the cinema.", "Often to the cinema my friends go.", "My friends to the cinema often go."],
+        answer: "My friends often go to the cinema.",
+        note: "Often goes before the main verb go."
+      },
+      {
+        prompt: "Choose the best order for place and time.",
+        options: ["We have lunch at school at one o'clock.", "We have lunch at one o'clock at school.", "We at school have lunch at one o'clock.", "At one o'clock have lunch we at school."],
+        answer: "We have lunch at school at one o'clock.",
+        note: "Place normally comes before time: at school + at one o'clock."
+      },
+      {
+        prompt: "Choose the correct sentence.",
+        options: ["They are never late.", "They never are late.", "Never they are late.", "They late are never."],
+        answer: "They are never late.",
+        note: "With be, never goes after are."
+      },
+      {
+        prompt: "Choose the sentence with subject + verb + object.",
+        options: ["This restaurant serves breakfast early.", "Serves this restaurant breakfast early.", "This restaurant breakfast serves early.", "Early serves breakfast this restaurant."],
+        answer: "This restaurant serves breakfast early.",
+        note: "Use subject + verb + object: this restaurant + serves + breakfast."
+      },
+      {
+        prompt: "Choose the correct sentence.",
+        options: ["Call me tomorrow.", "You call tomorrow me.", "Me call tomorrow.", "Tomorrow me call."],
+        answer: "Call me tomorrow.",
+        note: "Imperatives can start with the verb, and the object me comes after call."
+      },
+      {
+        prompt: "Choose the best sentence.",
+        options: ["She wrote in the library an email this morning.", "She wrote an email in the library this morning.", "She an email wrote this morning in the library.", "This morning she in the library wrote an email."],
+        answer: "She wrote an email in the library this morning.",
+        note: "Use verb + object first, then place, then time."
+      }
+    ];
+
+    const state = {
+      student: "",
+      index: 0,
+      score: 0,
+      correct: 0,
+      streak: 0,
+      locked: false,
+      startTime: 0,
+      answers: []
+    };
+
+    const screens = {
+      start: document.getElementById("start-screen"),
+      quiz: document.getElementById("quiz-screen"),
+      result: document.getElementById("result-screen"),
+      explanation: document.getElementById("explanation-screen")
+    };
+
+    const els = {
+      studentName: document.getElementById("student-name"),
+      startButton: document.getElementById("start-button"),
+      topStatus: document.getElementById("top-status"),
+      statStudent: document.getElementById("stat-student"),
+      statScore: document.getElementById("stat-score"),
+      statStreak: document.getElementById("stat-streak"),
+      statCorrect: document.getElementById("stat-correct"),
+      progressFill: document.getElementById("progress-fill"),
+      questionCount: document.getElementById("question-count"),
+      questionText: document.getElementById("question-text"),
+      answers: document.getElementById("answers"),
+      feedback: document.getElementById("feedback"),
+      feedbackActions: document.getElementById("feedback-actions"),
+      nextButton: document.getElementById("next-button"),
+      resultBadge: document.getElementById("result-badge"),
+      resultTitle: document.getElementById("result-title"),
+      resultMessage: document.getElementById("result-message"),
+      finalScore: document.getElementById("final-score"),
+      finalCorrect: document.getElementById("final-correct"),
+      finalRank: document.getElementById("final-rank"),
+      submitStatus: document.getElementById("submit-status"),
+      playAgain: document.getElementById("play-again"),
+      explanationButton: document.getElementById("explanation-button"),
+      backResults: document.getElementById("back-results")
+    };
+
+    function switchScreen(name) {
+      Object.values(screens).forEach(screen => screen.classList.remove("active"));
+      screens[name].classList.add("active");
+    }
+
+    function startGame() {
+      state.student = els.studentName.value.trim() || "Student";
+      state.index = 0;
+      state.score = 0;
+      state.correct = 0;
+      state.streak = 0;
+      state.locked = false;
+      state.startTime = Date.now();
+      state.answers = [];
+      els.statStudent.textContent = state.student;
+      els.topStatus.textContent = "In progress";
+      updateStats();
+      switchScreen("quiz");
+      loadQuestion();
+    }
+
+    function loadQuestion() {
+      const question = questions[state.index];
+      state.locked = false;
+      els.questionCount.textContent = `Question ${state.index + 1} / ${questions.length}`;
+      els.questionText.textContent = question.prompt;
+      els.progressFill.style.width = `${(state.index / questions.length) * 100}%`;
+      els.feedback.textContent = "";
+      els.feedback.className = "feedback";
+      els.feedbackActions.classList.remove("active");
+      els.answers.innerHTML = "";
+
+      question.options.forEach(option => {
+        const button = document.createElement("button");
+        button.className = "answer";
+        button.type = "button";
+        button.textContent = option;
+        button.addEventListener("click", () => chooseAnswer(option, button));
+        els.answers.appendChild(button);
+      });
+    }
+
+    function chooseAnswer(choice, element) {
+      if (state.locked) return;
+      const question = questions[state.index];
+      const isCorrect = choice === question.answer;
+      const pointsBefore = state.score;
+      state.locked = true;
+
+      document.querySelectorAll(".answer").forEach(button => {
+        button.disabled = true;
+        if (button.textContent === question.answer) {
+          button.classList.add("correct");
+        }
+      });
+
+      if (isCorrect) {
+        state.correct++;
+        state.streak++;
+        state.score += 100 + (state.streak >= 3 ? 25 : 0);
+        els.feedback.className = "feedback correct";
+        els.feedback.textContent = state.streak >= 3
+          ? `Correct. Streak bonus earned. ${question.note}`
+          : `Correct. ${question.note}`;
+      } else {
+        state.streak = 0;
+        element.classList.add("wrong");
+        els.feedback.className = "feedback wrong";
+        els.feedback.textContent = `Answer: ${question.answer} ${question.note}`;
+      }
+
+      state.answers.push({
+        questionNumber: state.index + 1,
+        question: question.prompt,
+        type: "choice",
+        studentAnswer: choice,
+        correctAnswer: question.answer,
+        isCorrect,
+        pointsEarned: state.score - pointsBefore
+      });
+
+      updateStats();
+      els.feedbackActions.classList.add("active");
+    }
+
+    function nextQuestion() {
+      state.index++;
+      if (state.index >= questions.length) {
+        showResults();
+      } else {
+        loadQuestion();
+      }
+    }
+
+    function updateStats() {
+      els.statScore.textContent = state.score;
+      els.statStreak.textContent = state.streak;
+      els.statCorrect.textContent = state.correct;
+    }
+
+    function showResults() {
+      els.progressFill.style.width = "100%";
+      const percentage = Math.round((state.correct / questions.length) * 100);
+      const rank = percentage >= 90 ? "Master Builder" : percentage >= 75 ? "Clear Builder" : percentage >= 55 ? "Careful Builder" : "New Builder";
+      els.resultBadge.textContent = percentage >= 90 ? "A" : percentage >= 75 ? "B" : percentage >= 55 ? "C" : "D";
+      els.resultTitle.textContent = `Finished, ${state.student}`;
+      els.resultMessage.textContent = percentage >= 75
+        ? "Strong sentence control. Keep using subject, verb, object, place, and time as your guide."
+        : "Good practice. Review the explanation, then try again with special attention to verb + object.";
+      els.finalScore.textContent = `Score: ${state.score}`;
+      els.finalCorrect.textContent = `Correct: ${state.correct} / ${questions.length}`;
+      els.finalRank.textContent = `Rank: ${rank}`;
+      els.topStatus.textContent = "Complete";
+      switchScreen("result");
+      submitResult();
+    }
+
+    function buildSubmission() {
+      return {
+        studentName: state.student,
+        gameTitle: GAME_TITLE,
+        score: state.score,
+        correct: state.correct,
+        total: questions.length,
+        timeSpentSeconds: Math.round((Date.now() - state.startTime) / 1000),
+        answers: state.answers
+      };
+    }
+
+    async function submitResult() {
+      const submission = buildSubmission();
+      els.submitStatus.className = "submit-status";
+      els.submitStatus.textContent = "Submitting result to teacher sheet...";
+
+      try {
+        await fetch(SUBMISSION_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: {
+            "Content-Type": "text/plain;charset=utf-8"
+          },
+          body: JSON.stringify(submission)
+        });
+
+        els.submitStatus.className = "submit-status success";
+        els.submitStatus.textContent = "Result submitted. You can open the explanation when you are ready.";
+      } catch (error) {
+        els.submitStatus.className = "submit-status warning";
+        els.submitStatus.textContent = `Could not submit automatically. Backup: ${state.student} | ${state.score} | ${state.correct}/${questions.length}`;
+      }
+    }
+
+    els.startButton.addEventListener("click", startGame);
+    els.nextButton.addEventListener("click", nextQuestion);
+    els.playAgain.addEventListener("click", () => {
+      els.topStatus.textContent = "Ready";
+      switchScreen("start");
+    });
+    els.explanationButton.addEventListener("click", () => switchScreen("explanation"));
+    els.backResults.addEventListener("click", () => switchScreen("result"));
+    els.studentName.addEventListener("keydown", event => {
+      if (event.key === "Enter") startGame();
+    });
+  </script>
+</body>
+</html>

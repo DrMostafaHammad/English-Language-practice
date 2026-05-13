@@ -43,7 +43,8 @@ English-Language-Practice/
     Code.gs
   templates/
   games/
-    # Future games go here.
+    word-order-workshop/
+      index.html
 ```
 
 ## Google Sheet Columns
@@ -141,9 +142,17 @@ Do not auto-advance immediately after feedback. Students need time to read expla
 
 ## Current Game
 
-There is no current game in this fresh local project.
+Current game:
 
-The old `Tense Trail` game has been removed locally. Future games should be created from scratch and saved under `games/game-folder-name/index.html`.
+- Title: `Word Order Workshop`
+- Topic: A1 basic word order in English
+- Source page: `https://test-english.com/grammar-points/a1/basic-word-order-in-english/`
+- Project copy lives at: `games/word-order-workshop/index.html`
+- Direct student link: `https://drmostafahammad.github.io/English-Language-practice/games/word-order-workshop/`
+- Question count: 20
+- After final result submission, the `Explanation` button opens a brief rules page in the game.
+
+The old `Tense Trail` game has been removed locally.
 
 ## Future Game Workflow
 
@@ -193,21 +202,22 @@ Notes:
 
 ## GitHub Pages Notes
 
-Current repository has an `index.html` at the root. It is now a game-library homepage. At the moment, it shows an empty state until the first new game is created.
+Current repository has an `index.html` at the root. It is now a game-library homepage that links to each game.
 
 Games live in their own folders:
 
 ```text
 index.html
 games/
-  vocabulary-volcano/index.html
   word-order-workshop/index.html
+  vocabulary-volcano/index.html
+  present-simple-quest/index.html
 ```
 
 Direct links can be sent to students for homework.
 
 Current local state:
 
-- Root `index.html` is now a game-library homepage with an empty state.
-- There are no games currently published locally.
+- Root `index.html` is now a game-library homepage.
+- `Word Order Workshop` is the first published game in the fresh project.
 - The same Google Sheet and Apps Script web app URL should be reused for future games unless the user asks for a fresh backend.

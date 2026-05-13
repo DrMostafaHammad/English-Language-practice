@@ -216,6 +216,31 @@ games/
 
 Direct links can be sent to students for homework.
 
+## Future Template System Notes
+
+Do not force all English practice areas into one rigid game template.
+
+Preferred long-term plan:
+
+- Keep a shared game engine pattern for common behavior:
+  - student name only
+  - score, streak, timer, and answer tracking
+  - answer feedback stays visible until `Next`
+  - result screen and backup result summary
+  - Google Sheet submission
+  - sound effects and polished classroom-friendly styling
+  - answer option shuffling
+  - final `Explanation` page
+- Create different reusable templates for different practice types as the project grows:
+  - grammar choice games
+  - word-order games
+  - vocabulary choice games
+  - collocation/matching games
+  - reading comprehension quizzes
+  - listening homework pages
+
+Start with a reusable grammar-choice or word-order template only after a few more games have been created and the repeated patterns are clearer.
+
 Current local state:
 
 - Root `index.html` is now a game-library homepage.

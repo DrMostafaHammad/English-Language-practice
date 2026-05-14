@@ -1,6 +1,6 @@
 # English Language Practice Project Notes
 
-Last updated: 2026-05-13
+Last updated: 2026-05-14
 
 ## Purpose
 
@@ -43,6 +43,8 @@ English-Language-Practice/
     Code.gs
   templates/
   games/
+    articles-adventure/
+      index.html
     word-order-workshop/
       index.html
 ```
@@ -144,6 +146,18 @@ Do not auto-advance immediately after feedback. Students need time to read expla
 
 Current game:
 
+- Title: `Articles Adventure`
+- Topic: A1 English articles: `a`, `an`, `the`, and zero article
+- Source page: `https://test-english.com/grammar-points/a1/a-an-the-no-article/`
+- Project copy lives at: `games/articles-adventure/index.html`
+- Direct student link: `https://drmostafahammad.github.io/English-Language-practice/games/articles-adventure/`
+- Question count: 20
+- Question types: multiple choice and fill in the blank
+- Multiple-choice answer options are shuffled at runtime.
+- After final result submission, the `Explanation` button opens a fuller ESL teacher-style explanation page in the game.
+
+Previous game:
+
 - Title: `Word Order Workshop`
 - Topic: A1 basic word order in English
 - Source page: `https://test-english.com/grammar-points/a1/basic-word-order-in-english/`
@@ -209,6 +223,7 @@ Games live in their own folders:
 ```text
 index.html
 games/
+  articles-adventure/index.html
   word-order-workshop/index.html
   vocabulary-volcano/index.html
   present-simple-quest/index.html
@@ -244,5 +259,5 @@ Start with a reusable grammar-choice or word-order template only after a few mor
 Current local state:
 
 - Root `index.html` is now a game-library homepage.
-- `Word Order Workshop` is the first published game in the fresh project.
+- Published games: `Articles Adventure`, `Word Order Workshop`.
 - The same Google Sheet and Apps Script web app URL should be reused for future games unless the user asks for a fresh backend.

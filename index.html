@@ -122,7 +122,6 @@
       background: var(--panel);
       box-shadow: 0 18px 40px rgba(23, 32, 51, 0.08);
       color: inherit;
-      text-decoration: none;
       transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
     }
 
@@ -205,6 +204,47 @@
       font-weight: 900;
     }
 
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
+      margin-top: auto;
+    }
+
+    .action {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px 13px;
+      color: var(--ink);
+      background: #ffffff;
+      cursor: pointer;
+      font-weight: 900;
+      text-decoration: none;
+      transition: transform 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+    }
+
+    .action.primary {
+      color: #ffffff;
+      background: var(--blue);
+      border-color: var(--blue);
+      box-shadow: 0 12px 26px rgba(37, 99, 235, 0.2);
+    }
+
+    .action:hover {
+      transform: translateY(-1px);
+      border-color: rgba(37, 99, 235, 0.42);
+    }
+
+    .copy-status {
+      min-height: 22px;
+      color: var(--green);
+      font-weight: 800;
+      font-size: 0.9rem;
+      text-align: right;
+    }
+
     @media (max-width: 700px) {
       header,
       .section-title {
@@ -237,7 +277,7 @@
       </div>
 
       <div class="game-grid">
-        <a class="game-card" href="games/articles-adventure/">
+        <article class="game-card">
           <div class="game-art" aria-hidden="true">
             <div class="word-block"></div>
             <div class="word-block"></div>
@@ -252,11 +292,14 @@
             <span class="tag">Grammar</span>
             <span class="tag">20 questions</span>
             <span class="tag">Results tracked</span>
-            <span class="open">Open</span>
           </div>
-        </a>
+          <div class="actions">
+            <button class="action" type="button" data-copy-link="games/articles-adventure/" data-title="Articles Adventure">Copy Link</button>
+            <a class="action primary" href="games/articles-adventure/">Open</a>
+          </div>
+        </article>
 
-        <a class="game-card" href="games/word-order-workshop/">
+        <article class="game-card">
           <div class="game-art" aria-hidden="true">
             <div class="word-block"></div>
             <div class="word-block"></div>
@@ -271,11 +314,39 @@
             <span class="tag">Grammar</span>
             <span class="tag">20 questions</span>
             <span class="tag">Results tracked</span>
-            <span class="open">Open</span>
           </div>
-        </a>
+          <div class="actions">
+            <button class="action" type="button" data-copy-link="games/word-order-workshop/" data-title="Word Order Workshop">Copy Link</button>
+            <a class="action primary" href="games/word-order-workshop/">Open</a>
+          </div>
+        </article>
       </div>
+      <p class="copy-status" id="copy-status" aria-live="polite"></p>
     </main>
   </div>
+  <script>
+    const copyStatus = document.getElementById("copy-status");
+
+    async function copyGameLink(button) {
+      const url = new URL(button.dataset.copyLink, window.location.href).href;
+      const title = button.dataset.title;
+
+      try {
+        await navigator.clipboard.writeText(url);
+        copyStatus.textContent = `${title} link copied.`;
+        button.textContent = "Copied";
+        setTimeout(() => {
+          button.textContent = "Copy Link";
+          copyStatus.textContent = "";
+        }, 2200);
+      } catch (error) {
+        copyStatus.textContent = url;
+      }
+    }
+
+    document.querySelectorAll("[data-copy-link]").forEach(button => {
+      button.addEventListener("click", () => copyGameLink(button));
+    });
+  </script>
 </body>
 </html>

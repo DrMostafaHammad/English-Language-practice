@@ -8,6 +8,41 @@ This project stores HTML grammar/vocabulary games and related teacher resources 
 
 The games should be playable in a browser, hosted on GitHub Pages, and submit student results to Google Sheets through Google Apps Script.
 
+## New Chat Handoff
+
+When starting a new Codex chat for this project, use this prompt:
+
+```text
+Read PROJECT_NOTES.md first from the local project folder. This project is also pushed to GitHub at https://github.com/DrMostafaHammad/English-Language-practice. Continue from these notes and inspect the repo files before making changes.
+```
+
+The local project folder should stay:
+
+```text
+C:\Users\Mostafa Hammad\Documents\Codex\English-Language-Practice
+```
+
+Treat this file as the durable source of truth when the chat context is missing or compressed. If anything important changes, update this file, commit it, and push it.
+
+## New Game Checklist
+
+For each new game:
+
+1. Read this file first.
+2. If the user gives a source URL, browse it and summarize the learning points.
+3. Create original questions inspired by the topic; do not copy exercise items wholesale.
+4. Use 20 questions unless the user asks for a different number.
+5. Mix question modes where suitable, such as multiple choice and fill in the blank.
+6. Shuffle multiple-choice answer options at runtime.
+7. Keep the answer flow: answer -> feedback/explanation -> student clicks `Next`.
+8. Include sound effects, polished styling, and a classroom-friendly game feel.
+9. Include subtle/simple visual assets automatically when useful, and mention where they were added.
+10. Add a generous `Explanation` page, especially when the game will be used during a lesson.
+11. Submit results to the existing Apps Script URL and preserve the standard payload.
+12. Add the game to the root homepage with `Open` and `Copy Link` controls.
+13. Update `PROJECT_NOTES.md` with the new game title, source, folder, and direct student link.
+14. Commit and push changes to GitHub.
+
 ## Current Online Setup
 
 Google Sheet:

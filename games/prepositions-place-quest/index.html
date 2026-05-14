@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prepositions Place Quest</title>
+  <style>
+    :root {
+      --navy: #071426;
+      --navy-2: #102442;
+      --ink: #f8fbff;
+      --muted: #afbdd2;
+      --panel: rgba(9, 24, 46, 0.92);
+      --line: rgba(255, 255, 255, 0.15);
+      --blue: #5ba8ff;
+      --green: #23d18b;
+      --yellow: #ffd166;
+      --red: #ff6f70;
+      --purple: #b48cff;
+      --shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        linear-gradient(120deg, rgba(91, 168, 255, 0.18), transparent 34%),
+        linear-gradient(250deg, rgba(35, 209, 139, 0.14), transparent 38%),
+        linear-gradient(135deg, var(--navy), var(--navy-2) 48%, #112033);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.2;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.09) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.09) 1px, transparent 1px);
+      background-size: 38px 38px;
+      mask-image: linear-gradient(180deg, black, transparent 78%);
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .shell {
+      position: relative;
+      width: min(1120px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 20px 0 42px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      padding: 14px 0 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .mark {
+      display: grid;
+      place-items: center;
+      width: 50px;
+      height: 50px;
+      border-radius: 8px;
+      color: #071426;
+      background: linear-gradient(135deg, var(--yellow), var(--green));
+      font-weight: 950;
+      box-shadow: 0 14px 34px rgba(35, 209, 139, 0.24);
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      margin-bottom: 4px;
+      font-size: clamp(1.8rem, 4vw, 3.2rem);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    .subtitle,
+    .muted {
+      color: var(--muted);
+      line-height: 1.58;
+    }
+
+    .status-pill {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 10px 14px;
+      background: rgba(255, 255, 255, 0.08);
+      color: #dce8fb;
+      font-weight: 850;
+      white-space: nowrap;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.035)),
+        var(--panel);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      backdrop-filter: blur(18px);
+    }
+
+    .screen {
+      display: none;
+      padding: clamp(20px, 4vw, 34px);
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    .start-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .place-map {
+      position: relative;
+      min-height: 330px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+      background:
+        linear-gradient(135deg, rgba(91, 168, 255, 0.18), rgba(35, 209, 139, 0.14)),
+        rgba(255, 255, 255, 0.05);
+      overflow: hidden;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    }
+
+    .map-card {
+      position: absolute;
+      display: grid;
+      place-items: center;
+      min-width: 78px;
+      min-height: 54px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+      font-weight: 950;
+      text-align: center;
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.18);
+    }
+
+    .map-card.in {
+      left: 8%;
+      top: 16%;
+      background: rgba(35, 209, 139, 0.2);
+      border-color: rgba(35, 209, 139, 0.42);
+    }
+
+    .map-card.on {
+      right: 9%;
+      top: 20%;
+      background: rgba(91, 168, 255, 0.2);
+      border-color: rgba(91, 168, 255, 0.42);
+    }
+
+    .map-card.at {
+      left: 38%;
+      bottom: 14%;
+      background: rgba(255, 209, 102, 0.2);
+      border-color: rgba(255, 209, 102, 0.46);
+    }
+
+    .map-road {
+      position: absolute;
+      left: 11%;
+      right: 11%;
+      bottom: 32%;
+      height: 16px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.12);
+      transform: rotate(-7deg);
+    }
+
+    .map-dot {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--yellow);
+      box-shadow: 0 0 0 8px rgba(255, 209, 102, 0.12);
+    }
+
+    .map-dot:nth-child(5) {
+      left: 21%;
+      bottom: 35%;
+    }
+
+    .map-dot:nth-child(6) {
+      left: 67%;
+      bottom: 27%;
+      background: var(--green);
+      box-shadow: 0 0 0 8px rgba(35, 209, 139, 0.12);
+    }
+
+    .start-form {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    input {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px 15px;
+      color: #eef6ff;
+      background: rgba(255, 255, 255, 0.08);
+      outline: none;
+    }
+
+    input::placeholder {
+      color: rgba(220, 232, 251, 0.58);
+    }
+
+    input:focus {
+      border-color: rgba(91, 168, 255, 0.85);
+      box-shadow: 0 0 0 4px rgba(91, 168, 255, 0.14);
+    }
+
+    .button {
+      border: 0;
+      border-radius: 8px;
+      padding: 14px 18px;
+      color: #071426;
+      background: linear-gradient(135deg, var(--green), var(--blue));
+      font-weight: 950;
+      cursor: pointer;
+      box-shadow: 0 18px 38px rgba(91, 168, 255, 0.24);
+      transition: transform 160ms ease, filter 160ms ease, box-shadow 160ms ease;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.04);
+      box-shadow: 0 24px 52px rgba(35, 209, 139, 0.26);
+    }
+
+    .button.secondary {
+      color: #dce8fb;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--line);
+      box-shadow: none;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-top: 14px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .stat {
+      padding: 14px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+
+    .stat span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 850;
+      text-transform: uppercase;
+    }
+
+    .stat strong {
+      display: block;
+      margin-top: 5px;
+      font-size: 1.2rem;
+    }
+
+    .progress {
+      height: 12px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.09);
+      margin-bottom: 22px;
+    }
+
+    #progress-fill {
+      width: 0;
+      height: 100%;
+      background: linear-gradient(90deg, var(--green), var(--yellow), var(--blue));
+      transition: width 240ms ease;
+    }
+
+    .question-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 10px;
+      color: #dce8fb;
+      background: rgba(255, 255, 255, 0.08);
+      font-size: 0.86rem;
+      font-weight: 850;
+    }
+
+    .question {
+      margin-bottom: 18px;
+      font-size: clamp(1.35rem, 3vw, 2.1rem);
+      line-height: 1.22;
+      letter-spacing: 0;
+    }
+
+    .answers {
+      display: grid;
+      gap: 10px;
+      counter-reset: answer;
+    }
+
+    .answer {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      width: 100%;
+      min-height: 58px;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: #eef6ff;
+      background: rgba(255, 255, 255, 0.08);
+      text-align: left;
+      cursor: pointer;
+      font-weight: 850;
+      line-height: 1.35;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
+    }
+
+    .answer::before {
+      counter-increment: answer;
+      content: counter(answer, upper-alpha);
+      display: grid;
+      place-items: center;
+      flex: 0 0 34px;
+      height: 34px;
+      border-radius: 8px;
+      color: #071426;
+      background: var(--yellow);
+      font-weight: 950;
+    }
+
+    .answer:hover:not(:disabled) {
+      border-color: rgba(91, 168, 255, 0.52);
+      background: rgba(91, 168, 255, 0.18);
+      transform: translateY(-1px);
+    }
+
+    .answer.correct {
+      border-color: rgba(35, 209, 139, 0.65);
+      background: linear-gradient(135deg, rgba(35, 209, 139, 0.22), rgba(255, 255, 255, 0.08));
+      color: var(--green);
+    }
+
+    .answer.correct::before {
+      content: "OK";
+      background: var(--green);
+    }
+
+    .answer.wrong {
+      border-color: rgba(255, 111, 112, 0.7);
+      background: linear-gradient(135deg, rgba(255, 111, 112, 0.18), rgba(255, 255, 255, 0.08));
+      color: var(--red);
+    }
+
+    .answer.wrong::before {
+      content: "X";
+      background: var(--red);
+    }
+
+    .blank-row {
+      display: none;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .blank-row.active {
+      display: grid;
+    }
+
+    .feedback {
+      min-height: 64px;
+      margin-top: 16px;
+      padding: 14px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.07);
+      line-height: 1.55;
+      font-weight: 780;
+    }
+
+    .feedback.correct {
+      border-color: rgba(35, 209, 139, 0.42);
+      color: #b9ffd7;
+      background: rgba(35, 209, 139, 0.14);
+    }
+
+    .feedback.wrong {
+      border-color: rgba(255, 111, 112, 0.42);
+      color: #ffd4d0;
+      background: rgba(255, 111, 112, 0.13);
+    }
+
+    .feedback-actions,
+    .result-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-top: 14px;
+    }
+
+    .feedback-actions {
+      display: none;
+    }
+
+    .feedback-actions.active {
+      display: flex;
+    }
+
+    .result-wrap {
+      text-align: center;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .result-badge {
+      display: grid;
+      place-items: center;
+      width: 92px;
+      height: 92px;
+      margin: 0 auto 16px;
+      border-radius: 8px;
+      color: white;
+      background: linear-gradient(135deg, var(--yellow), var(--purple), var(--blue));
+      font-size: 2.4rem;
+      font-weight: 950;
+      box-shadow: 0 20px 52px rgba(91, 168, 255, 0.28);
+    }
+
+    .scoreline {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin: 22px 0;
+    }
+
+    .score-chip {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 10px 13px;
+      background: rgba(255, 255, 255, 0.08);
+      font-weight: 900;
+    }
+
+    .submit-status {
+      min-height: 28px;
+      color: var(--muted);
+      font-weight: 850;
+      margin-bottom: 14px;
+    }
+
+    .submit-status.success {
+      color: var(--green);
+    }
+
+    .submit-status.warning {
+      color: var(--yellow);
+    }
+
+    .teacher-note {
+      border: 1px solid rgba(255, 209, 102, 0.38);
+      border-radius: 8px;
+      padding: 16px;
+      margin: 18px 0;
+      background: rgba(255, 209, 102, 0.12);
+      color: #fff2bd;
+      line-height: 1.6;
+    }
+
+    .explanation-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin: 18px 0;
+    }
+
+    .rule {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .rule h3 {
+      margin-bottom: 8px;
+      color: #ffffff;
+      font-size: 1.05rem;
+      letter-spacing: 0;
+    }
+
+    .rule p,
+    .rule li {
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .rule ul {
+      margin: 10px 0 0;
+      padding-left: 18px;
+    }
+
+    .rule strong {
+      color: #ffffff;
+    }
+
+    .burst {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      pointer-events: none;
+      border-radius: 50%;
+      z-index: 10;
+      animation: pop 850ms ease-out forwards;
+    }
+
+    @keyframes pop {
+      from {
+        opacity: 1;
+        transform: translate(0, 0) scale(1);
+      }
+      to {
+        opacity: 0;
+        transform: translate(var(--x), var(--y)) scale(0);
+      }
+    }
+
+    @media (max-width: 820px) {
+      .topbar,
+      .question-head {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .start-layout,
+      .explanation-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .start-form,
+      .blank-row {
+        grid-template-columns: 1fr;
+      }
+
+      .status-pill {
+        white-space: normal;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .stats {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="mark">IN</div>
+        <div>
+          <h1>Prepositions Place Quest</h1>
+          <p class="subtitle">Practise in, on, and at for places, surfaces, transport, addresses, and exact positions.</p>
+        </div>
+      </div>
+      <div class="status-pill" id="top-status">Ready</div>
+    </header>
+
+    <section class="panel">
+      <div class="screen active" id="start-screen">
+        <div class="start-layout">
+          <div>
+            <h2>Start The Place Quest</h2>
+            <p class="muted">Write your name, then answer 25 questions about location. Use the explanation first if you want a quick lesson before playing.</p>
+            <div class="start-form">
+              <input id="student-name" maxlength="28" autocomplete="off" placeholder="Student name" />
+              <button class="button" id="start-button" type="button">Start</button>
+            </div>
+            <div class="button-row">
+              <button class="button secondary" id="start-explanation" type="button">Explanation</button>
+            </div>
+          </div>
+          <div class="place-map" aria-label="Simple visual map for in, on, and at">
+            <div class="map-card in">in<br>space</div>
+            <div class="map-card on">on<br>surface</div>
+            <div class="map-card at">at<br>point</div>
+            <div class="map-road"></div>
+            <div class="map-dot"></div>
+            <div class="map-dot"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="screen" id="quiz-screen">
+        <div class="stats">
+          <div class="stat"><span>Student</span><strong id="stat-student">-</strong></div>
+          <div class="stat"><span>Score</span><strong id="stat-score">0</strong></div>
+          <div class="stat"><span>Streak</span><strong id="stat-streak">0</strong></div>
+          <div class="stat"><span>Correct</span><strong id="stat-correct">0</strong></div>
+        </div>
+
+        <div class="progress"><div id="progress-fill"></div></div>
+
+        <div class="question-head">
+          <span class="tag" id="question-count">Question 1 / 25</span>
+          <span class="tag" id="question-type">Multiple Choice</span>
+        </div>
+
+        <h2 class="question" id="question-text">Loading...</h2>
+        <div class="answers" id="answers"></div>
+        <div class="blank-row" id="blank-row">
+          <input id="blank-answer" autocomplete="off" placeholder="Type in, on, or at" />
+          <button class="button" id="submit-blank" type="button">Submit</button>
+        </div>
+        <div class="feedback" id="feedback"></div>
+        <div class="feedback-actions" id="feedback-actions">
+          <button class="button" id="next-button" type="button">Next</button>
+        </div>
+      </div>
+
+      <div class="screen" id="result-screen">
+        <div class="result-wrap">
+          <div class="result-badge" id="result-badge">A</div>
+          <h2 id="result-title">Quest Complete</h2>
+          <p class="muted" id="result-message">Your result will appear here.</p>
+          <div class="scoreline">
+            <div class="score-chip" id="final-score">Score: 0</div>
+            <div class="score-chip" id="final-correct">Correct: 0 / 25</div>
+            <div class="score-chip" id="final-rank">Rank: Place Explorer</div>
+          </div>
+          <div class="submit-status" id="submit-status">Submitting result...</div>
+          <div class="result-actions">
+            <button class="button secondary" id="play-again" type="button">Play Again</button>
+            <button class="button" id="explanation-button" type="button">Explanation</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="screen" id="explanation-screen">
+        <h2>Prepositions Of Place: In, On, At</h2>
+        <p class="muted">Prepositions of place go before nouns and tell us where something or someone is. The most useful beginner question is: are we thinking about a space, a surface, or a point/activity place?</p>
+
+        <div class="teacher-note">
+          Quick picture: <strong>in</strong> often means inside a space, <strong>on</strong> often means touching a surface or line, and <strong>at</strong> often means a point, address, event, or activity place. Some common expressions must be learned as chunks.
+        </div>
+
+        <div class="explanation-grid">
+          <div class="rule">
+            <h3>1. Use in for inside spaces</h3>
+            <p>Use <strong>in</strong> when something is inside a bigger space or inside an area with limits.</p>
+            <ul>
+              <li><strong>in the bag</strong>, <strong>in the kitchen</strong>, <strong>in the classroom</strong></li>
+              <li><strong>in Cairo</strong>, <strong>in France</strong>, <strong>in the mountains</strong></li>
+              <li><strong>in a car</strong> or <strong>in a taxi</strong></li>
+            </ul>
+          </div>
+
+          <div class="rule">
+            <h3>2. Use in for water and printed material</h3>
+            <p>We also use <strong>in</strong> when something is inside water, or appears inside a book, picture, newspaper, or document.</p>
+            <ul>
+              <li><strong>swim in the sea</strong>, <strong>in the river</strong>, <strong>in the pool</strong></li>
+              <li><strong>the woman in the picture</strong></li>
+              <li><strong>information in the newspaper</strong></li>
+            </ul>
+          </div>
+
+          <div class="rule">
+            <h3>3. Use on for surfaces</h3>
+            <p>Use <strong>on</strong> when something is touching a surface.</p>
+            <ul>
+              <li><strong>on the table</strong>, <strong>on the desk</strong>, <strong>on the sofa</strong></li>
+              <li><strong>on the wall</strong>, <strong>on the floor</strong></li>
+              <li><strong>on the third floor</strong></li>
+            </ul>
+          </div>
+
+          <div class="rule">
+            <h3>4. Use on for transport, streets, lines, and media</h3>
+            <p>Use <strong>on</strong> for public transport and for many lines or surfaces we imagine as lines.</p>
+            <ul>
+              <li><strong>on the bus</strong>, <strong>on a train</strong>, <strong>on a plane</strong></li>
+              <li><strong>on James Street</strong>, <strong>on the border</strong>, <strong>on the River Thames</strong></li>
+              <li><strong>on TV</strong>, <strong>on the internet</strong>, <strong>on a website</strong></li>
+            </ul>
+          </div>
+
+          <div class="rule">
+            <h3>5. Use at for points and exact positions</h3>
+            <p>Use <strong>at</strong> when the place is understood as a point, meeting place, address, entrance, or exact position.</p>
+            <ul>
+              <li><strong>at the door</strong>, <strong>at the entrance</strong>, <strong>at the back of the room</strong></li>
+              <li><strong>at 15 Craig Street</strong></li>
+              <li><strong>at a desk</strong> can mean sitting/working at that position.</li>
+            </ul>
+          </div>
+
+          <div class="rule">
+            <h3>6. Use at for activity places</h3>
+            <p>Use <strong>at</strong> in common phrases where the place suggests an activity.</p>
+            <ul>
+              <li><strong>at school</strong>, <strong>at work</strong>, <strong>at home</strong></li>
+              <li><strong>at the library</strong>, <strong>at the supermarket</strong>, <strong>at the station</strong></li>
+              <li><strong>at a party</strong>, <strong>at a concert</strong></li>
+            </ul>
+          </div>
+
+          <div class="rule">
+            <h3>7. Compare common contrasts</h3>
+            <p>Some contrasts are about how we imagine the place.</p>
+            <ul>
+              <li><strong>in a car</strong>, but <strong>on a bus/train/plane</strong></li>
+              <li><strong>in a lake</strong> means in the water; <strong>on a lake</strong> can mean on the surface or beside it.</li>
+              <li><strong>in the park</strong> can mean inside the park area; <strong>at the park</strong> can mean the park as a meeting place.</li>
+            </ul>
+          </div>
+
+          <div class="rule">
+            <h3>8. Learn useful chunks</h3>
+            <p>Some phrases are so common that it is best to learn them as complete chunks.</p>
+            <ul>
+              <li><strong>at home</strong>, <strong>at work</strong>, <strong>at school</strong></li>
+              <li><strong>on the left</strong>, <strong>on the right</strong></li>
+              <li><strong>in the world</strong>, <strong>in the countryside</strong>, <strong>in the forest</strong></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="teacher-note">
+          Final teacher tip: do not translate prepositions word by word. First ask what kind of place meaning you need: inside space, surface/line, or point/activity place. Then check whether the sentence is one of the common chunks.
+        </div>
+
+        <div class="result-actions">
+          <button class="button secondary" id="back-button" type="button">Back</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const SUBMISSION_URL = "https://script.google.com/macros/s/AKfycbzemuwABx_r378H23gNRkisj2n_LW92T97voS5NwMfuLjH6O8sfW2bifcfUXYMlQzMcpg/exec";
+    const GAME_TITLE = "Prepositions Place Quest";
+
+    const questions = [
+      { mode: "choice", prompt: "The keys are ___ the drawer.", correct: "in", distractors: ["on", "at", "by"], note: "Use in because the keys are inside an enclosed space." },
+      { mode: "choice", prompt: "The picture is ___ the wall.", correct: "on", distractors: ["in", "at", "to"], note: "Use on for something attached to or touching a surface." },
+      { mode: "blank", prompt: "I met Sara ___ the station.", correct: "at", acceptable: ["at"], note: "Use at for a meeting point or public place seen as a point." },
+      { mode: "choice", prompt: "They live ___ Helsinki.", correct: "in", distractors: ["on", "at", "over"], note: "Use in for cities, countries, and areas with limits." },
+      { mode: "choice", prompt: "Our office is ___ the fifth floor.", correct: "on", distractors: ["in", "at", "inside"], note: "Use on with floors in a building." },
+      { mode: "blank", prompt: "The children are ___ school now.", correct: "at", acceptable: ["at"], note: "At school is a common activity-place phrase." },
+      { mode: "choice", prompt: "There is a cafe ___ James Street.", correct: "on", distractors: ["in", "at", "under"], note: "Use on for streets when talking about location along a line." },
+      { mode: "choice", prompt: "My phone is ___ my bag.", correct: "in", distractors: ["on", "at", "near"], note: "Use in because the phone is inside the bag." },
+      { mode: "blank", prompt: "She is sitting ___ a desk.", correct: "at", acceptable: ["at"], note: "Use at when someone is sitting or working at a position such as a desk." },
+      { mode: "choice", prompt: "We saw the news ___ TV.", correct: "on", distractors: ["in", "at", "inside"], note: "Use on for TV, radio, the internet, and websites." },
+      { mode: "choice", prompt: "The milk is ___ the fridge.", correct: "in", distractors: ["on", "at", "by"], note: "Use in because the milk is inside the fridge." },
+      { mode: "choice", prompt: "He's ___ the bus now.", correct: "on", distractors: ["in", "at", "into"], note: "Use on for public transport such as buses, trains, and planes." },
+      { mode: "blank", prompt: "She's waiting ___ the entrance.", correct: "at", acceptable: ["at"], note: "Use at for exact positions such as the entrance or the back of a room." },
+      { mode: "choice", prompt: "The kids are swimming ___ the pool.", correct: "in", distractors: ["on", "at", "above"], note: "Use in when something is in water." },
+      { mode: "choice", prompt: "There's a small island ___ the lake.", correct: "in", distractors: ["on", "at", "to"], note: "Use in because the island is inside the area of the lake." },
+      { mode: "choice", prompt: "They stayed in a cabin ___ a lake.", correct: "on", distractors: ["in", "at", "inside"], note: "On a lake can mean on or beside the lake, like on the coast or on a river." },
+      { mode: "blank", prompt: "The answer is ___ page 12.", correct: "on", acceptable: ["on"], note: "Use on for pages because we imagine writing on the page surface." },
+      { mode: "choice", prompt: "I saw your photo ___ the newspaper.", correct: "in", distractors: ["on", "at", "over"], note: "Use in for things printed in newspapers, books, pictures, and documents." },
+      { mode: "choice", prompt: "We'll meet ___ the back of the room.", correct: "at", distractors: ["in", "on", "over"], note: "Use at for exact positions such as the back, front, or entrance." },
+      { mode: "choice", prompt: "The office is ___ the left.", correct: "on", distractors: ["in", "at", "inside"], note: "Use on in the expressions on the left and on the right." },
+      { mode: "blank", prompt: "My grandmother was born ___ Sweden.", correct: "in", acceptable: ["in"], note: "Use in with countries and other large areas." },
+      { mode: "choice", prompt: "I live ___ 15 Green Road.", correct: "at", distractors: ["in", "on", "inside"], note: "Use at for exact addresses." },
+      { mode: "choice", prompt: "There are many fish ___ the river.", correct: "in", distractors: ["on", "at", "onto"], note: "Use in when something is in the water." },
+      { mode: "choice", prompt: "The Pyrenees are ___ the border of Spain and France.", correct: "on", distractors: ["in", "at", "inside"], note: "Use on for borders and lines." },
+      { mode: "blank", prompt: "I am ___ home today.", correct: "at", acceptable: ["at"], note: "At home is a common fixed phrase. We do not say at the home for this meaning." }
+    ];
+
+    const state = {
+      student: "",
+      index: 0,
+      score: 0,
+      correct: 0,
+      streak: 0,
+      locked: false,
+      startTime: 0,
+      answers: [],
+      returnScreen: "start"
+    };
+
+    const screens = {
+      start: document.getElementById("start-screen"),
+      quiz: document.getElementById("quiz-screen"),
+      result: document.getElementById("result-screen"),
+      explanation: document.getElementById("explanation-screen")
+    };
+
+    const els = {
+      studentName: document.getElementById("student-name"),
+      startButton: document.getElementById("start-button"),
+      startExplanation: document.getElementById("start-explanation"),
+      topStatus: document.getElementById("top-status"),
+      statStudent: document.getElementById("stat-student"),
+      statScore: document.getElementById("stat-score"),
+      statStreak: document.getElementById("stat-streak"),
+      statCorrect: document.getElementById("stat-correct"),
+      progressFill: document.getElementById("progress-fill"),
+      questionCount: document.getElementById("question-count"),
+      questionType: document.getElementById("question-type"),
+      questionText: document.getElementById("question-text"),
+      answers: document.getElementById("answers"),
+      blankRow: document.getElementById("blank-row"),
+      blankAnswer: document.getElementById("blank-answer"),
+      submitBlank: document.getElementById("submit-blank"),
+      feedback: document.getElementById("feedback"),
+      feedbackActions: document.getElementById("feedback-actions"),
+      nextButton: document.getElementById("next-button"),
+      resultBadge: document.getElementById("result-badge"),
+      resultTitle: document.getElementById("result-title"),
+      resultMessage: document.getElementById("result-message"),
+      finalScore: document.getElementById("final-score"),
+      finalCorrect: document.getElementById("final-correct"),
+      finalRank: document.getElementById("final-rank"),
+      submitStatus: document.getElementById("submit-status"),
+      playAgain: document.getElementById("play-again"),
+      explanationButton: document.getElementById("explanation-button"),
+      backButton: document.getElementById("back-button")
+    };
+
+    function switchScreen(name) {
+      Object.values(screens).forEach(screen => screen.classList.remove("active"));
+      screens[name].classList.add("active");
+    }
+
+    function shuffle(items) {
+      const copy = [...items];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function startGame() {
+      state.student = els.studentName.value.trim() || "Student";
+      state.index = 0;
+      state.score = 0;
+      state.correct = 0;
+      state.streak = 0;
+      state.locked = false;
+      state.startTime = Date.now();
+      state.answers = [];
+      state.returnScreen = "start";
+      els.statStudent.textContent = state.student;
+      els.topStatus.textContent = "In progress";
+      updateStats();
+      switchScreen("quiz");
+      loadQuestion();
+    }
+
+    function loadQuestion() {
+      const question = questions[state.index];
+      state.locked = false;
+      els.questionCount.textContent = `Question ${state.index + 1} / ${questions.length}`;
+      els.questionType.textContent = question.mode === "choice" ? "Multiple Choice" : "Fill In The Blank";
+      els.questionText.textContent = question.prompt;
+      els.progressFill.style.width = `${(state.index / questions.length) * 100}%`;
+      els.feedback.textContent = "";
+      els.feedback.className = "feedback";
+      els.feedbackActions.classList.remove("active");
+      els.answers.innerHTML = "";
+      els.blankAnswer.value = "";
+      els.blankAnswer.disabled = false;
+      els.submitBlank.disabled = false;
+
+      if (question.mode === "choice") {
+        els.answers.style.display = "grid";
+        els.blankRow.classList.remove("active");
+        shuffle([question.correct, ...question.distractors]).forEach(option => {
+          const button = document.createElement("button");
+          button.className = "answer";
+          button.type = "button";
+          button.textContent = option;
+          button.addEventListener("click", () => chooseAnswer(option, button));
+          els.answers.appendChild(button);
+        });
+      } else {
+        els.answers.style.display = "none";
+        els.blankRow.classList.add("active");
+        setTimeout(() => els.blankAnswer.focus(), 80);
+      }
+    }
+
+    function normalize(value) {
+      return value.trim().toLowerCase().replace(/\s+/g, " ");
+    }
+
+    function checkBlankAnswer() {
+      if (state.locked) return;
+      const question = questions[state.index];
+      const rawAnswer = els.blankAnswer.value;
+      const normalized = normalize(rawAnswer);
+      const acceptable = question.acceptable.map(answer => normalize(answer));
+      const isCorrect = acceptable.includes(normalized);
+      els.blankAnswer.disabled = true;
+      els.submitBlank.disabled = true;
+      finishAnswer(isCorrect, rawAnswer.trim());
+    }
+
+    function chooseAnswer(choice, element) {
+      if (state.locked) return;
+      const question = questions[state.index];
+      const isCorrect = choice === question.correct;
+      document.querySelectorAll(".answer").forEach(button => {
+        button.disabled = true;
+        if (button.textContent === question.correct) {
+          button.classList.add("correct");
+        }
+      });
+      if (!isCorrect) {
+        element.classList.add("wrong");
+      }
+      finishAnswer(isCorrect, choice);
+    }
+
+    function finishAnswer(isCorrect, studentAnswer) {
+      const question = questions[state.index];
+      const pointsBefore = state.score;
+      state.locked = true;
+
+      if (isCorrect) {
+        state.correct++;
+        state.streak++;
+        state.score += 100 + (state.streak >= 3 ? 25 : 0);
+        els.feedback.className = "feedback correct";
+        els.feedback.textContent = state.streak >= 3
+          ? `Correct. Streak bonus earned. ${question.note}`
+          : `Correct. ${question.note}`;
+        playCorrect();
+        burst(["#23d18b", "#5ba8ff", "#ffd166"]);
+      } else {
+        state.streak = 0;
+        els.feedback.className = "feedback wrong";
+        els.feedback.textContent = `Answer: ${question.correct}. ${question.note}`;
+        playWrong();
+      }
+
+      state.answers.push({
+        questionNumber: state.index + 1,
+        question: question.prompt,
+        type: question.mode,
+        studentAnswer,
+        correctAnswer: question.correct,
+        isCorrect,
+        pointsEarned: state.score - pointsBefore
+      });
+
+      updateStats();
+      els.feedbackActions.classList.add("active");
+    }
+
+    function nextQuestion() {
+      state.index++;
+      if (state.index >= questions.length) {
+        showResults();
+      } else {
+        loadQuestion();
+      }
+    }
+
+    function updateStats() {
+      els.statScore.textContent = state.score;
+      els.statStreak.textContent = state.streak;
+      els.statCorrect.textContent = state.correct;
+    }
+
+    function showExplanation(returnScreen) {
+      state.returnScreen = returnScreen;
+      switchScreen("explanation");
+    }
+
+    function showResults() {
+      els.progressFill.style.width = "100%";
+      const percentage = Math.round((state.correct / questions.length) * 100);
+      const rank = percentage >= 90 ? "Place Master" : percentage >= 76 ? "Route Finder" : percentage >= 56 ? "Place Explorer" : "Map Trainee";
+      els.resultBadge.textContent = percentage >= 90 ? "A" : percentage >= 76 ? "B" : percentage >= 56 ? "C" : "D";
+      els.resultTitle.textContent = `Finished, ${state.student}`;
+      els.resultMessage.textContent = percentage >= 76
+        ? "Strong place-preposition control. You are noticing spaces, surfaces, points, transport, and common chunks."
+        : "Good practice. Review the explanation, then try again and ask: space, surface, or point?";
+      els.finalScore.textContent = `Score: ${state.score}`;
+      els.finalCorrect.textContent = `Correct: ${state.correct} / ${questions.length}`;
+      els.finalRank.textContent = `Rank: ${rank}`;
+      els.topStatus.textContent = "Complete";
+      switchScreen("result");
+      playFinish();
+      burst(["#ffd166", "#b48cff", "#5ba8ff", "#23d18b"], 28);
+      submitResult();
+    }
+
+    function buildSubmission() {
+      return {
+        studentName: state.student,
+        gameTitle: GAME_TITLE,
+        score: state.score,
+        correct: state.correct,
+        total: questions.length,
+        timeSpentSeconds: Math.round((Date.now() - state.startTime) / 1000),
+        answers: state.answers
+      };
+    }
+
+    async function submitResult() {
+      const submission = buildSubmission();
+      els.submitStatus.className = "submit-status";
+      els.submitStatus.textContent = "Submitting result to teacher sheet...";
+
+      try {
+        await fetch(SUBMISSION_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: {
+            "Content-Type": "text/plain;charset=utf-8"
+          },
+          body: JSON.stringify(submission)
+        });
+
+        els.submitStatus.className = "submit-status success";
+        els.submitStatus.textContent = "Result submitted. Open the explanation when you are ready.";
+      } catch (error) {
+        els.submitStatus.className = "submit-status warning";
+        els.submitStatus.textContent = `Could not submit automatically. Backup: ${state.student} | ${state.score} | ${state.correct}/${questions.length}`;
+      }
+    }
+
+    function playTone(frequency, duration, type = "sine", delay = 0, volume = 0.08) {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContext) return;
+
+      const audio = new AudioContext();
+      const oscillator = audio.createOscillator();
+      const gain = audio.createGain();
+      const start = audio.currentTime + delay;
+
+      oscillator.frequency.value = frequency;
+      oscillator.type = type;
+      gain.gain.setValueAtTime(volume, start);
+      gain.gain.exponentialRampToValueAtTime(0.001, start + duration);
+      oscillator.connect(gain);
+      gain.connect(audio.destination);
+      oscillator.start(start);
+      oscillator.stop(start + duration);
+    }
+
+    function playCorrect() {
+      playTone(660, 0.1, "triangle", 0, 0.07);
+      playTone(880, 0.12, "triangle", 0.08, 0.06);
+    }
+
+    function playWrong() {
+      playTone(220, 0.16, "sawtooth", 0, 0.045);
+      playTone(165, 0.18, "sine", 0.08, 0.04);
+    }
+
+    function playFinish() {
+      playTone(523, 0.1, "triangle", 0, 0.06);
+      playTone(659, 0.12, "triangle", 0.09, 0.06);
+      playTone(784, 0.16, "triangle", 0.19, 0.055);
+    }
+
+    function burst(colors, count = 16) {
+      for (let i = 0; i < count; i++) {
+        const dot = document.createElement("span");
+        dot.className = "burst";
+        dot.style.left = `${window.innerWidth / 2}px`;
+        dot.style.top = `${Math.min(window.innerHeight * 0.55, 440)}px`;
+        dot.style.background = colors[i % colors.length];
+        dot.style.setProperty("--x", `${Math.random() * 260 - 130}px`);
+        dot.style.setProperty("--y", `${Math.random() * 190 - 135}px`);
+        document.body.appendChild(dot);
+        setTimeout(() => dot.remove(), 900);
+      }
+    }
+
+    els.startButton.addEventListener("click", startGame);
+    els.startExplanation.addEventListener("click", () => showExplanation("start"));
+    els.explanationButton.addEventListener("click", () => showExplanation("result"));
+    els.backButton.addEventListener("click", () => switchScreen(state.returnScreen));
+    els.nextButton.addEventListener("click", nextQuestion);
+    els.submitBlank.addEventListener("click", checkBlankAnswer);
+    els.playAgain.addEventListener("click", () => {
+      els.topStatus.textContent = "Ready";
+      switchScreen("start");
+    });
+    els.studentName.addEventListener("keydown", event => {
+      if (event.key === "Enter") startGame();
+    });
+    els.blankAnswer.addEventListener("keydown", event => {
+      if (event.key === "Enter" && !state.locked) checkBlankAnswer();
+    });
+  </script>
+</body>
+</html>

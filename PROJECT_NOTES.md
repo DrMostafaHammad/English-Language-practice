@@ -38,10 +38,11 @@ For each new game:
 8. Include sound effects, polished styling, and a classroom-friendly game feel.
 9. Include subtle/simple visual assets automatically when useful, and mention where they were added.
 10. Add a generous `Explanation` page, especially when the game will be used during a lesson.
-11. Submit results to the existing Apps Script URL and preserve the standard payload.
-12. Add the game to the root homepage with `Open` and `Copy Link` controls.
-13. Update `PROJECT_NOTES.md` with the new game title, source, folder, and direct student link.
-14. Commit and push changes to GitHub.
+11. Add an `Explanation` button on the first/start page so students can read the lesson before starting if they want.
+12. Submit results to the existing Apps Script URL and preserve the standard payload.
+13. Add the game to the root homepage with `Open` and `Copy Link` controls.
+14. Update `PROJECT_NOTES.md` with the new game title, source, folder, and direct student link.
+15. Commit and push changes to GitHub.
 
 ## Current Online Setup
 
@@ -78,6 +79,8 @@ English-Language-Practice/
     Code.gs
   templates/
   games/
+    prepositions-place-quest/
+      index.html
     articles-adventure/
       index.html
     word-order-workshop/
@@ -181,6 +184,22 @@ Do not auto-advance immediately after feedback. Students need time to read expla
 
 Current game:
 
+- Title: `Prepositions Place Quest`
+- Topic: A1-A2 prepositions of place: `in`, `on`, and `at`
+- Source pages:
+  - `https://learnenglish.britishcouncil.org/free-resources/grammar/a1-a2/prepositions-place`
+  - `https://test-english.com/grammar-points/a1/at-in-on-prepositions-of-place/`
+- Project copy lives at: `games/prepositions-place-quest/index.html`
+- Direct student link: `https://drmostafahammad.github.io/English-Language-practice/games/prepositions-place-quest/`
+- Question count: 25
+- Question types: multiple choice and fill in the blank
+- Multiple-choice answer options are shuffled at runtime.
+- Includes an `Explanation` button on the first page before the game starts.
+- Uses a subtle HTML/CSS place-map visual on the start screen.
+- After final result submission, the `Explanation` button opens the lesson page in the game.
+
+Previous games:
+
 - Title: `Articles Adventure`
 - Topic: A1 English articles: `a`, `an`, `the`, and zero article
 - Source page: `https://test-english.com/grammar-points/a1/a-an-the-no-article/`
@@ -190,8 +209,6 @@ Current game:
 - Question types: multiple choice and fill in the blank
 - Multiple-choice answer options are shuffled at runtime.
 - After final result submission, the `Explanation` button opens a fuller ESL teacher-style explanation page in the game.
-
-Previous game:
 
 - Title: `Word Order Workshop`
 - Topic: A1 basic word order in English
@@ -249,6 +266,31 @@ Notes:
 - Exercise 1 dropdown options appear flattened inline, but can be inferred.
 - Best approach: create original questions inspired by the topic, not copied wholesale.
 
+British Council prepositions of place page:
+
+```text
+https://learnenglish.britishcouncil.org/free-resources/grammar/a1-a2/prepositions-place
+```
+
+Notes:
+
+- Main explanation covers `in`, `on`, and `at` for location.
+- `in`: inside bigger spaces, cities/countries, cars/taxis, water, mountains/countryside/forest.
+- `on`: surfaces, floors, public transport, lines/streets/borders/rivers/islands.
+- `at`: activity places, public places, exact positions, addresses, entrances, back/front of a room.
+- Best approach: create original questions based on the rule categories.
+
+Test-English at/in/on prepositions of place page:
+
+```text
+https://test-english.com/grammar-points/a1/at-in-on-prepositions-of-place/
+```
+
+Notes:
+
+- Main explanation adds useful chunks such as `at home`, `at work`, `at school`, `at the shop`, `on the left/right`, `on TV/the radio/the internet`, and `in a picture/book/newspaper`.
+- Best approach: include both simple spatial questions and common fixed phrases.
+
 ## GitHub Pages Notes
 
 Current repository has an `index.html` at the root. It is now a game-library homepage that links to each game.
@@ -258,6 +300,7 @@ Games live in their own folders:
 ```text
 index.html
 games/
+  prepositions-place-quest/index.html
   articles-adventure/index.html
   word-order-workshop/index.html
   vocabulary-volcano/index.html
@@ -313,5 +356,5 @@ games/articles-adventure/assets/
 Current local state:
 
 - Root `index.html` is now a game-library homepage.
-- Published games: `Articles Adventure`, `Word Order Workshop`.
+- Published games: `Prepositions Place Quest`, `Articles Adventure`, `Word Order Workshop`.
 - The same Google Sheet and Apps Script web app URL should be reused for future games unless the user asks for a fresh backend.

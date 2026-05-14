@@ -256,6 +256,25 @@ Preferred long-term plan:
 
 Start with a reusable grammar-choice or word-order template only after a few more games have been created and the repeated patterns are clearer.
 
+## Visual Asset Notes
+
+For upcoming games, include subtle, simple images automatically when they support the topic or make the game feel more polished.
+
+Start small:
+
+- Prefer one lightweight topic image, visual motif, or diagram per new game.
+- Use images first on the start screen, explanation page, or as simple category visuals.
+- Keep important grammar text in HTML/CSS rather than embedded inside generated images, because generated image text may be imperfect.
+- Store assets inside the relevant game folder, for example:
+
+```text
+games/articles-adventure/assets/
+```
+
+- Prefer optimized `.webp` images and keep each asset small when possible.
+- In final responses, explicitly mention where images were added so the user knows what to review.
+- Increase image use gradually after seeing which placements are helpful for teaching.
+
 Current local state:
 
 - Root `index.html` is now a game-library homepage.

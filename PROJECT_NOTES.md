@@ -1,6 +1,6 @@
 # English Language Practice Project Notes
 
-Last updated: 2026-05-14
+Last updated: 2026-05-22
 
 ## Purpose
 
@@ -79,6 +79,10 @@ English-Language-Practice/
     Code.gs
   templates/
   games/
+    countable-uncountable-quest/
+      index.html
+      assets/
+        countable-uncountable-hero.png
     prepositions-place-quest/
       index.html
     articles-adventure/
@@ -184,6 +188,21 @@ Do not auto-advance immediately after feedback. Students need time to read expla
 
 Current game:
 
+- Title: `Countable And Uncountable Quest`
+- Topic: A1-A2 countable and uncountable nouns
+- Source page: `https://learnenglish.britishcouncil.org/free-resources/grammar/a1-a2/nouns-countable-uncountable`
+- Project copy lives at: `games/countable-uncountable-quest/index.html`
+- Direct student link: `https://drmostafahammad.github.io/English-Language-practice/games/countable-uncountable-quest/`
+- Question count: 25
+- Question types: multiple choice and fill in the blank
+- Multiple-choice answer options are shuffled at runtime.
+- Includes an `Explanation` button on the first page before the game starts.
+- Uses a generated custom visual asset saved at `games/countable-uncountable-quest/assets/countable-uncountable-hero.png`.
+- The generated visual is blended into the panel background, the start visual, and occasional question strips.
+- Pushed after user inspection and approval.
+
+Previous games:
+
 - Title: `Prepositions Place Quest`
 - Topic: A1-A2 prepositions of place: `in`, `on`, and `at`
 - Source pages:
@@ -197,8 +216,6 @@ Current game:
 - Includes an `Explanation` button on the first page before the game starts.
 - Uses a subtle HTML/CSS place-map visual on the start screen.
 - After final result submission, the `Explanation` button opens the lesson page in the game.
-
-Previous games:
 
 - Title: `Articles Adventure`
 - Topic: A1 English articles: `a`, `an`, `the`, and zero article
@@ -291,6 +308,26 @@ Notes:
 - Main explanation adds useful chunks such as `at home`, `at work`, `at school`, `at the shop`, `on the left/right`, `on TV/the radio/the internet`, and `in a picture/book/newspaper`.
 - Best approach: include both simple spatial questions and common fixed phrases.
 
+British Council countable and uncountable nouns page:
+
+```text
+https://learnenglish.britishcouncil.org/free-resources/grammar/a1-a2/nouns-countable-uncountable
+```
+
+Notes:
+
+- Countable nouns can be counted: `an apple`, `two apples`, `three apples`.
+- Uncountable nouns cannot normally be counted directly: `air`, `rice`, `water`, `bread`, `coffee`, `information`, `money`, `advice`, `luggage`, `furniture`.
+- Positive countable: use `a/an` for singular nouns and `some` for plural nouns.
+- Negative countable: use `a/an` for singular nouns and `any` for plural nouns.
+- Positive uncountable: use `some`.
+- Negative uncountable: use `any`.
+- Questions: use `a/an`, `any`, or `how many` with countable nouns; use `any` or `how much` with uncountable nouns.
+- Use `some` in offers, requests, and questions where we expect the answer to be yes.
+- `A lot of/lots of` works with both countable and uncountable nouns.
+- In positive sentences, `a lot of` is usually more natural than `many/much`.
+- In negatives, use `not many` with countable plural nouns and `not much` with uncountable nouns.
+
 ## GitHub Pages Notes
 
 Current repository has an `index.html` at the root. It is now a game-library homepage that links to each game.
@@ -300,6 +337,7 @@ Games live in their own folders:
 ```text
 index.html
 games/
+  countable-uncountable-quest/index.html
   prepositions-place-quest/index.html
   articles-adventure/index.html
   word-order-workshop/index.html
@@ -356,5 +394,5 @@ games/articles-adventure/assets/
 Current local state:
 
 - Root `index.html` is now a game-library homepage.
-- Published games: `Prepositions Place Quest`, `Articles Adventure`, `Word Order Workshop`.
+- Published games: `Countable And Uncountable Quest`, `Prepositions Place Quest`, `Articles Adventure`, `Word Order Workshop`.
 - The same Google Sheet and Apps Script web app URL should be reused for future games unless the user asks for a fresh backend.

@@ -30,19 +30,20 @@ For each new game:
 
 1. Read this file first.
 2. If the user gives a source URL, browse it and summarize the learning points.
-3. Create original questions inspired by the topic; do not copy exercise items wholesale.
-4. Use 20 questions unless the user asks for a different number.
-5. Mix question modes where suitable, such as multiple choice and fill in the blank.
-6. Shuffle multiple-choice answer options at runtime.
-7. Keep the answer flow: answer -> feedback/explanation -> student clicks `Next`.
-8. Include sound effects, polished styling, and a classroom-friendly game feel.
-9. Include subtle/simple visual assets automatically when useful, and mention where they were added.
-10. Add a generous `Explanation` page, especially when the game will be used during a lesson.
-11. Add an `Explanation` button on the first/start page so students can read the lesson before starting if they want.
-12. Submit results to the existing Apps Script URL and preserve the standard payload.
-13. Add the game to the root homepage with `Open` and `Copy Link` controls.
-14. Update `PROJECT_NOTES.md` with the new game title, source, folder, and direct student link.
-15. Commit and push changes to GitHub.
+3. Ask for or use the user's stated CEFR level, and write the game/explanation language at that level.
+4. Create original questions inspired by the topic; do not copy exercise items wholesale.
+5. Use 20 questions unless the user asks for a different number.
+6. Mix question modes where suitable, such as multiple choice and fill in the blank.
+7. Shuffle multiple-choice answer options at runtime.
+8. Keep the answer flow: answer -> feedback/explanation -> student clicks `Next`.
+9. Include sound effects, polished styling, and a classroom-friendly game feel.
+10. Include subtle/simple visual assets automatically when useful, and mention where they were added.
+11. Add a generous `Explanation` page, especially when the game will be used during a lesson.
+12. Add an `Explanation` button on the first/start page so students can read the lesson before starting if they want.
+13. Submit results to the existing Apps Script URL and preserve the standard payload.
+14. Add the game to the root homepage with `Open` and `Copy Link` controls.
+15. Update `PROJECT_NOTES.md` with the new game title, source, folder, and direct student link.
+16. Commit and push changes to GitHub.
 
 ## Current Online Setup
 
@@ -175,6 +176,22 @@ For all future games:
 - If submission fails, show a backup result code or summary.
 - Use a clear, polished, classroom-friendly visual style.
 - Make the game playable as a standalone `index.html` file.
+
+Name and example preference:
+
+- When example sentences need personal names, use broadly familiar English/international names suitable for mixed-nationality students, including Turkish students.
+- Good examples: `Tom`, `Emma`, `Anna`, `Ben`, `Lisa`, `Max`, `Mia`, `Jack`, `Sofia`, `Alex`.
+- Avoid using mostly Arabic-specific names such as `Ali`, `Omar`, `Ahmed`, `Mona`, or `Sara` as the default naming pattern.
+- Do not avoid names completely; use names naturally when they make sentences clearer.
+
+CEFR explanation preference:
+
+- The user will specify the intended CEFR level for future games when possible.
+- Match the explanation page and question wording to that level.
+- For `A1`, keep explanations very simple, with short sentences, clear examples, limited terminology, and student-facing language.
+- For `A2`, include a little more detail but keep the language controlled and practical.
+- For `B1+`, explanations may be deeper and more analytical.
+- If no CEFR level is provided, ask briefly or assume A1-A2 only when the topic/source clearly suggests it.
 
 Important answer-flow rule:
 

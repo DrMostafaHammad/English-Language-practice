@@ -80,6 +80,10 @@ English-Language-Practice/
     Code.gs
   templates/
   games/
+    possessive-pronouns-quest/
+      index.html
+      assets/
+        possessive-pronouns-hero.png
     possessive-adjectives-quest/
       index.html
       assets/
@@ -209,6 +213,22 @@ Do not auto-advance immediately after feedback. Students need time to read expla
 
 Current game:
 
+- Title: `Possessive Pronouns Quest`
+- Topic: A1 possessive pronouns: `mine`, `yours`, `his`, `hers`, `ours`, and `theirs`
+- Source page: `https://learnenglish.britishcouncil.org/free-resources/grammar/english-grammar-reference/possessives-pronouns`
+- Project copy lives at: `games/possessive-pronouns-quest/index.html`
+- Direct student link: `https://drmostafahammad.github.io/English-Language-practice/games/possessive-pronouns-quest/`
+- Question count: 20
+- Question types: multiple choice and fill in the blank
+- Multiple-choice answer options are shuffled at runtime.
+- Includes an `Explanation` button on the first page before the game starts.
+- Explanation page uses A1-friendly language and emphasizes that possessive pronouns stand alone and replace possessive adjective + noun.
+- Uses broadly familiar English/international names in examples.
+- Uses a generated custom visual asset saved at `games/possessive-pronouns-quest/assets/possessive-pronouns-hero.png`.
+- The generated visual is blended into the panel background, the start visual, and occasional question strips.
+
+Previous games:
+
 - Title: `Possessive Adjectives Quest`
 - Topic: A1-A2 possessive adjectives: `my`, `your`, `his`, `her`, `its`, `our`, `their`
 - Source page: `https://learnenglish.britishcouncil.org/free-resources/grammar/english-grammar-reference/possessives-adjectives`
@@ -221,8 +241,6 @@ Current game:
 - Explanation page clearly emphasizes that possessive adjectives come before nouns.
 - Uses a generated custom visual asset saved at `games/possessive-adjectives-quest/assets/possessive-adjectives-hero.png`.
 - The generated visual is blended into the panel background, the start visual, and occasional question strips.
-
-Previous games:
 
 - Title: `Countable And Uncountable Quest`
 - Topic: A1-A2 countable and uncountable nouns
@@ -376,6 +394,21 @@ Notes:
 - `Its` is the possessive adjective. `It's` means `it is` or `it has`.
 - Best approach: make students choose the owner first, then place the possessive adjective directly before the noun.
 
+British Council possessive pronouns page:
+
+```text
+https://learnenglish.britishcouncil.org/free-resources/grammar/english-grammar-reference/possessives-pronouns
+```
+
+Notes:
+
+- Possessive pronouns are `mine`, `yours`, `his`, `hers`, `ours`, and `theirs`.
+- They stand alone and replace a possessive adjective + noun phrase, such as `my bag` -> `mine`.
+- `His` is the same form before a noun and alone: `his book` / `It is his`.
+- Possessive pronouns do not take apostrophes: use `yours`, `hers`, `ours`, and `theirs`.
+- `Its` is usually taught as a possessive adjective before a noun at A1; it is not normally used alone like `mine` or `yours`.
+- For A1 students, the key classroom question is: "Is there a noun after it?" If yes, use a possessive adjective. If no, use a possessive pronoun.
+
 ## GitHub Pages Notes
 
 Current repository has an `index.html` at the root. It is now a game-library homepage that links to each game.
@@ -385,6 +418,7 @@ Games live in their own folders:
 ```text
 index.html
 games/
+  possessive-pronouns-quest/index.html
   possessive-adjectives-quest/index.html
   countable-uncountable-quest/index.html
   prepositions-place-quest/index.html
@@ -443,5 +477,5 @@ games/articles-adventure/assets/
 Current local state:
 
 - Root `index.html` is now a game-library homepage.
-- Published games: `Possessive Adjectives Quest`, `Countable And Uncountable Quest`, `Prepositions Place Quest`, `Articles Adventure`, `Word Order Workshop`.
+- Published games: `Possessive Pronouns Quest`, `Possessive Adjectives Quest`, `Countable And Uncountable Quest`, `Prepositions Place Quest`, `Articles Adventure`, `Word Order Workshop`.
 - The same Google Sheet and Apps Script web app URL should be reused for future games unless the user asks for a fresh backend.

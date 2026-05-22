@@ -79,6 +79,10 @@ English-Language-Practice/
     Code.gs
   templates/
   games/
+    possessive-adjectives-quest/
+      index.html
+      assets/
+        possessive-adjectives-hero.png
     countable-uncountable-quest/
       index.html
       assets/
@@ -188,6 +192,21 @@ Do not auto-advance immediately after feedback. Students need time to read expla
 
 Current game:
 
+- Title: `Possessive Adjectives Quest`
+- Topic: A1-A2 possessive adjectives: `my`, `your`, `his`, `her`, `its`, `our`, `their`
+- Source page: `https://learnenglish.britishcouncil.org/free-resources/grammar/english-grammar-reference/possessives-adjectives`
+- Project copy lives at: `games/possessive-adjectives-quest/index.html`
+- Direct student link: `https://drmostafahammad.github.io/English-Language-practice/games/possessive-adjectives-quest/`
+- Question count: 20
+- Question types: multiple choice and fill in the blank
+- Multiple-choice answer options are shuffled at runtime.
+- Includes an `Explanation` button on the first page before the game starts.
+- Explanation page clearly emphasizes that possessive adjectives come before nouns.
+- Uses a generated custom visual asset saved at `games/possessive-adjectives-quest/assets/possessive-adjectives-hero.png`.
+- The generated visual is blended into the panel background, the start visual, and occasional question strips.
+
+Previous games:
+
 - Title: `Countable And Uncountable Quest`
 - Topic: A1-A2 countable and uncountable nouns
 - Source page: `https://learnenglish.britishcouncil.org/free-resources/grammar/a1-a2/nouns-countable-uncountable`
@@ -200,8 +219,6 @@ Current game:
 - Uses a generated custom visual asset saved at `games/countable-uncountable-quest/assets/countable-uncountable-hero.png`.
 - The generated visual is blended into the panel background, the start visual, and occasional question strips.
 - Pushed after user inspection and approval.
-
-Previous games:
 
 - Title: `Prepositions Place Quest`
 - Topic: A1-A2 prepositions of place: `in`, `on`, and `at`
@@ -328,6 +345,20 @@ Notes:
 - In positive sentences, `a lot of` is usually more natural than `many/much`.
 - In negatives, use `not many` with countable plural nouns and `not much` with uncountable nouns.
 
+British Council possessive adjectives page:
+
+```text
+https://learnenglish.britishcouncil.org/free-resources/grammar/english-grammar-reference/possessives-adjectives
+```
+
+Notes:
+
+- Possessive adjectives are `my`, `your`, `his`, `her`, `its`, `our`, and `their`.
+- They are used before nouns.
+- They can refer to belongings, people/relationships/friends, and body parts.
+- `Its` is the possessive adjective. `It's` means `it is` or `it has`.
+- Best approach: make students choose the owner first, then place the possessive adjective directly before the noun.
+
 ## GitHub Pages Notes
 
 Current repository has an `index.html` at the root. It is now a game-library homepage that links to each game.
@@ -337,6 +368,7 @@ Games live in their own folders:
 ```text
 index.html
 games/
+  possessive-adjectives-quest/index.html
   countable-uncountable-quest/index.html
   prepositions-place-quest/index.html
   articles-adventure/index.html
@@ -394,5 +426,5 @@ games/articles-adventure/assets/
 Current local state:
 
 - Root `index.html` is now a game-library homepage.
-- Published games: `Countable And Uncountable Quest`, `Prepositions Place Quest`, `Articles Adventure`, `Word Order Workshop`.
+- Published games: `Possessive Adjectives Quest`, `Countable And Uncountable Quest`, `Prepositions Place Quest`, `Articles Adventure`, `Word Order Workshop`.
 - The same Google Sheet and Apps Script web app URL should be reused for future games unless the user asks for a fresh backend.

@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Possessive Adjectives Quest</title>
+  <style>
+    :root {
+      --navy: #071426;
+      --navy-2: #102442;
+      --ink: #f8fbff;
+      --muted: #afbdd2;
+      --panel: rgba(9, 24, 46, 0.92);
+      --line: rgba(255, 255, 255, 0.15);
+      --blue: #5ba8ff;
+      --green: #23d18b;
+      --yellow: #ffd166;
+      --red: #ff6f70;
+      --purple: #b48cff;
+      --shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        linear-gradient(120deg, rgba(91, 168, 255, 0.18), transparent 34%),
+        linear-gradient(250deg, rgba(35, 209, 139, 0.14), transparent 38%),
+        linear-gradient(135deg, var(--navy), var(--navy-2) 48%, #112033);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.2;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.09) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.09) 1px, transparent 1px);
+      background-size: 38px 38px;
+      mask-image: linear-gradient(180deg, black, transparent 78%);
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .shell {
+      position: relative;
+      width: min(1120px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 20px 0 42px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      padding: 14px 0 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .mark {
+      display: grid;
+      place-items: center;
+      width: 50px;
+      height: 50px;
+      border-radius: 8px;
+      color: #071426;
+      background: linear-gradient(135deg, var(--yellow), var(--green));
+      font-weight: 950;
+      box-shadow: 0 14px 34px rgba(35, 209, 139, 0.24);
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      margin-bottom: 4px;
+      font-size: clamp(1.8rem, 4vw, 3.2rem);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    .subtitle,
+    .muted {
+      color: var(--muted);
+      line-height: 1.58;
+    }
+
+    .status-pill {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 10px 14px;
+      background: rgba(255, 255, 255, 0.08);
+      color: #dce8fb;
+      font-weight: 850;
+      white-space: nowrap;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    }
+
+    .panel {
+      position: relative;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.035)),
+        var(--panel);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      backdrop-filter: blur(18px);
+    }
+
+    .panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(90deg, rgba(7, 20, 38, 0.82), rgba(7, 20, 38, 0.4), rgba(7, 20, 38, 0.9)),
+        url("assets/possessive-adjectives-hero.png");
+      background-size: cover;
+      background-position: center;
+      opacity: 0.2;
+      filter: saturate(1.05);
+    }
+
+    .screen {
+      position: relative;
+      display: none;
+      padding: clamp(20px, 4vw, 34px);
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    .start-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .hero-visual {
+      min-height: 340px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+      background:
+        linear-gradient(180deg, rgba(7, 20, 38, 0.12), rgba(7, 20, 38, 0.86)),
+        url("assets/possessive-adjectives-hero.png");
+      background-size: cover;
+      background-position: center;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+      display: grid;
+      align-content: end;
+      overflow: hidden;
+    }
+
+    .mini-board {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .mini-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      background: rgba(7, 20, 38, 0.74);
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.18);
+    }
+
+    .mini-card strong {
+      display: block;
+      margin-bottom: 6px;
+      color: #ffffff;
+      font-size: 1.05rem;
+    }
+
+    .start-form {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    input {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px 15px;
+      color: #eef6ff;
+      background: rgba(255, 255, 255, 0.08);
+      outline: none;
+    }
+
+    input::placeholder {
+      color: rgba(220, 232, 251, 0.58);
+    }
+
+    input:focus {
+      border-color: rgba(91, 168, 255, 0.85);
+      box-shadow: 0 0 0 4px rgba(91, 168, 255, 0.14);
+    }
+
+    .button {
+      border: 0;
+      border-radius: 8px;
+      padding: 14px 18px;
+      color: #071426;
+      background: linear-gradient(135deg, var(--green), var(--blue));
+      font-weight: 950;
+      cursor: pointer;
+      box-shadow: 0 18px 38px rgba(91, 168, 255, 0.24);
+      transition: transform 160ms ease, filter 160ms ease, box-shadow 160ms ease;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.04);
+      box-shadow: 0 24px 52px rgba(35, 209, 139, 0.26);
+    }
+
+    .button.secondary {
+      color: #dce8fb;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--line);
+      box-shadow: none;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-top: 14px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .stat {
+      padding: 14px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+
+    .stat span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 850;
+      text-transform: uppercase;
+    }
+
+    .stat strong {
+      display: block;
+      margin-top: 5px;
+      font-size: 1.2rem;
+    }
+
+    .progress {
+      height: 12px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.09);
+      margin-bottom: 22px;
+    }
+
+    #progress-fill {
+      width: 0;
+      height: 100%;
+      background: linear-gradient(90deg, var(--green), var(--yellow), var(--blue));
+      transition: width 240ms ease;
+    }
+
+    .question-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 10px;
+      color: #dce8fb;
+      background: rgba(255, 255, 255, 0.08);
+      font-size: 0.86rem;
+      font-weight: 850;
+    }
+
+    .question {
+      margin-bottom: 18px;
+      font-size: clamp(1.35rem, 3vw, 2.1rem);
+      line-height: 1.22;
+      letter-spacing: 0;
+    }
+
+    .question-strip {
+      display: none;
+      min-height: 120px;
+      margin-bottom: 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background:
+        linear-gradient(90deg, rgba(7, 20, 38, 0.88), rgba(7, 20, 38, 0.36)),
+        url("assets/possessive-adjectives-hero.png");
+      background-size: cover;
+      background-position: center;
+    }
+
+    .question-strip.active {
+      display: block;
+    }
+
+    .answers {
+      display: grid;
+      gap: 10px;
+      counter-reset: answer;
+    }
+
+    .answer {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      width: 100%;
+      min-height: 58px;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: #eef6ff;
+      background: rgba(255, 255, 255, 0.08);
+      text-align: left;
+      cursor: pointer;
+      font-weight: 850;
+      line-height: 1.35;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
+    }
+
+    .answer::before {
+      counter-increment: answer;
+      content: counter(answer, upper-alpha);
+      display: grid;
+      place-items: center;
+      flex: 0 0 34px;
+      height: 34px;
+      border-radius: 8px;
+      color: #071426;
+      background: var(--yellow);
+      font-weight: 950;
+    }
+
+    .answer:hover:not(:disabled) {
+      border-color: rgba(91, 168, 255, 0.52);
+      background: rgba(91, 168, 255, 0.18);
+      transform: translateY(-1px);
+    }
+
+    .answer.correct {
+      border-color: rgba(35, 209, 139, 0.65);
+      background: linear-gradient(135deg, rgba(35, 209, 139, 0.22), rgba(255, 255, 255, 0.08));
+      color: var(--green);
+    }
+
+    .answer.correct::before {
+      content: "OK";
+      background: var(--green);
+    }
+
+    .answer.wrong {
+      border-color: rgba(255, 111, 112, 0.7);
+      background: linear-gradient(135deg, rgba(255, 111, 112, 0.18), rgba(255, 255, 255, 0.08));
+      color: var(--red);
+    }
+
+    .answer.wrong::before {
+      content: "X";
+      background: var(--red);
+    }
+
+    .blank-row {
+      display: none;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .blank-row.active {
+      display: grid;
+    }
+
+    .feedback {
+      min-height: 64px;
+      margin-top: 16px;
+      padding: 14px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.07);
+      line-height: 1.55;
+      font-weight: 780;
+    }
+
+    .feedback.correct {
+      border-color: rgba(35, 209, 139, 0.42);
+      color: #b9ffd7;
+      background: rgba(35, 209, 139, 0.14);
+    }
+
+    .feedback.wrong {
+      border-color: rgba(255, 111, 112, 0.42);
+      color: #ffd4d0;
+      background: rgba(255, 111, 112, 0.13);
+    }
+
+    .feedback-actions,
+    .result-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-top: 14px;
+    }
+
+    .feedback-actions {
+      display: none;
+    }
+
+    .feedback-actions.active {
+      display: flex;
+    }
+
+    .result-wrap {
+      text-align: center;
+      max-width: 780px;
+      margin: 0 auto;
+    }
+
+    .result-badge {
+      display: grid;
+      place-items: center;
+      width: 92px;
+      height: 92px;
+      margin: 0 auto 16px;
+      border-radius: 8px;
+      color: white;
+      background: linear-gradient(135deg, var(--yellow), var(--purple), var(--blue));
+      font-size: 2.4rem;
+      font-weight: 950;
+      box-shadow: 0 20px 52px rgba(91, 168, 255, 0.28);
+    }
+
+    .scoreline {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin: 22px 0;
+    }
+
+    .score-chip {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 10px 13px;
+      background: rgba(255, 255, 255, 0.08);
+      font-weight: 900;
+    }
+
+    .submit-status {
+      min-height: 28px;
+      color: var(--muted);
+      font-weight: 850;
+      margin-bottom: 14px;
+    }
+
+    .submit-status.success {
+      color: var(--green);
+    }
+
+    .submit-status.warning {
+      color: var(--yellow);
+    }
+
+    .teacher-note {
+      border: 1px solid rgba(255, 209, 102, 0.38);
+      border-radius: 8px;
+      padding: 16px;
+      margin: 18px 0;
+      background: rgba(255, 209, 102, 0.12);
+      color: #fff2bd;
+      line-height: 1.6;
+    }
+
+    .explanation-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin: 18px 0;
+    }
+
+    .rule {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .rule h3 {
+      margin-bottom: 8px;
+      color: #ffffff;
+      font-size: 1.05rem;
+      letter-spacing: 0;
+    }
+
+    .rule p,
+    .rule li {
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .rule ul {
+      margin: 10px 0 0;
+      padding-left: 18px;
+    }
+
+    .rule strong {
+      color: #ffffff;
+    }
+
+    .burst {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      pointer-events: none;
+      border-radius: 50%;
+      z-index: 10;
+      animation: pop 850ms ease-out forwards;
+    }
+
+    @keyframes pop {
+      from {
+        opacity: 1;
+        transform: translate(0, 0) scale(1);
+      }
+      to {
+        opacity: 0;
+        transform: translate(var(--x), var(--y)) scale(0);
+      }
+    }
+
+    @media (max-width: 820px) {
+      .topbar,
+      .question-head {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .start-layout,
+      .explanation-grid,
+      .mini-board {
+        grid-template-columns: 1fr;
+      }
+
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .start-form,
+      .blank-row {
+        grid-template-columns: 1fr;
+      }
+
+      .status-pill {
+        white-space: normal;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .stats {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="mark">MY</div>
+        <div>
+          <h1>Possessive Adjectives Quest</h1>
+          <p class="subtitle">Practise my, your, his, her, its, our, and their before nouns.</p>
+        </div>
+      </div>
+      <div class="status-pill" id="top-status">Ready</div>
+    </header>
+
+    <section class="panel">
+      <div class="screen active" id="start-screen">
+        <div class="start-layout">
+          <div>
+            <h2>Start The Ownership Mission</h2>
+            <p class="muted">Write your name, then answer 20 questions. Remember: possessive adjectives come before nouns, like my book, her bag, and their house.</p>
+            <div class="start-form">
+              <input id="student-name" maxlength="28" autocomplete="off" placeholder="Student name" />
+              <button class="button" id="start-button" type="button">Start</button>
+            </div>
+            <div class="button-row">
+              <button class="button secondary" id="start-explanation" type="button">Explanation</button>
+            </div>
+          </div>
+          <div class="hero-visual" aria-label="Illustration of personal objects for possessive adjectives">
+            <div class="mini-board">
+              <div class="mini-card">
+                <strong>Before a noun</strong>
+                <span class="muted">my phone, her notebook, their house</span>
+              </div>
+              <div class="mini-card">
+                <strong>Shows connection</strong>
+                <span class="muted">belongings, family, friends, body parts</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="screen" id="quiz-screen">
+        <div class="stats">
+          <div class="stat"><span>Student</span><strong id="stat-student">-</strong></div>
+          <div class="stat"><span>Score</span><strong id="stat-score">0</strong></div>
+          <div class="stat"><span>Streak</span><strong id="stat-streak">0</strong></div>
+          <div class="stat"><span>Correct</span><strong id="stat-correct">0</strong></div>
+        </div>
+
+        <div class="progress"><div id="progress-fill"></div></div>
+
+        <div class="question-head">
+          <span class="tag" id="question-count">Question 1 / 20</span>
+          <span class="tag" id="question-type">Multiple Choice</span>
+        </div>
+
+        <div class="question-strip" id="question-strip" aria-hidden="true"></div>
+        <h2 class="question" id="question-text">Loading...</h2>
+        <div class="answers" id="answers"></div>
+        <div class="blank-row" id="blank-row">
+          <input id="blank-answer" autocomplete="off" placeholder="Type the possessive adjective" />
+          <button class="button" id="submit-blank" type="button">Submit</button>
+        </div>
+        <div class="feedback" id="feedback"></div>
+        <div class="feedback-actions" id="feedback-actions">
+          <button class="button" id="next-button" type="button">Next</button>
+        </div>
+      </div>
+
+      <div class="screen" id="result-screen">
+        <div class="result-wrap">
+          <div class="result-badge" id="result-badge">A</div>
+          <h2 id="result-title">Quest Complete</h2>
+          <p class="muted" id="result-message">Your result will appear here.</p>
+          <div class="scoreline">
+            <div class="score-chip" id="final-score">Score: 0</div>
+            <div class="score-chip" id="final-correct">Correct: 0 / 20</div>
+            <div class="score-chip" id="final-rank">Rank: Ownership Explorer</div>
+          </div>
+          <div class="submit-status" id="submit-status">Submitting result...</div>
+          <div class="result-actions">
+            <button class="button secondary" id="play-again" type="button">Play Again</button>
+            <button class="button" id="explanation-button" type="button">Explanation</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="screen" id="explanation-screen">
+        <h2>Possessive Adjectives</h2>
+        <p class="muted">Possessive adjectives show that a noun is connected to a person, people, animal, thing, or place. They are called adjectives because they go with a noun.</p>
+
+        <div class="teacher-note">
+          The most important rule: <strong>a possessive adjective comes before a noun.</strong> Say <strong>my book</strong>, <strong>your teacher</strong>, <strong>his phone</strong>, <strong>her bag</strong>, <strong>our class</strong>, and <strong>their house</strong>. Do not put it after the noun.
+        </div>
+
+        <div class="question-strip active" aria-hidden="true"></div>
+
+        <div class="explanation-grid">
+          <div class="rule">
+            <h3>1. The basic forms</h3>
+            <p>Each subject pronoun has a possessive adjective.</p>
+            <ul>
+              <li><strong>I -> my</strong>: I like my school.</li>
+              <li><strong>you -> your</strong>: Is this your pen?</li>
+              <li><strong>he -> his</strong>: Ali has his book.</li>
+              <li><strong>she -> her</strong>: Sara has her bag.</li>
+              <li><strong>it -> its</strong>: The cat moved its tail.</li>
+              <li><strong>we -> our</strong>: We love our city.</li>
+              <li><strong>they -> their</strong>: They cleaned their room.</li>
+            </ul>
+          </div>
+
+          <div class="rule">
+            <h3>2. Position before the noun</h3>
+            <p>Possessive adjectives always come before the noun they describe.</p>
+            <ul>
+              <li><strong>my phone</strong>, not phone my</li>
+              <li><strong>her brother</strong>, not brother her</li>
+              <li><strong>their teacher</strong>, not teacher their</li>
+            </ul>
+          </div>
+
+          <div class="rule">
+            <h3>3. They show more than ownership</h3>
+            <p>They can show things we own, but also people, relationships, body parts, and things connected to us.</p>
+            <ul>
+              <li><strong>my car</strong> = a thing I own</li>
+              <li><strong>her mother</strong> = family relationship</li>
+              <li><strong>his hand</strong> = body part</li>
+              <li><strong>our team</strong> = a group connected to us</li>
+            </ul>
+          </div>
+
+          <div class="rule">
+            <h3>4. His or her?</h3>
+            <p>Use <strong>his</strong> for a male person and <strong>her</strong> for a female person.</p>
+            <ul>
+              <li>Omar forgot <strong>his</strong> keys.</li>
+              <li>Mona forgot <strong>her</strong> keys.</li>
+              <li>The noun after it can be singular or plural: <strong>his key</strong>, <strong>his keys</strong>.</li>
+            </ul>
+          </div>
+
+          <div class="rule">
+            <h3>5. Its has no apostrophe</h3>
+            <p>Use <strong>its</strong> for animals, objects, places, and organizations when they are not people. Do not add an apostrophe.</p>
+            <ul>
+              <li>The dog is eating <strong>its</strong> food.</li>
+              <li>The company changed <strong>its</strong> name.</li>
+              <li><strong>It's</strong> means <strong>it is</strong> or <strong>it has</strong>, not possession.</li>
+            </ul>
+          </div>
+
+          <div class="rule">
+            <h3>6. Your can be one person or many people</h3>
+            <p><strong>Your</strong> can mean belonging to one person or to a group. Context tells us the meaning.</p>
+            <ul>
+              <li>Ahmed, is this <strong>your</strong> notebook?</li>
+              <li>Class, open <strong>your</strong> books.</li>
+            </ul>
+          </div>
+
+          <div class="rule">
+            <h3>7. Our and their</h3>
+            <p>Use <strong>our</strong> when the speaker is included. Use <strong>their</strong> for other people, animals, things, or groups.</p>
+            <ul>
+              <li>We finished <strong>our</strong> homework.</li>
+              <li>The students finished <strong>their</strong> homework.</li>
+              <li>The birds are in <strong>their</strong> nest.</li>
+            </ul>
+          </div>
+
+          <div class="rule">
+            <h3>8. Possessive adjective or possessive pronoun?</h3>
+            <p>A possessive adjective needs a noun after it. A possessive pronoun stands alone.</p>
+            <ul>
+              <li><strong>This is my bag.</strong> My needs the noun bag.</li>
+              <li><strong>This bag is mine.</strong> Mine stands alone.</li>
+              <li>In this game, practise the adjective forms before nouns.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="teacher-note">
+          Quick rule: choose the owner first, then put the possessive adjective directly before the noun: <strong>owner + noun</strong>. I -> my book, she -> her book, they -> their book.
+        </div>
+
+        <div class="result-actions">
+          <button class="button secondary" id="back-button" type="button">Back</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const SUBMISSION_URL = "https://script.google.com/macros/s/AKfycbzemuwABx_r378H23gNRkisj2n_LW92T97voS5NwMfuLjH6O8sfW2bifcfUXYMlQzMcpg/exec";
+    const GAME_TITLE = "Possessive Adjectives Quest";
+
+    const questions = [
+      { mode: "choice", prompt: "I have a new phone. ___ phone is blue.", correct: "My", distractors: ["Your", "His", "Their"], note: "I connects to my. The possessive adjective comes before the noun phone." },
+      { mode: "choice", prompt: "Sara is looking for ___ bag.", correct: "her", distractors: ["his", "our", "their"], note: "Sara is female, so use her before the noun bag." },
+      { mode: "blank", prompt: "Omar forgot ___ keys at home.", correct: "his", acceptable: ["his"], note: "Omar is male, so use his before the plural noun keys." },
+      { mode: "choice", prompt: "We are in class. ___ teacher is explaining grammar.", correct: "Our", distractors: ["Their", "Your", "Her"], note: "We connects to our. Use our before teacher." },
+      { mode: "choice", prompt: "The students opened ___ books.", correct: "their", distractors: ["our", "his", "its"], note: "The students means they, so use their before books." },
+      { mode: "blank", prompt: "You have a nice jacket. Is this ___ jacket?", correct: "your", acceptable: ["your"], note: "You connects to your. Your can refer to one person or many people." },
+      { mode: "choice", prompt: "The dog is eating ___ food.", correct: "its", distractors: ["it's", "his", "their"], note: "Use its for an animal here. It's means it is or it has." },
+      { mode: "choice", prompt: "Choose the correct sentence.", correct: "This is my notebook.", distractors: ["This is notebook my.", "This my is notebook.", "This is mine notebook."], note: "Possessive adjectives come before nouns: my notebook." },
+      { mode: "choice", prompt: "Mona and I finished ___ project.", correct: "our", distractors: ["their", "your", "her"], note: "Mona and I means we, so use our before project." },
+      { mode: "blank", prompt: "The company changed ___ logo.", correct: "its", acceptable: ["its"], note: "Use its for a company or thing. Do not use an apostrophe for possession." },
+      { mode: "choice", prompt: "Class, please close ___ books.", correct: "your", distractors: ["their", "our", "his"], note: "The teacher is speaking to the class, so use your before books." },
+      { mode: "choice", prompt: "Ahmed is with ___ brother.", correct: "his", distractors: ["her", "its", "our"], note: "Ahmed is male, so use his before brother." },
+      { mode: "choice", prompt: "The girls are visiting ___ grandmother.", correct: "their", distractors: ["her", "our", "its"], note: "The girls means they, so use their before grandmother." },
+      { mode: "blank", prompt: "I like ___ English class.", correct: "my", acceptable: ["my"], note: "I connects to my. Put my before English class." },
+      { mode: "choice", prompt: "Choose the correct sentence.", correct: "The cat moved its tail.", distractors: ["The cat moved it's tail.", "The cat moved tail its.", "The cat moved their tail."], note: "Its is the possessive adjective. It's means it is or it has." },
+      { mode: "choice", prompt: "This bag belongs to you. It is ___ bag.", correct: "your", distractors: ["my", "their", "his"], note: "You connects to your. Use your before bag." },
+      { mode: "choice", prompt: "Ali and Rami are washing ___ car.", correct: "their", distractors: ["our", "his", "your"], note: "Ali and Rami means they, so use their before car." },
+      { mode: "blank", prompt: "She has a problem with ___ hand.", correct: "her", acceptable: ["her"], note: "Possessive adjectives are also used with body parts: her hand." },
+      { mode: "choice", prompt: "Which sentence uses a possessive adjective before the noun?", correct: "Their house is near the park.", distractors: ["The house is their.", "The house is theirs.", "This house their is near the park."], note: "Their is before the noun house, so it is a possessive adjective." },
+      { mode: "choice", prompt: "Choose the correct sentence.", correct: "It's a new coat, and its color is beautiful.", distractors: ["Its a new coat, and it's color is beautiful.", "It's a new coat, and it's color is beautiful.", "Its a new coat, and its color is beautiful."], note: "It's means it is. Its before color shows possession." }
+    ];
+
+    const state = {
+      student: "",
+      index: 0,
+      score: 0,
+      correct: 0,
+      streak: 0,
+      locked: false,
+      startTime: 0,
+      answers: [],
+      returnScreen: "start"
+    };
+
+    const screens = {
+      start: document.getElementById("start-screen"),
+      quiz: document.getElementById("quiz-screen"),
+      result: document.getElementById("result-screen"),
+      explanation: document.getElementById("explanation-screen")
+    };
+
+    const els = {
+      studentName: document.getElementById("student-name"),
+      startButton: document.getElementById("start-button"),
+      startExplanation: document.getElementById("start-explanation"),
+      topStatus: document.getElementById("top-status"),
+      statStudent: document.getElementById("stat-student"),
+      statScore: document.getElementById("stat-score"),
+      statStreak: document.getElementById("stat-streak"),
+      statCorrect: document.getElementById("stat-correct"),
+      progressFill: document.getElementById("progress-fill"),
+      questionCount: document.getElementById("question-count"),
+      questionType: document.getElementById("question-type"),
+      questionText: document.getElementById("question-text"),
+      questionStrip: document.getElementById("question-strip"),
+      answers: document.getElementById("answers"),
+      blankRow: document.getElementById("blank-row"),
+      blankAnswer: document.getElementById("blank-answer"),
+      submitBlank: document.getElementById("submit-blank"),
+      feedback: document.getElementById("feedback"),
+      feedbackActions: document.getElementById("feedback-actions"),
+      nextButton: document.getElementById("next-button"),
+      resultBadge: document.getElementById("result-badge"),
+      resultTitle: document.getElementById("result-title"),
+      resultMessage: document.getElementById("result-message"),
+      finalScore: document.getElementById("final-score"),
+      finalCorrect: document.getElementById("final-correct"),
+      finalRank: document.getElementById("final-rank"),
+      submitStatus: document.getElementById("submit-status"),
+      playAgain: document.getElementById("play-again"),
+      explanationButton: document.getElementById("explanation-button"),
+      backButton: document.getElementById("back-button")
+    };
+
+    function switchScreen(name) {
+      Object.values(screens).forEach(screen => screen.classList.remove("active"));
+      screens[name].classList.add("active");
+    }
+
+    function shuffle(items) {
+      const copy = [...items];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function startGame() {
+      state.student = els.studentName.value.trim() || "Student";
+      state.index = 0;
+      state.score = 0;
+      state.correct = 0;
+      state.streak = 0;
+      state.locked = false;
+      state.startTime = Date.now();
+      state.answers = [];
+      state.returnScreen = "start";
+      els.statStudent.textContent = state.student;
+      els.topStatus.textContent = "In progress";
+      updateStats();
+      switchScreen("quiz");
+      loadQuestion();
+    }
+
+    function loadQuestion() {
+      const question = questions[state.index];
+      state.locked = false;
+      els.questionCount.textContent = `Question ${state.index + 1} / ${questions.length}`;
+      els.questionType.textContent = question.mode === "choice" ? "Multiple Choice" : "Fill In The Blank";
+      els.questionText.textContent = question.prompt;
+      els.progressFill.style.width = `${(state.index / questions.length) * 100}%`;
+      els.feedback.textContent = "";
+      els.feedback.className = "feedback";
+      els.feedbackActions.classList.remove("active");
+      els.answers.innerHTML = "";
+      els.blankAnswer.value = "";
+      els.blankAnswer.disabled = false;
+      els.submitBlank.disabled = false;
+      els.questionStrip.classList.toggle("active", state.index % 5 === 0);
+
+      if (question.mode === "choice") {
+        els.answers.style.display = "grid";
+        els.blankRow.classList.remove("active");
+        shuffle([question.correct, ...question.distractors]).forEach(option => {
+          const button = document.createElement("button");
+          button.className = "answer";
+          button.type = "button";
+          button.textContent = option;
+          button.addEventListener("click", () => chooseAnswer(option, button));
+          els.answers.appendChild(button);
+        });
+      } else {
+        els.answers.style.display = "none";
+        els.blankRow.classList.add("active");
+        setTimeout(() => els.blankAnswer.focus(), 80);
+      }
+    }
+
+    function normalize(value) {
+      return value.trim().toLowerCase().replace(/\s+/g, " ");
+    }
+
+    function checkBlankAnswer() {
+      if (state.locked) return;
+      const question = questions[state.index];
+      const rawAnswer = els.blankAnswer.value;
+      const normalized = normalize(rawAnswer);
+      const acceptable = question.acceptable.map(answer => normalize(answer));
+      const isCorrect = acceptable.includes(normalized);
+      els.blankAnswer.disabled = true;
+      els.submitBlank.disabled = true;
+      finishAnswer(isCorrect, rawAnswer.trim());
+    }
+
+    function chooseAnswer(choice, element) {
+      if (state.locked) return;
+      const question = questions[state.index];
+      const isCorrect = choice === question.correct;
+      document.querySelectorAll(".answer").forEach(button => {
+        button.disabled = true;
+        if (button.textContent === question.correct) {
+          button.classList.add("correct");
+        }
+      });
+      if (!isCorrect) {
+        element.classList.add("wrong");
+      }
+      finishAnswer(isCorrect, choice);
+    }
+
+    function finishAnswer(isCorrect, studentAnswer) {
+      const question = questions[state.index];
+      const pointsBefore = state.score;
+      state.locked = true;
+
+      if (isCorrect) {
+        state.correct++;
+        state.streak++;
+        state.score += 100 + (state.streak >= 3 ? 25 : 0);
+        els.feedback.className = "feedback correct";
+        els.feedback.textContent = state.streak >= 3
+          ? `Correct. Streak bonus earned. ${question.note}`
+          : `Correct. ${question.note}`;
+        playCorrect();
+        burst(["#23d18b", "#5ba8ff", "#ffd166"]);
+      } else {
+        state.streak = 0;
+        els.feedback.className = "feedback wrong";
+        els.feedback.textContent = `Answer: ${question.correct}. ${question.note}`;
+        playWrong();
+      }
+
+      state.answers.push({
+        questionNumber: state.index + 1,
+        question: question.prompt,
+        type: question.mode,
+        studentAnswer,
+        correctAnswer: question.correct,
+        isCorrect,
+        pointsEarned: state.score - pointsBefore
+      });
+
+      updateStats();
+      els.feedbackActions.classList.add("active");
+    }
+
+    function nextQuestion() {
+      state.index++;
+      if (state.index >= questions.length) {
+        showResults();
+      } else {
+        loadQuestion();
+      }
+    }
+
+    function updateStats() {
+      els.statScore.textContent = state.score;
+      els.statStreak.textContent = state.streak;
+      els.statCorrect.textContent = state.correct;
+    }
+
+    function showExplanation(returnScreen) {
+      state.returnScreen = returnScreen;
+      switchScreen("explanation");
+    }
+
+    function showResults() {
+      els.progressFill.style.width = "100%";
+      const percentage = Math.round((state.correct / questions.length) * 100);
+      const rank = percentage >= 90 ? "Ownership Master" : percentage >= 75 ? "Grammar Keeper" : percentage >= 55 ? "Ownership Explorer" : "Adjective Trainee";
+      els.resultBadge.textContent = percentage >= 90 ? "A" : percentage >= 75 ? "B" : percentage >= 55 ? "C" : "D";
+      els.resultTitle.textContent = `Finished, ${state.student}`;
+      els.resultMessage.textContent = percentage >= 75
+        ? "Strong work. You are choosing the owner and placing the possessive adjective before the noun."
+        : "Good practice. Review the explanation, then try again and focus on owner + noun.";
+      els.finalScore.textContent = `Score: ${state.score}`;
+      els.finalCorrect.textContent = `Correct: ${state.correct} / ${questions.length}`;
+      els.finalRank.textContent = `Rank: ${rank}`;
+      els.topStatus.textContent = "Complete";
+      switchScreen("result");
+      playFinish();
+      burst(["#ffd166", "#b48cff", "#5ba8ff", "#23d18b"], 28);
+      submitResult();
+    }
+
+    function buildSubmission() {
+      return {
+        studentName: state.student,
+        gameTitle: GAME_TITLE,
+        score: state.score,
+        correct: state.correct,
+        total: questions.length,
+        timeSpentSeconds: Math.round((Date.now() - state.startTime) / 1000),
+        answers: state.answers
+      };
+    }
+
+    async function submitResult() {
+      const submission = buildSubmission();
+      els.submitStatus.className = "submit-status";
+      els.submitStatus.textContent = "Submitting result to teacher sheet...";
+
+      try {
+        await fetch(SUBMISSION_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: {
+            "Content-Type": "text/plain;charset=utf-8"
+          },
+          body: JSON.stringify(submission)
+        });
+
+        els.submitStatus.className = "submit-status success";
+        els.submitStatus.textContent = "Result submitted. Open the explanation when you are ready.";
+      } catch (error) {
+        els.submitStatus.className = "submit-status warning";
+        els.submitStatus.textContent = `Could not submit automatically. Backup: ${state.student} | ${state.score} | ${state.correct}/${questions.length}`;
+      }
+    }
+
+    function playTone(frequency, duration, type = "sine", delay = 0, volume = 0.08) {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContext) return;
+
+      const audio = new AudioContext();
+      const oscillator = audio.createOscillator();
+      const gain = audio.createGain();
+      const start = audio.currentTime + delay;
+
+      oscillator.frequency.value = frequency;
+      oscillator.type = type;
+      gain.gain.setValueAtTime(volume, start);
+      gain.gain.exponentialRampToValueAtTime(0.001, start + duration);
+      oscillator.connect(gain);
+      gain.connect(audio.destination);
+      oscillator.start(start);
+      oscillator.stop(start + duration);
+    }
+
+    function playCorrect() {
+      playTone(660, 0.1, "triangle", 0, 0.07);
+      playTone(880, 0.12, "triangle", 0.08, 0.06);
+    }
+
+    function playWrong() {
+      playTone(220, 0.16, "sawtooth", 0, 0.045);
+      playTone(165, 0.18, "sine", 0.08, 0.04);
+    }
+
+    function playFinish() {
+      playTone(523, 0.1, "triangle", 0, 0.06);
+      playTone(659, 0.12, "triangle", 0.09, 0.06);
+      playTone(784, 0.16, "triangle", 0.19, 0.055);
+    }
+
+    function burst(colors, count = 16) {
+      for (let i = 0; i < count; i++) {
+        const dot = document.createElement("span");
+        dot.className = "burst";
+        dot.style.left = `${window.innerWidth / 2}px`;
+        dot.style.top = `${Math.min(window.innerHeight * 0.55, 440)}px`;
+        dot.style.background = colors[i % colors.length];
+        dot.style.setProperty("--x", `${Math.random() * 260 - 130}px`);
+        dot.style.setProperty("--y", `${Math.random() * 190 - 135}px`);
+        document.body.appendChild(dot);
+        setTimeout(() => dot.remove(), 900);
+      }
+    }
+
+    els.startButton.addEventListener("click", startGame);
+    els.startExplanation.addEventListener("click", () => showExplanation("start"));
+    els.explanationButton.addEventListener("click", () => showExplanation("result"));
+    els.backButton.addEventListener("click", () => switchScreen(state.returnScreen));
+    els.nextButton.addEventListener("click", nextQuestion);
+    els.submitBlank.addEventListener("click", checkBlankAnswer);
+    els.playAgain.addEventListener("click", () => {
+      els.topStatus.textContent = "Ready";
+      switchScreen("start");
+    });
+    els.studentName.addEventListener("keydown", event => {
+      if (event.key === "Enter") startGame();
+    });
+    els.blankAnswer.addEventListener("keydown", event => {
+      if (event.key === "Enter" && !state.locked) checkBlankAnswer();
+    });
+  </script>
+</body>
+</html>

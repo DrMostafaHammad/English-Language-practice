@@ -1,12 +1,19 @@
 # English Language Practice Project Notes
 
-Last updated: 2026-05-22
+Last updated: 2026-05-23
 
 ## Purpose
 
-This project stores HTML grammar/vocabulary games and related teacher resources for private English students.
+This project stores HTML grammar and vocabulary games plus related teacher resources for private English students.
 
 The games should be playable in a browser, hosted on GitHub Pages, and submit student results to Google Sheets through Google Apps Script.
+
+The site now has two activity tracks:
+
+- `Grammar Quests`
+- `Vocabulary Games`
+
+Both tracks use the same local folder, same GitHub repository, same GitHub Pages site, and same Google Sheet backend.
 
 ## New Chat Handoff
 
@@ -41,9 +48,13 @@ For each new game:
 11. Add a generous `Explanation` page, especially when the game will be used during a lesson.
 12. Add an `Explanation` button on the first/start page so students can read the lesson before starting if they want.
 13. Submit results to the existing Apps Script URL and preserve the standard payload.
-14. Add the game to the root homepage with `Open` and `Copy Link` controls.
+14. Add the game to the correct section page with `Open` and `Copy Link` controls.
 15. Update `PROJECT_NOTES.md` with the new game title, source, folder, and direct student link.
 16. Commit and push changes to GitHub.
+
+For grammar games, update `grammar/index.html`.
+
+For vocabulary games, update `vocabulary/index.html`.
 
 ## Current Online Setup
 
@@ -76,6 +87,10 @@ https://drmostafahammad.github.io/English-Language-practice/
 English-Language-Practice/
   PROJECT_NOTES.md
   index.html
+  grammar/
+    index.html
+  vocabulary/
+    index.html
   apps-script/
     Code.gs
   templates/
@@ -208,6 +223,70 @@ Student answers
 ```
 
 Do not auto-advance immediately after feedback. Students need time to read explanations.
+
+## Site Architecture
+
+The GitHub Pages root homepage is a track chooser, not a full game list.
+
+Root homepage:
+
+```text
+https://drmostafahammad.github.io/English-Language-practice/
+```
+
+Track pages:
+
+```text
+https://drmostafahammad.github.io/English-Language-practice/grammar/
+https://drmostafahammad.github.io/English-Language-practice/vocabulary/
+```
+
+Current implementation:
+
+- `index.html` has two large cards: `Grammar Quests` and `Vocabulary Games`.
+- `grammar/index.html` lists all current grammar games and has `Open` and `Copy Link` controls.
+- `vocabulary/index.html` is a ready skeleton for future vocabulary games.
+- Existing playable game folders remain under `games/<game-folder>/` to preserve old direct student links.
+- Future games may continue to live under `games/<game-folder>/`; the important rule is that the correct section page must link to them.
+
+This allows separate Codex chats for grammar and vocabulary work as long as both chats read `PROJECT_NOTES.md` first and avoid pushing at the exact same time.
+
+## Vocabulary Game Direction
+
+Vocabulary games should match the quality of the grammar games but test vocabulary skills directly.
+
+Useful vocabulary activity types:
+
+- Meaning match: word -> simple meaning.
+- Picture to word: generated image -> choose or type the word.
+- Word to picture: word -> choose matching image.
+- Sentence gap: choose the word that naturally completes a sentence.
+- Collocation builder: choose words that go together.
+- Odd one out: choose the word outside the category.
+- Synonym/antonym challenge.
+- Spelling blank from a simple clue.
+- Mini-story vocabulary questions.
+- Category sorting when the interaction is useful.
+
+For vocabulary games, the start/final `Explanation` page should usually become a `Vocabulary Bank` or `Review` page with:
+
+- target word
+- A1/A2-friendly meaning
+- simple example sentence
+- useful phrase or collocation
+- optional generated image or visual cue
+
+Vocabulary games should still use:
+
+- student name only
+- no class/group field
+- shuffled answers
+- feedback that stays visible until `Next`
+- sound prompts
+- score, streak, timer, and answer tracking
+- Google Sheet submission with the same standard payload
+- polished classroom-friendly styling
+- subtle generated visuals where useful
 
 ## Current Game
 
@@ -411,12 +490,14 @@ Notes:
 
 ## GitHub Pages Notes
 
-Current repository has an `index.html` at the root. It is now a game-library homepage that links to each game.
+Current repository has an `index.html` at the root. It is now an activity-track chooser that links to the grammar and vocabulary pages.
 
-Games live in their own folders:
+Current page structure:
 
 ```text
 index.html
+grammar/index.html
+vocabulary/index.html
 games/
   possessive-pronouns-quest/index.html
   possessive-adjectives-quest/index.html
@@ -428,7 +509,14 @@ games/
   present-simple-quest/index.html
 ```
 
-Direct links can be sent to students for homework.
+Direct game links can still be sent to students for homework.
+
+Track links can be saved or shared when students need to choose from a section:
+
+```text
+https://drmostafahammad.github.io/English-Language-practice/grammar/
+https://drmostafahammad.github.io/English-Language-practice/vocabulary/
+```
 
 ## Future Template System Notes
 
@@ -476,6 +564,8 @@ games/articles-adventure/assets/
 
 Current local state:
 
-- Root `index.html` is now a game-library homepage.
+- Root `index.html` is now a two-track homepage.
+- `grammar/index.html` is the current grammar game-library page.
+- `vocabulary/index.html` is the ready skeleton for vocabulary games.
 - Published games: `Possessive Pronouns Quest`, `Possessive Adjectives Quest`, `Countable And Uncountable Quest`, `Prepositions Place Quest`, `Articles Adventure`, `Word Order Workshop`.
 - The same Google Sheet and Apps Script web app URL should be reused for future games unless the user asks for a fresh backend.

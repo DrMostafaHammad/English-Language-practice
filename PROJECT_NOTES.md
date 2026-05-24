@@ -1,6 +1,6 @@
 # English Language Practice Project Notes
 
-Last updated: 2026-05-23
+Last updated: 2026-05-24
 
 ## Purpose
 
@@ -267,6 +267,103 @@ Useful vocabulary activity types:
 - Spelling blank from a simple clue.
 - Mini-story vocabulary questions.
 - Category sorting when the interaction is useful.
+
+Reference vocabulary game modes for future builds:
+
+1. Meaning Match
+   Students see a word and choose the correct meaning.
+   Example: `generous`
+   Choices:
+   - `gives or shares easily`
+   - `very tired`
+   - `difficult to understand`
+   - `full of noise`
+   Good for: new vocabulary sets, A1-B1.
+
+2. Picture To Word
+   Students see an image and choose or type the word.
+   Example:
+   - Image of a wallet.
+   - Question: `What is this?`
+   Choices:
+   - `wallet`
+   - `suitcase`
+   - `receipt`
+   - `shelf`
+   Good for: concrete nouns, classroom objects, food, travel, places, clothes.
+   This is a strong place to use generated images more heavily.
+
+3. Word To Picture
+   Students see a word and choose the matching image.
+   Example: `umbrella`
+   They choose from 4 simple images.
+   Good for: younger learners, A1, visual vocabulary.
+
+4. Fill The Sentence
+   Students choose the word that best completes a real sentence.
+   Example: `I always keep my money in my ___.`
+   Choices:
+   - `wallet`
+   - `mirror`
+   - `ticket`
+   - `fork`
+   This is one of the most teacher-useful formats because it teaches vocabulary in context, not as isolated translation.
+
+5. Collocation Builder
+   Students choose words that naturally go together.
+   Example: `make`
+   Choices:
+   - `a mistake`
+   - `homework`
+   - `a photo`
+   - `the bus`
+   Correct: `make a mistake`
+   Good for: A2-B2, exam prep, speaking fluency.
+
+6. Odd One Out
+   Students choose the word that does not belong.
+   Example:
+   - `apple`
+   - `banana`
+   - `carrot`
+   - `orange`
+   Correct: `carrot`, because it is a vegetable.
+   Good for: categories, food, jobs, places, personality adjectives.
+
+7. Synonym / Antonym Challenge
+   Students match similar or opposite meanings.
+   Example: `Choose the opposite of expensive.`
+   Choices:
+   - `cheap`
+   - `busy`
+   - `narrow`
+   - `heavy`
+   Good for: adjectives, academic vocabulary, exam prep.
+
+8. Spelling Sprint
+   Students hear or see a clue and type the word.
+   Example:
+   - Clue: `You use it to unlock a door.`
+   - Answer: `key`
+   Good for: spelling practice, A1-A2 vocabulary.
+   Input handling should be forgiving by accepting lowercase and trimming spaces. Simple typo tolerance can be added later if needed.
+
+9. Vocabulary In A Mini Story
+   Students read a short 3-4 sentence scene and answer vocabulary questions.
+   Example:
+   - `Emma is at the airport. She has two bags and her passport. She is waiting for her flight.`
+   Questions:
+   - `Where is Emma?`
+   - `What document does she have?`
+   - `What does flight mean?`
+   Good for: themed vocabulary lessons like travel, restaurants, shopping, health.
+
+10. Category Sorting
+    Students drag or click words into groups.
+    Example:
+    - Groups: `Food`, `Drinks`
+    - Words: `rice`, `coffee`, `bread`, `tea`, `cheese`, `water`
+    Good for: vocabulary sets, countable/uncountable overlap, classroom review.
 
 For vocabulary games, the start/final `Explanation` page should usually become a `Vocabulary Bank` or `Review` page with:
 

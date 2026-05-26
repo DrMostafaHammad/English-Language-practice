@@ -259,7 +259,7 @@
 
           <div class="action-row">
             <a class="btn btn-primary" href="../games/food-clues-adventure/index.html">Open Game</a>
-            <button class="btn btn-secondary" onclick="copyGameLink()">Copy Link</button>
+            <button class="btn btn-secondary" onclick="copyGameLink('food-clues-adventure')">Copy Link</button>
           </div>
         </div>
 
@@ -272,13 +272,41 @@
           <div class="word-tile">healthy</div>
         </div>
       </section>
+
+      <section class="game-card">
+        <div>
+          <h2>Travel Stay Explorer</h2>
+          <p>Master hotel check-ins, holiday rentals, layouts, amenities, and prepositions of space. Perfect vocabulary preparation for future world trips!</p>
+          
+          <div class="tag-row">
+            <span class="tag">CEFR A1/A2</span>
+            <span class="tag">40 Challenges</span>
+            <span class="tag">Travel & Housing</span>
+            <span class="tag">Live Sheets Sync</span>
+          </div>
+
+          <div class="action-row">
+            <a class="btn btn-primary" href="../games/travel-stay-explorer/index.html">Open Game</a>
+            <button class="btn btn-secondary" onclick="copyGameLink('travel-stay-explorer')">Copy Link</button>
+          </div>
+        </div>
+
+        <div class="word-bank" aria-hidden="true">
+          <div class="word-tile">apartment</div>
+          <div class="word-tile">receptionist</div>
+          <div class="word-tile">roof terrace</div>
+          <div class="word-tile">free WiFi</div>
+          <div class="word-tile">between</div>
+          <div class="word-tile">sea view</div>
+        </div>
+      </section>
     </main>
   </div>
 
   <script>
-    function copyGameLink() {
-      // Constructs the absolute URL relative to the active deployment link
-      const gameRelativePath = "games/food-clues-adventure/index.html";
+    function copyGameLink(gameFolder) {
+      // Constructs the absolute URL relative to the active deployment folder link
+      const gameRelativePath = "games/" + gameFolder + "/index.html";
       const rootUrl = window.location.href.replace("vocabulary/index.html", "").replace("vocabulary/", "");
       const fullUrl = rootUrl + gameRelativePath;
 

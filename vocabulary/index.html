@@ -93,7 +93,7 @@
       padding-top: 30px;
     }
 
-    .game-card {
+    .ready-panel {
       display: grid;
       grid-template-columns: 1fr 1.1fr;
       gap: 24px;
@@ -103,7 +103,6 @@
       border-radius: 8px;
       background: var(--panel);
       box-shadow: 0 18px 40px rgba(23, 32, 51, 0.08);
-      margin-bottom: 24px;
     }
 
     .word-bank {
@@ -113,9 +112,6 @@
     }
 
     .word-tile {
-      display: grid;
-      place-items: center;
-      text-align: center;
       min-height: 72px;
       border: 1px solid rgba(37, 99, 235, 0.22);
       border-radius: 8px;
@@ -123,7 +119,6 @@
       color: var(--muted);
       background: rgba(37, 99, 235, 0.07);
       font-weight: 900;
-      font-size: 0.95rem;
     }
 
     .word-tile:nth-child(2),
@@ -154,7 +149,7 @@
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
-      margin: 18px 0 22px;
+      margin-top: 22px;
     }
 
     .tag {
@@ -166,48 +161,9 @@
       font-weight: 800;
     }
 
-    .action-row {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 12px 20px;
-      border-radius: 6px;
-      font-weight: 850;
-      font-size: 0.95rem;
-      text-decoration: none;
-      cursor: pointer;
-      border: 0;
-      transition: background 150ms ease, transform 150ms ease;
-    }
-
-    .btn-primary {
-      background: var(--blue);
-      color: white;
-    }
-    .btn-primary:hover {
-      background: #1d4ed8;
-      transform: translateY(-1px);
-    }
-
-    .btn-secondary {
-      background: #f1f5f9;
-      color: var(--ink);
-      border: 1px solid var(--line);
-    }
-    .btn-secondary:hover {
-      background: #e2e8f0;
-      transform: translateY(-1px);
-    }
-
     @media (max-width: 760px) {
       header,
-      .game-card {
+      .ready-panel {
         align-items: flex-start;
         grid-template-columns: 1fr;
       }
@@ -222,11 +178,6 @@
 
       .back-link {
         white-space: normal;
-      }
-    }
-    @media (max-width: 480px) {
-      .word-bank {
-        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -245,49 +196,29 @@
     </header>
 
     <main>
-      <section class="game-card">
+      <section class="ready-panel">
         <div>
-          <h2>Food Clues Adventure</h2>
-          <p>Read contextual descriptions of meals, shopping items, habits, and containers. Find the right vocabulary keyword using logical reading clues!</p>
-          
+          <h2>Ready For The First Vocabulary Game</h2>
+          <p>Future vocabulary games will appear here with the same student-name-only flow, answer feedback, sounds, polished design, image support, direct links, copy buttons, and Google Sheet result tracking.</p>
           <div class="tag-row">
-            <span class="tag">CEFR A1</span>
-            <span class="tag">30 Challenges</span>
-            <span class="tag">Context Clues</span>
-            <span class="tag">Live Sheets Sync</span>
-          </div>
-
-          <div class="action-row">
-            <a class="btn btn-primary" href="../games/food-clues-adventure/index.html">Open Game</a>
-            <button class="btn btn-secondary" onclick="copyGameLink()">Copy Link</button>
+            <span class="tag">Meaning</span>
+            <span class="tag">Context</span>
+            <span class="tag">Spelling</span>
+            <span class="tag">Images</span>
+            <span class="tag">Results tracked</span>
           </div>
         </div>
 
         <div class="word-bank" aria-hidden="true">
-          <div class="word-tile">beef & lamb</div>
-          <div class="word-tile">broccoli</div>
-          <div class="word-tile">glass jar</div>
-          <div class="word-tile">takeaway</div>
-          <div class="word-tile">carton</div>
-          <div class="word-tile">healthy</div>
+          <div class="word-tile">word</div>
+          <div class="word-tile">meaning</div>
+          <div class="word-tile">image</div>
+          <div class="word-tile">sentence</div>
+          <div class="word-tile">match</div>
+          <div class="word-tile">spell</div>
         </div>
       </section>
     </main>
   </div>
-
-  <script>
-    function copyGameLink() {
-      // Constructs the absolute URL relative to the active deployment link
-      const gameRelativePath = "games/food-clues-adventure/index.html";
-      const rootUrl = window.location.href.replace("vocabulary/index.html", "").replace("vocabulary/", "");
-      const fullUrl = rootUrl + gameRelativePath;
-
-      navigator.clipboard.writeText(fullUrl).then(() => {
-        alert("Link successfully copied for sharing! 📋\n" + fullUrl);
-      }).catch(err => {
-        console.error("Could not copy link text: ", err);
-      });
-    }
-  </script>
 </body>
 </html>

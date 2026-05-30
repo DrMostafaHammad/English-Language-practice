@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Travel Check-In Challenge</title>
+  <style>
+    :root {
+      --navy: #081526;
+      --navy-2: #133252;
+      --ink: #f7fbff;
+      --muted: #b7c8da;
+      --panel: rgba(8, 21, 38, 0.9);
+      --line: rgba(255, 255, 255, 0.16);
+      --blue: #6fb7ff;
+      --green: #31d79b;
+      --yellow: #ffd36b;
+      --red: #ff7d7d;
+      --coral: #ff9f68;
+      --shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(111, 183, 255, 0.18), transparent 28%),
+        radial-gradient(circle at top right, rgba(49, 215, 155, 0.16), transparent 24%),
+        linear-gradient(135deg, var(--navy), var(--navy-2) 46%, #102945);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.2;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+      background-size: 38px 38px;
+      mask-image: linear-gradient(180deg, black, transparent 78%);
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .shell {
+      position: relative;
+      width: min(1120px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 20px 0 42px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      padding: 14px 0 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .mark {
+      display: grid;
+      place-items: center;
+      width: 52px;
+      height: 52px;
+      border-radius: 8px;
+      color: #081526;
+      background: linear-gradient(135deg, var(--yellow), var(--green));
+      font-weight: 950;
+      box-shadow: 0 14px 34px rgba(49, 215, 155, 0.24);
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      margin-bottom: 4px;
+      font-size: clamp(1.9rem, 4vw, 3.25rem);
+      line-height: 1.04;
+      letter-spacing: 0;
+    }
+
+    .subtitle,
+    .muted {
+      color: var(--muted);
+      line-height: 1.58;
+    }
+
+    .status-pill {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 10px 14px;
+      background: rgba(255, 255, 255, 0.08);
+      color: #e6f2ff;
+      font-weight: 850;
+      white-space: nowrap;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    }
+
+    .panel {
+      position: relative;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.035)),
+        var(--panel);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      backdrop-filter: blur(18px);
+    }
+
+    .panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.18;
+      background:
+        linear-gradient(90deg, rgba(8, 21, 38, 0.92), rgba(8, 21, 38, 0.38), rgba(8, 21, 38, 0.9)),
+        radial-gradient(circle at left center, rgba(111, 183, 255, 0.35), transparent 28%),
+        radial-gradient(circle at right top, rgba(255, 211, 107, 0.18), transparent 22%);
+    }
+
+    .screen {
+      position: relative;
+      display: none;
+      padding: clamp(20px, 4vw, 34px);
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    .start-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .travel-visual {
+      min-height: 352px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+      background:
+        linear-gradient(180deg, rgba(111, 183, 255, 0.16), rgba(8, 21, 38, 0.82)),
+        linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+      display: grid;
+      gap: 14px;
+      align-content: end;
+      overflow: hidden;
+    }
+
+    .route-board {
+      display: grid;
+      gap: 10px;
+    }
+
+    .route-row {
+      display: grid;
+      grid-template-columns: 76px 1fr 88px;
+      gap: 10px;
+      align-items: center;
+      padding: 12px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: rgba(8, 21, 38, 0.62);
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.18);
+    }
+
+    .route-row strong {
+      color: #ffffff;
+      font-size: 0.98rem;
+      letter-spacing: 0.04em;
+    }
+
+    .route-chip {
+      justify-self: end;
+      border-radius: 999px;
+      padding: 7px 10px;
+      background: rgba(49, 215, 155, 0.14);
+      color: #cbffe8;
+      font-size: 0.82rem;
+      font-weight: 900;
+      border: 1px solid rgba(49, 215, 155, 0.3);
+    }
+
+    .boarding-pass {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 0;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.18);
+    }
+
+    .boarding-main,
+    .boarding-side {
+      padding: 16px;
+    }
+
+    .boarding-main {
+      background: rgba(255, 255, 255, 0.09);
+    }
+
+    .boarding-side {
+      background: linear-gradient(180deg, rgba(255, 211, 107, 0.2), rgba(255, 159, 104, 0.18));
+      color: #fff9ea;
+      border-left: 1px dashed rgba(255, 255, 255, 0.25);
+    }
+
+    .boarding-label {
+      display: block;
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .boarding-main strong,
+    .boarding-side strong {
+      display: block;
+      margin-top: 6px;
+      color: #ffffff;
+      font-size: 1.08rem;
+    }
+
+    .start-form {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    input {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px 15px;
+      color: #eef6ff;
+      background: rgba(255, 255, 255, 0.08);
+      outline: none;
+    }
+
+    input::placeholder {
+      color: rgba(220, 232, 251, 0.58);
+    }
+
+    input:focus {
+      border-color: rgba(111, 183, 255, 0.88);
+      box-shadow: 0 0 0 4px rgba(111, 183, 255, 0.14);
+    }
+
+    .button {
+      border: 0;
+      border-radius: 8px;
+      padding: 14px 18px;
+      color: #081526;
+      background: linear-gradient(135deg, var(--green), var(--blue));
+      font-weight: 950;
+      cursor: pointer;
+      box-shadow: 0 18px 38px rgba(111, 183, 255, 0.24);
+      transition: transform 160ms ease, filter 160ms ease, box-shadow 160ms ease;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.04);
+      box-shadow: 0 24px 52px rgba(49, 215, 155, 0.26);
+    }
+
+    .button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+      filter: none !important;
+    }
+
+    .button.secondary {
+      color: #dce8fb;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--line);
+      box-shadow: none;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-top: 14px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .stat {
+      padding: 14px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+
+    .stat span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 850;
+      text-transform: uppercase;
+    }
+
+    .stat strong {
+      display: block;
+      margin-top: 5px;
+      font-size: 1.2rem;
+    }
+
+    .progress {
+      height: 12px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.09);
+      margin-bottom: 22px;
+    }
+
+    #progress-fill {
+      width: 0;
+      height: 100%;
+      background: linear-gradient(90deg, var(--green), var(--yellow), var(--blue));
+      transition: width 240ms ease;
+    }
+
+    .question-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 10px;
+      color: #dce8fb;
+      background: rgba(255, 255, 255, 0.08);
+      font-size: 0.86rem;
+      font-weight: 850;
+    }
+
+    .question {
+      margin-bottom: 18px;
+      font-size: clamp(1.35rem, 3vw, 2.1rem);
+      line-height: 1.24;
+      letter-spacing: 0;
+    }
+
+    .question-strip {
+      display: none;
+      min-height: 118px;
+      margin-bottom: 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background:
+        linear-gradient(90deg, rgba(8, 21, 38, 0.92), rgba(8, 21, 38, 0.38)),
+        linear-gradient(135deg, rgba(111, 183, 255, 0.25), transparent 48%);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .question-strip::before,
+    .question-strip::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .question-strip::before {
+      width: 180px;
+      height: 180px;
+      top: -72px;
+      right: 32px;
+    }
+
+    .question-strip::after {
+      width: 120px;
+      height: 120px;
+      bottom: -38px;
+      left: 34px;
+    }
+
+    .question-strip.active {
+      display: block;
+    }
+
+    .strip-labels {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      padding: 16px;
+      align-items: end;
+    }
+
+    .strip-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px 12px;
+      background: rgba(8, 21, 38, 0.66);
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.18);
+    }
+
+    .strip-card strong {
+      display: block;
+      color: #ffffff;
+      margin-bottom: 4px;
+    }
+
+    .answers {
+      display: grid;
+      gap: 10px;
+      counter-reset: answer;
+    }
+
+    .answer {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      width: 100%;
+      min-height: 58px;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: #eef6ff;
+      background: rgba(255, 255, 255, 0.08);
+      text-align: left;
+      cursor: pointer;
+      font-weight: 850;
+      line-height: 1.35;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
+    }
+
+    .answer::before {
+      counter-increment: answer;
+      content: counter(answer, upper-alpha);
+      display: grid;
+      place-items: center;
+      flex: 0 0 34px;
+      height: 34px;
+      border-radius: 8px;
+      color: #081526;
+      background: var(--yellow);
+      font-weight: 950;
+    }
+
+    .answer:hover:not(:disabled) {
+      border-color: rgba(111, 183, 255, 0.52);
+      background: rgba(111, 183, 255, 0.18);
+      transform: translateY(-1px);
+    }
+
+    .answer.correct {
+      border-color: rgba(49, 215, 155, 0.65);
+      background: linear-gradient(135deg, rgba(49, 215, 155, 0.22), rgba(255, 255, 255, 0.08));
+      color: #baffdf;
+    }
+
+    .answer.correct::before {
+      content: "OK";
+      background: var(--green);
+    }
+
+    .answer.wrong {
+      border-color: rgba(255, 125, 125, 0.7);
+      background: linear-gradient(135deg, rgba(255, 125, 125, 0.18), rgba(255, 255, 255, 0.08));
+      color: #ffd6d6;
+    }
+
+    .answer.wrong::before {
+      content: "X";
+      background: var(--red);
+    }
+
+    .blank-row {
+      display: none;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .blank-row.active {
+      display: grid;
+    }
+
+    .feedback {
+      min-height: 64px;
+      margin-top: 16px;
+      padding: 14px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.07);
+      line-height: 1.55;
+      font-weight: 780;
+    }
+
+    .feedback.correct {
+      border-color: rgba(49, 215, 155, 0.42);
+      color: #c5ffe3;
+      background: rgba(49, 215, 155, 0.14);
+    }
+
+    .feedback.wrong {
+      border-color: rgba(255, 125, 125, 0.42);
+      color: #ffd5d5;
+      background: rgba(255, 125, 125, 0.13);
+    }
+
+    .feedback-actions,
+    .result-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-top: 14px;
+    }
+
+    .feedback-actions {
+      display: none;
+    }
+
+    .feedback-actions.active {
+      display: flex;
+    }
+
+    .result-wrap {
+      text-align: center;
+      max-width: 780px;
+      margin: 0 auto;
+    }
+
+    .result-badge {
+      display: grid;
+      place-items: center;
+      width: 92px;
+      height: 92px;
+      margin: 0 auto 16px;
+      border-radius: 8px;
+      color: white;
+      background: linear-gradient(135deg, var(--yellow), var(--coral), var(--blue));
+      font-size: 2.4rem;
+      font-weight: 950;
+      box-shadow: 0 20px 52px rgba(111, 183, 255, 0.28);
+    }
+
+    .scoreline {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin: 22px 0;
+    }
+
+    .score-chip {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 10px 13px;
+      background: rgba(255, 255, 255, 0.08);
+      font-weight: 900;
+    }
+
+    .submit-status {
+      min-height: 28px;
+      color: var(--muted);
+      font-weight: 850;
+      margin-bottom: 14px;
+    }
+
+    .submit-status.success {
+      color: var(--green);
+    }
+
+    .submit-status.warning {
+      color: var(--yellow);
+    }
+
+    .teacher-note {
+      border: 1px solid rgba(255, 211, 107, 0.38);
+      border-radius: 8px;
+      padding: 16px;
+      margin: 18px 0;
+      background: rgba(255, 211, 107, 0.12);
+      color: #fff3c4;
+      line-height: 1.6;
+    }
+
+    .bank-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin: 18px 0;
+    }
+
+    .word-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .word-card h3 {
+      margin-bottom: 8px;
+      color: #ffffff;
+      font-size: 1.05rem;
+      letter-spacing: 0;
+    }
+
+    .word-card p,
+    .word-card li {
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .word-card ul {
+      margin: 10px 0 0;
+      padding-left: 18px;
+    }
+
+    .word-card strong {
+      color: #ffffff;
+    }
+
+    .burst {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      pointer-events: none;
+      border-radius: 50%;
+      z-index: 10;
+      animation: pop 850ms ease-out forwards;
+    }
+
+    @keyframes pop {
+      from {
+        opacity: 1;
+        transform: translate(0, 0) scale(1);
+      }
+      to {
+        opacity: 0;
+        transform: translate(var(--x), var(--y)) scale(0);
+      }
+    }
+
+    @media (max-width: 860px) {
+      .topbar,
+      .question-head {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .start-layout,
+      .bank-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .start-form,
+      .blank-row {
+        grid-template-columns: 1fr;
+      }
+
+      .status-pill {
+        white-space: normal;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .stats,
+      .strip-labels {
+        grid-template-columns: 1fr;
+      }
+
+      .route-row {
+        grid-template-columns: 1fr;
+      }
+
+      .route-chip {
+        justify-self: start;
+      }
+
+      .boarding-pass {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="mark">TC</div>
+        <div>
+          <h1>Travel Check-In Challenge</h1>
+          <p class="subtitle">Build practical travel vocabulary for airports, hotels, tickets, and getting around.</p>
+        </div>
+      </div>
+      <div class="status-pill" id="top-status">Ready</div>
+    </header>
+
+    <section class="panel">
+      <div class="screen active" id="start-screen">
+        <div class="start-layout">
+          <div>
+            <h2>Start The Travel Mission</h2>
+            <p class="muted">Write your name, then answer 30 travel vocabulary questions. Some questions ask you to choose the best word in a real sentence, and some check the meaning of a travel word.</p>
+            <div class="start-form">
+              <input id="student-name" maxlength="28" autocomplete="off" placeholder="Student name" />
+              <button class="button" id="start-button" type="button">Start</button>
+            </div>
+            <div class="button-row">
+              <button class="button secondary" id="start-bank" type="button">Vocabulary Bank</button>
+            </div>
+          </div>
+
+          <div class="travel-visual" aria-label="Travel board with route and ticket details">
+            <div class="route-board">
+              <div class="route-row">
+                <strong>IST</strong>
+                <span class="muted">passport -> check-in -> gate</span>
+                <span class="route-chip">Boarding</span>
+              </div>
+              <div class="route-row">
+                <strong>LON</strong>
+                <span class="muted">reservation -> receptionist -> room key</span>
+                <span class="route-chip">Hotel</span>
+              </div>
+            </div>
+
+            <div class="boarding-pass">
+              <div class="boarding-main">
+                <span class="boarding-label">Trip focus</span>
+                <strong>Airport, station, hotel, and city travel words</strong>
+              </div>
+              <div class="boarding-side">
+                <span class="boarding-label">Level</span>
+                <strong>A1-A2</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="screen" id="quiz-screen">
+        <div class="stats">
+          <div class="stat"><span>Student</span><strong id="stat-student">-</strong></div>
+          <div class="stat"><span>Score</span><strong id="stat-score">0</strong></div>
+          <div class="stat"><span>Streak</span><strong id="stat-streak">0</strong></div>
+          <div class="stat"><span>Correct</span><strong id="stat-correct">0</strong></div>
+        </div>
+
+        <div class="progress"><div id="progress-fill"></div></div>
+
+        <div class="question-head">
+          <span class="tag" id="question-count">Question 1 / 30</span>
+          <span class="tag" id="question-type">Sentence Gap</span>
+        </div>
+
+        <div class="question-strip" id="question-strip" aria-hidden="true">
+          <div class="strip-labels">
+            <div class="strip-card">
+              <strong>Airport</strong>
+              <span class="muted">gate, boarding pass</span>
+            </div>
+            <div class="strip-card">
+              <strong>Hotel</strong>
+              <span class="muted">receptionist, reservation</span>
+            </div>
+            <div class="strip-card">
+              <strong>City</strong>
+              <span class="muted">map, sightseeing</span>
+            </div>
+          </div>
+        </div>
+
+        <h2 class="question" id="question-text">Loading...</h2>
+        <div class="answers" id="answers"></div>
+        <div class="blank-row" id="blank-row">
+          <input id="blank-answer" autocomplete="off" placeholder="Type the travel word" />
+          <button class="button" id="submit-blank" type="button">Submit</button>
+        </div>
+        <div class="feedback" id="feedback"></div>
+        <div class="feedback-actions" id="feedback-actions">
+          <button class="button" id="next-button" type="button">Next</button>
+        </div>
+      </div>
+
+      <div class="screen" id="result-screen">
+        <div class="result-wrap">
+          <div class="result-badge" id="result-badge">A</div>
+          <h2 id="result-title">Trip Complete</h2>
+          <p class="muted" id="result-message">Your result will appear here.</p>
+          <div class="scoreline">
+            <div class="score-chip" id="final-score">Score: 0</div>
+            <div class="score-chip" id="final-correct">Correct: 0 / 30</div>
+            <div class="score-chip" id="final-rank">Rank: Travel Starter</div>
+          </div>
+          <div class="submit-status" id="submit-status">Submitting result...</div>
+          <div class="result-actions">
+            <button class="button secondary" id="play-again" type="button">Play Again</button>
+            <button class="button" id="bank-button" type="button">Vocabulary Bank</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="screen" id="bank-screen">
+        <h2>Travel Vocabulary Bank</h2>
+        <p class="muted">Use this review page before or after the game. The words below are practical travel words for airports, stations, hotels, and visiting a city.</p>
+
+        <div class="teacher-note">
+          Easy study tip: do not learn words alone. Learn a word with a short meaning and one simple example, such as <strong>gate</strong> -> the place where you wait before you get on a plane.
+        </div>
+
+        <div class="question-strip active" aria-hidden="true">
+          <div class="strip-labels">
+            <div class="strip-card">
+              <strong>Passport</strong>
+              <span class="muted">official travel document</span>
+            </div>
+            <div class="strip-card">
+              <strong>Reservation</strong>
+              <span class="muted">a room you booked before arrival</span>
+            </div>
+            <div class="strip-card">
+              <strong>Souvenir</strong>
+              <span class="muted">something you buy to remember a trip</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bank-grid">
+          <div class="word-card">
+            <h3>Passport</h3>
+            <p>An official document that shows who you are when you travel to another country.</p>
+            <ul>
+              <li><strong>Example:</strong> I showed my passport at the airport.</li>
+              <li><strong>Useful phrase:</strong> passport control</li>
+            </ul>
+          </div>
+
+          <div class="word-card">
+            <h3>Boarding pass</h3>
+            <p>The paper or phone ticket you show before you get on the plane.</p>
+            <ul>
+              <li><strong>Example:</strong> Please keep your boarding pass in your hand.</li>
+              <li><strong>Useful phrase:</strong> show your boarding pass</li>
+            </ul>
+          </div>
+
+          <div class="word-card">
+            <h3>Suitcase</h3>
+            <p>A large bag for clothes and travel items.</p>
+            <ul>
+              <li><strong>Example:</strong> Her suitcase is too heavy.</li>
+              <li><strong>Useful phrase:</strong> pack a suitcase</li>
+            </ul>
+          </div>
+
+          <div class="word-card">
+            <h3>Gate</h3>
+            <p>The place in an airport where people wait before they board the plane.</p>
+            <ul>
+              <li><strong>Example:</strong> We are waiting at gate 12.</li>
+              <li><strong>Useful phrase:</strong> go to the gate</li>
+            </ul>
+          </div>
+
+          <div class="word-card">
+            <h3>Platform</h3>
+            <p>The place in a station where you wait for a train.</p>
+            <ul>
+              <li><strong>Example:</strong> Our train leaves from platform 4.</li>
+              <li><strong>Useful phrase:</strong> on the platform</li>
+            </ul>
+          </div>
+
+          <div class="word-card">
+            <h3>Reservation</h3>
+            <p>An arranged booking for a room, seat, or table.</p>
+            <ul>
+              <li><strong>Example:</strong> I have a reservation for two nights.</li>
+              <li><strong>Useful phrase:</strong> make a reservation</li>
+            </ul>
+          </div>
+
+          <div class="word-card">
+            <h3>Receptionist</h3>
+            <p>The person at the front desk in a hotel.</p>
+            <ul>
+              <li><strong>Example:</strong> The receptionist gave us the key.</li>
+              <li><strong>Useful phrase:</strong> ask the receptionist</li>
+            </ul>
+          </div>
+
+          <div class="word-card">
+            <h3>Return ticket</h3>
+            <p>A ticket for going somewhere and then coming back.</p>
+            <ul>
+              <li><strong>Example:</strong> We bought a return ticket to Ankara.</li>
+              <li><strong>Useful phrase:</strong> buy a return ticket</li>
+            </ul>
+          </div>
+
+          <div class="word-card">
+            <h3>Sightseeing</h3>
+            <p>Visiting famous or interesting places in a city.</p>
+            <ul>
+              <li><strong>Example:</strong> We did some sightseeing after lunch.</li>
+              <li><strong>Useful phrase:</strong> go sightseeing</li>
+            </ul>
+          </div>
+
+          <div class="word-card">
+            <h3>Souvenir</h3>
+            <p>Something you buy or keep to remember a place you visited.</p>
+            <ul>
+              <li><strong>Example:</strong> Mia bought a souvenir for her sister.</li>
+              <li><strong>Useful phrase:</strong> souvenir shop</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="teacher-note">
+          Travel words are easier to remember in short scenes: airport, hotel, station, and city centre. Try to imagine where the word is used each time.
+        </div>
+
+        <div class="result-actions">
+          <button class="button secondary" id="back-button" type="button">Back</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const SUBMISSION_URL = "https://script.google.com/macros/s/AKfycbzemuwABx_r378H23gNRkisj2n_LW92T97voS5NwMfuLjH6O8sfW2bifcfUXYMlQzMcpg/exec";
+    const GAME_TITLE = "Travel Check-In Challenge";
+
+    const questions = [
+      { mode: "choice", label: "Sentence Gap", prompt: "At the airport, Emma showed her ___ before she got on the plane.", correct: "boarding pass", distractors: ["platform", "souvenir", "map"], note: "A boarding pass is the ticket or phone pass you show before boarding." },
+      { mode: "choice", label: "Sentence Gap", prompt: "Tom put his clothes in a large ___ before the trip.", correct: "suitcase", distractors: ["ticket", "gate", "passport control"], note: "A suitcase is a big travel bag for clothes." },
+      { mode: "choice", label: "Meaning Match", prompt: "What does passport mean?", correct: "an official travel document", distractors: ["a place to wait for a train", "a bag for dirty clothes", "a small city map"], note: "A passport shows who you are when you travel to another country." },
+      { mode: "blank", label: "Sentence Gap", prompt: "Our train leaves from platform 6. We need to go to the ______ now.", correct: "platform", acceptable: ["platform"], note: "A platform is the place where you wait for a train." },
+      { mode: "choice", label: "Sentence Gap", prompt: "Sofia had a hotel ___, so the receptionist already knew her name.", correct: "reservation", distractors: ["souvenir", "delay", "runway"], note: "A reservation means you booked the room before arriving." },
+      { mode: "choice", label: "Sentence Gap", prompt: "We asked the ___ for our room key and breakfast time.", correct: "receptionist", distractors: ["pilot", "tourist", "driver"], note: "A receptionist works at the front desk in a hotel." },
+      { mode: "choice", label: "Meaning Match", prompt: "What does return ticket mean?", correct: "a ticket for going and coming back", distractors: ["a ticket only for one way", "a paper with your hotel room number", "a ticket for a museum visit"], note: "A return ticket includes the trip there and the trip back." },
+      { mode: "choice", label: "Sentence Gap", prompt: "Ben lost his way in the old town, so he opened his ___.", correct: "map", distractors: ["boarding pass", "suitcase", "reservation"], note: "A map helps you find places and directions." },
+      { mode: "choice", label: "Sentence Gap", prompt: "Our plane is late. The screen says the flight is ___.", correct: "delayed", distractors: ["packed", "guided", "checked in"], note: "If a flight is delayed, it leaves later than planned." },
+      { mode: "blank", label: "Sentence Gap", prompt: "We waited at gate 14 because our plane was boarding from that ______.", correct: "gate", acceptable: ["gate"], note: "A gate is the place where you wait before entering the plane." },
+      { mode: "choice", label: "Meaning Match", prompt: "What does sightseeing mean?", correct: "visiting interesting places in a city", distractors: ["sleeping on a train", "buying a plane online", "washing clothes in a hotel"], note: "Sightseeing is visiting famous or interesting places." },
+      { mode: "choice", label: "Sentence Gap", prompt: "Anna bought a small ___ for her family after visiting Rome.", correct: "souvenir", distractors: ["platform", "check-in desk", "runway"], note: "A souvenir is something you keep to remember a trip." },
+      { mode: "choice", label: "Sentence Gap", prompt: "We need to ___ online before we arrive at the airport tomorrow.", correct: "check in", distractors: ["take off", "pick up", "turn back"], note: "To check in means to register for your flight or hotel arrival." },
+      { mode: "blank", label: "Sentence Gap", prompt: "I want to sit next to the window, so I asked for a ______ seat.", correct: "window", acceptable: ["window", "window seat"], note: "A window seat is the seat beside the window on a plane or bus." },
+      { mode: "choice", label: "Sentence Gap", prompt: "When the plane landed, we went to ___ to get our bags.", correct: "baggage claim", distractors: ["passport control", "departure board", "platform"], note: "Baggage claim is the area where you collect checked bags after a flight." },
+      { mode: "choice", label: "Meaning Match", prompt: "What does hostel mean?", correct: "a simple and usually cheaper place to stay", distractors: ["a private airport room", "a building for train tickets only", "a place to wash suitcases"], note: "A hostel is often a budget place to stay." },
+      { mode: "choice", label: "Sentence Gap", prompt: "Jack wanted to walk around the city centre and do some ___.", correct: "sightseeing", distractors: ["boarding", "landing", "unpacking"], note: "Sightseeing means visiting places for interest or pleasure." },
+      { mode: "choice", label: "Sentence Gap", prompt: "At passport control, the officer asked Mia for her ___.", correct: "passport", distractors: ["souvenir", "platform", "map"], note: "You usually show your passport at passport control." },
+      { mode: "blank", label: "Meaning Match", prompt: "Type the travel word: a person who is visiting a place for pleasure is a ______.", correct: "tourist", acceptable: ["tourist"], note: "A tourist is someone who visits a place for a holiday or interest." },
+      { mode: "choice", label: "Sentence Gap", prompt: "We arrived early because airport ___ can be slow in summer.", correct: "security", distractors: ["luggage tag", "souvenir shop", "runway"], note: "Security is the airport check before you go to the gate area." },
+      { mode: "choice", label: "Sentence Gap", prompt: "Alex chose an ___ seat so he could leave the plane quickly.", correct: "aisle", distractors: ["window", "garden", "return"], note: "An aisle seat is next to the walkway, not the window." },
+      { mode: "choice", label: "Meaning Match", prompt: "What does luggage mean?", correct: "the bags you take on a trip", distractors: ["the place where a plane takes off", "the money used in another country", "the list of hotel guests"], note: "Luggage is a more general word for bags and suitcases." },
+      { mode: "choice", label: "Sentence Gap", prompt: "The hotel room was for two people, so we booked a ___ room.", correct: "double", distractors: ["late", "return", "tourist"], note: "A double room is usually for two people." },
+      { mode: "blank", label: "Sentence Gap", prompt: "I changed some money at the airport because I needed local ______.", correct: "currency", acceptable: ["currency"], note: "Currency means the money used in a country." },
+      { mode: "choice", label: "Sentence Gap", prompt: "The train station was crowded, but we still found our ___.", correct: "platform", distractors: ["boarding pass", "receptionist", "hostel"], note: "Platforms belong to trains, not planes or hotels." },
+      { mode: "choice", label: "Sentence Gap", prompt: "Before we left the hotel, we put the room key on the ___ desk.", correct: "reception", distractors: ["souvenir", "runway", "passport"], note: "Reception is the front area of a hotel." },
+      { mode: "choice", label: "Meaning Match", prompt: "What does gate mean?", correct: "the area where you wait before boarding a plane", distractors: ["the place where you buy a city map", "the room where suitcases are made", "the road outside the hotel"], note: "Your gate number tells you where to board the plane." },
+      { mode: "blank", label: "Sentence Gap", prompt: "We bought a ______ ticket because we wanted to come back on Sunday.", correct: "return", acceptable: ["return"], note: "A return ticket includes the journey back." },
+      { mode: "choice", label: "Sentence Gap", prompt: "The small bus that takes people from the terminal to the hotel is a ___.", correct: "shuttle", distractors: ["passport", "platform", "souvenir"], note: "A shuttle is a short transport service that goes back and forth." },
+      { mode: "choice", label: "Sentence Gap", prompt: "When we arrived in the city, we asked for ___ so we could reach the museum.", correct: "directions", distractors: ["luggage", "boarding", "currency"], note: "Directions help you find your way to a place." }
+    ];
+
+    const state = {
+      student: "",
+      index: 0,
+      score: 0,
+      correct: 0,
+      streak: 0,
+      locked: false,
+      startTime: 0,
+      answers: [],
+      returnScreen: "start"
+    };
+
+    const screens = {
+      start: document.getElementById("start-screen"),
+      quiz: document.getElementById("quiz-screen"),
+      result: document.getElementById("result-screen"),
+      bank: document.getElementById("bank-screen")
+    };
+
+    const els = {
+      studentName: document.getElementById("student-name"),
+      startButton: document.getElementById("start-button"),
+      startBank: document.getElementById("start-bank"),
+      topStatus: document.getElementById("top-status"),
+      statStudent: document.getElementById("stat-student"),
+      statScore: document.getElementById("stat-score"),
+      statStreak: document.getElementById("stat-streak"),
+      statCorrect: document.getElementById("stat-correct"),
+      progressFill: document.getElementById("progress-fill"),
+      questionCount: document.getElementById("question-count"),
+      questionType: document.getElementById("question-type"),
+      questionText: document.getElementById("question-text"),
+      questionStrip: document.getElementById("question-strip"),
+      answers: document.getElementById("answers"),
+      blankRow: document.getElementById("blank-row"),
+      blankAnswer: document.getElementById("blank-answer"),
+      submitBlank: document.getElementById("submit-blank"),
+      feedback: document.getElementById("feedback"),
+      feedbackActions: document.getElementById("feedback-actions"),
+      nextButton: document.getElementById("next-button"),
+      resultBadge: document.getElementById("result-badge"),
+      resultTitle: document.getElementById("result-title"),
+      resultMessage: document.getElementById("result-message"),
+      finalScore: document.getElementById("final-score"),
+      finalCorrect: document.getElementById("final-correct"),
+      finalRank: document.getElementById("final-rank"),
+      submitStatus: document.getElementById("submit-status"),
+      playAgain: document.getElementById("play-again"),
+      bankButton: document.getElementById("bank-button"),
+      backButton: document.getElementById("back-button")
+    };
+
+    function switchScreen(name) {
+      Object.values(screens).forEach(screen => screen.classList.remove("active"));
+      screens[name].classList.add("active");
+    }
+
+    function shuffle(items) {
+      const copy = [...items];
+      for (let index = copy.length - 1; index > 0; index--) {
+        const swapIndex = Math.floor(Math.random() * (index + 1));
+        [copy[index], copy[swapIndex]] = [copy[swapIndex], copy[index]];
+      }
+      return copy;
+    }
+
+    function startGame() {
+      state.student = els.studentName.value.trim() || "Student";
+      state.index = 0;
+      state.score = 0;
+      state.correct = 0;
+      state.streak = 0;
+      state.locked = false;
+      state.startTime = Date.now();
+      state.answers = [];
+      state.returnScreen = "start";
+      els.statStudent.textContent = state.student;
+      els.topStatus.textContent = "In progress";
+      updateStats();
+      switchScreen("quiz");
+      loadQuestion();
+    }
+
+    function loadQuestion() {
+      const question = questions[state.index];
+      state.locked = false;
+      els.questionCount.textContent = `Question ${state.index + 1} / ${questions.length}`;
+      els.questionType.textContent = question.label;
+      els.questionText.textContent = question.prompt;
+      els.progressFill.style.width = `${(state.index / questions.length) * 100}%`;
+      els.feedback.textContent = "";
+      els.feedback.className = "feedback";
+      els.feedbackActions.classList.remove("active");
+      els.answers.innerHTML = "";
+      els.blankAnswer.value = "";
+      els.blankAnswer.disabled = false;
+      els.submitBlank.disabled = false;
+      els.questionStrip.classList.toggle("active", state.index % 4 === 0);
+
+      if (question.mode === "choice") {
+        els.answers.style.display = "grid";
+        els.blankRow.classList.remove("active");
+        shuffle([question.correct, ...question.distractors]).forEach(option => {
+          const button = document.createElement("button");
+          button.className = "answer";
+          button.type = "button";
+          button.textContent = option;
+          button.addEventListener("click", () => chooseAnswer(option, button));
+          els.answers.appendChild(button);
+        });
+      } else {
+        els.answers.style.display = "none";
+        els.blankRow.classList.add("active");
+        setTimeout(() => els.blankAnswer.focus(), 80);
+      }
+    }
+
+    function normalize(value) {
+      return value.trim().toLowerCase().replace(/\s+/g, " ");
+    }
+
+    function checkBlankAnswer() {
+      if (state.locked) return;
+      const question = questions[state.index];
+      const rawAnswer = els.blankAnswer.value;
+      const normalized = normalize(rawAnswer);
+      const acceptable = question.acceptable.map(answer => normalize(answer));
+      const isCorrect = acceptable.includes(normalized);
+      els.blankAnswer.disabled = true;
+      els.submitBlank.disabled = true;
+      finishAnswer(isCorrect, rawAnswer.trim());
+    }
+
+    function chooseAnswer(choice, element) {
+      if (state.locked) return;
+      const question = questions[state.index];
+      const isCorrect = choice === question.correct;
+      document.querySelectorAll(".answer").forEach(button => {
+        button.disabled = true;
+        if (button.textContent === question.correct) {
+          button.classList.add("correct");
+        }
+      });
+      if (!isCorrect) {
+        element.classList.add("wrong");
+      }
+      finishAnswer(isCorrect, choice);
+    }
+
+    function finishAnswer(isCorrect, studentAnswer) {
+      const question = questions[state.index];
+      const scoreBefore = state.score;
+      state.locked = true;
+
+      if (isCorrect) {
+        state.correct++;
+        state.streak++;
+        state.score += 100 + (state.streak >= 3 ? 25 : 0);
+        els.feedback.className = "feedback correct";
+        els.feedback.textContent = state.streak >= 3
+          ? `Correct. Streak bonus earned. ${question.note}`
+          : `Correct. ${question.note}`;
+        playCorrect();
+        burst(["#31d79b", "#6fb7ff", "#ffd36b"]);
+      } else {
+        state.streak = 0;
+        els.feedback.className = "feedback wrong";
+        els.feedback.textContent = `Answer: ${question.correct}. ${question.note}`;
+        playWrong();
+      }
+
+      state.answers.push({
+        questionNumber: state.index + 1,
+        question: question.prompt,
+        type: question.label.toLowerCase(),
+        studentAnswer,
+        correctAnswer: question.correct,
+        isCorrect,
+        pointsEarned: state.score - scoreBefore
+      });
+
+      updateStats();
+      els.feedbackActions.classList.add("active");
+    }
+
+    function nextQuestion() {
+      state.index++;
+      if (state.index >= questions.length) {
+        showResults();
+      } else {
+        loadQuestion();
+      }
+    }
+
+    function updateStats() {
+      els.statScore.textContent = state.score;
+      els.statStreak.textContent = state.streak;
+      els.statCorrect.textContent = state.correct;
+    }
+
+    function showBank(returnScreen) {
+      state.returnScreen = returnScreen;
+      switchScreen("bank");
+    }
+
+    function showResults() {
+      els.progressFill.style.width = "100%";
+      const percentage = Math.round((state.correct / questions.length) * 100);
+      const rank = percentage >= 90 ? "Travel Navigator" : percentage >= 75 ? "Travel Guide" : percentage >= 55 ? "Route Explorer" : "Travel Starter";
+      els.resultBadge.textContent = percentage >= 90 ? "A" : percentage >= 75 ? "B" : percentage >= 55 ? "C" : "D";
+      els.resultTitle.textContent = `Trip Complete, ${state.student}`;
+      els.resultMessage.textContent = percentage >= 75
+        ? "Strong work. You can use travel vocabulary in real situations with confidence."
+        : "Good practice. Review the vocabulary bank, then try again and look at each travel scene carefully.";
+      els.finalScore.textContent = `Score: ${state.score}`;
+      els.finalCorrect.textContent = `Correct: ${state.correct} / ${questions.length}`;
+      els.finalRank.textContent = `Rank: ${rank}`;
+      els.topStatus.textContent = "Complete";
+      switchScreen("result");
+      playFinish();
+      burst(["#ffd36b", "#ff9f68", "#6fb7ff", "#31d79b"], 28);
+      submitResult();
+    }
+
+    function buildSubmission() {
+      return {
+        studentName: state.student,
+        gameTitle: GAME_TITLE,
+        score: state.score,
+        correct: state.correct,
+        total: questions.length,
+        timeSpentSeconds: Math.round((Date.now() - state.startTime) / 1000),
+        answers: state.answers
+      };
+    }
+
+    async function submitResult() {
+      const submission = buildSubmission();
+      els.submitStatus.className = "submit-status";
+      els.submitStatus.textContent = "Submitting result to teacher sheet...";
+
+      try {
+        await fetch(SUBMISSION_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: {
+            "Content-Type": "text/plain;charset=utf-8"
+          },
+          body: JSON.stringify(submission)
+        });
+
+        els.submitStatus.className = "submit-status success";
+        els.submitStatus.textContent = "Result submitted. Open the vocabulary bank when you are ready.";
+      } catch (error) {
+        els.submitStatus.className = "submit-status warning";
+        els.submitStatus.textContent = `Could not submit automatically. Backup: ${state.student} | ${state.score} | ${state.correct}/${questions.length}`;
+      }
+    }
+
+    function playTone(frequency, duration, type = "sine", delay = 0, volume = 0.08) {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContext) return;
+
+      const audio = new AudioContext();
+      const oscillator = audio.createOscillator();
+      const gain = audio.createGain();
+      const start = audio.currentTime + delay;
+
+      oscillator.frequency.value = frequency;
+      oscillator.type = type;
+      gain.gain.setValueAtTime(volume, start);
+      gain.gain.exponentialRampToValueAtTime(0.001, start + duration);
+      oscillator.connect(gain);
+      gain.connect(audio.destination);
+      oscillator.start(start);
+      oscillator.stop(start + duration);
+    }
+
+    function playCorrect() {
+      playTone(660, 0.1, "triangle", 0, 0.07);
+      playTone(880, 0.12, "triangle", 0.08, 0.06);
+    }
+
+    function playWrong() {
+      playTone(240, 0.16, "sawtooth", 0, 0.045);
+      playTone(180, 0.18, "sine", 0.08, 0.04);
+    }
+
+    function playFinish() {
+      playTone(523, 0.1, "triangle", 0, 0.06);
+      playTone(659, 0.12, "triangle", 0.09, 0.06);
+      playTone(784, 0.16, "triangle", 0.19, 0.055);
+    }
+
+    function burst(colors, count = 16) {
+      for (let index = 0; index < count; index++) {
+        const dot = document.createElement("span");
+        dot.className = "burst";
+        dot.style.left = `${window.innerWidth / 2}px`;
+        dot.style.top = `${Math.min(window.innerHeight * 0.55, 440)}px`;
+        dot.style.background = colors[index % colors.length];
+        dot.style.setProperty("--x", `${Math.random() * 260 - 130}px`);
+        dot.style.setProperty("--y", `${Math.random() * 190 - 135}px`);
+        document.body.appendChild(dot);
+        setTimeout(() => dot.remove(), 900);
+      }
+    }
+
+    els.startButton.addEventListener("click", startGame);
+    els.startBank.addEventListener("click", () => showBank("start"));
+    els.bankButton.addEventListener("click", () => showBank("result"));
+    els.backButton.addEventListener("click", () => switchScreen(state.returnScreen));
+    els.nextButton.addEventListener("click", nextQuestion);
+    els.submitBlank.addEventListener("click", checkBlankAnswer);
+    els.playAgain.addEventListener("click", () => {
+      els.topStatus.textContent = "Ready";
+      switchScreen("start");
+    });
+    els.studentName.addEventListener("keydown", event => {
+      if (event.key === "Enter") startGame();
+    });
+    els.blankAnswer.addEventListener("keydown", event => {
+      if (event.key === "Enter" && !state.locked) checkBlankAnswer();
+    });
+  </script>
+</body>
+</html>

@@ -1,6 +1,6 @@
 # English Language Practice Project Notes
 
-Last updated: 2026-05-24
+Last updated: 2026-05-30
 
 ## Purpose
 
@@ -107,6 +107,8 @@ English-Language-Practice/
       index.html
       assets/
         countable-uncountable-hero.png
+    travel-check-in-challenge/
+      index.html
     prepositions-place-quest/
       index.html
     articles-adventure/
@@ -245,7 +247,7 @@ Current implementation:
 
 - `index.html` has two large cards: `Grammar Quests` and `Vocabulary Games`.
 - `grammar/index.html` lists all current grammar games and has `Open` and `Copy Link` controls.
-- `vocabulary/index.html` is a ready skeleton for future vocabulary games.
+- `vocabulary/index.html` is the current vocabulary game-library page and has `Open` and `Copy Link` controls.
 - Existing playable game folders remain under `games/<game-folder>/` to preserve old direct student links.
 - Future games may continue to live under `games/<game-folder>/`; the important rule is that the correct section page must link to them.
 
@@ -385,9 +387,9 @@ Vocabulary games should still use:
 - polished classroom-friendly styling
 - subtle generated visuals where useful
 
-## Current Game
+## Current Games
 
-Current game:
+Current grammar game:
 
 - Title: `Possessive Pronouns Quest`
 - Topic: A1 possessive pronouns: `mine`, `yours`, `his`, `hers`, `ours`, and `theirs`
@@ -402,6 +404,20 @@ Current game:
 - Uses broadly familiar English/international names in examples.
 - Uses a generated custom visual asset saved at `games/possessive-pronouns-quest/assets/possessive-pronouns-hero.png`.
 - The generated visual is blended into the panel background, the start visual, and occasional question strips.
+
+Current vocabulary game:
+
+- Title: `Travel Check-In Challenge`
+- Topic: A1-A2 travel vocabulary for airports, stations, hotels, tickets, directions, and sightseeing
+- Source: original Codex-created question set based on common travel situations; no user-provided source URL
+- Project copy lives at: `games/travel-check-in-challenge/index.html`
+- Direct student link: `https://drmostafahammad.github.io/English-Language-practice/games/travel-check-in-challenge/`
+- Question count: 30
+- Question types: sentence gap, meaning match, and typed travel-word blanks
+- Multiple-choice answer options are shuffled at runtime.
+- Includes a `Vocabulary Bank` button on the first page before the game starts.
+- Vocabulary bank uses A1-A2-friendly meanings, short examples, and useful phrases.
+- Uses subtle travel visuals built in HTML/CSS on the start screen and question strips instead of a separate image asset.
 
 Previous games:
 
@@ -602,8 +618,7 @@ games/
   prepositions-place-quest/index.html
   articles-adventure/index.html
   word-order-workshop/index.html
-  vocabulary-volcano/index.html
-  present-simple-quest/index.html
+  travel-check-in-challenge/index.html
 ```
 
 Direct game links can still be sent to students for homework.
@@ -663,6 +678,7 @@ Current local state:
 
 - Root `index.html` is now a two-track homepage.
 - `grammar/index.html` is the current grammar game-library page.
-- `vocabulary/index.html` is the ready skeleton for vocabulary games.
-- Published games: `Possessive Pronouns Quest`, `Possessive Adjectives Quest`, `Countable And Uncountable Quest`, `Prepositions Place Quest`, `Articles Adventure`, `Word Order Workshop`.
+- `vocabulary/index.html` is now the live vocabulary game-library page.
+- Published grammar games: `Possessive Pronouns Quest`, `Possessive Adjectives Quest`, `Countable And Uncountable Quest`, `Prepositions Place Quest`, `Articles Adventure`, `Word Order Workshop`.
+- Published vocabulary games: `Travel Check-In Challenge`.
 - The same Google Sheet and Apps Script web app URL should be reused for future games unless the user asks for a fresh backend.

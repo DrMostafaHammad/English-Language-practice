@@ -1,0 +1,1764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Noun Verb Adjective Challenge</title>
+  <style>
+    :root {
+      --night: #102033;
+      --night-2: #18395d;
+      --sky: #7ed6ff;
+      --mint: #69e0a8;
+      --sun: #ffd56a;
+      --peach: #ff9e7a;
+      --rose: #ff6f91;
+      --ink: #f8fbff;
+      --muted: #bfd0df;
+      --panel: rgba(12, 29, 48, 0.92);
+      --panel-strong: rgba(7, 19, 33, 0.84);
+      --line: rgba(255, 255, 255, 0.16);
+      --shadow: 0 26px 70px rgba(0, 0, 0, 0.3);
+      --noun: #7ed6ff;
+      --verb: #69e0a8;
+      --adjective: #ffd56a;
+      --wrong: #ff8b8b;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Trebuchet MS", "Aptos", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(126, 214, 255, 0.18), transparent 26%),
+        radial-gradient(circle at top right, rgba(105, 224, 168, 0.15), transparent 22%),
+        linear-gradient(135deg, #0e1c2d, var(--night) 48%, var(--night-2));
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.18;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+      background-size: 34px 34px;
+      mask-image: linear-gradient(180deg, black, transparent 82%);
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .shell {
+      width: min(1160px, calc(100% - 24px));
+      margin: 0 auto;
+      padding: 18px 0 40px;
+      position: relative;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: center;
+      padding: 12px 0 18px;
+    }
+
+    .brand {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .mark {
+      display: grid;
+      place-items: center;
+      width: 54px;
+      height: 54px;
+      border-radius: 16px;
+      color: #0f2234;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--sun), var(--mint));
+      box-shadow: 0 14px 34px rgba(105, 224, 168, 0.24);
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      margin-bottom: 4px;
+      font-size: clamp(1.8rem, 4vw, 3.1rem);
+      line-height: 1.04;
+    }
+
+    .subtitle,
+    .muted {
+      color: var(--muted);
+      line-height: 1.58;
+    }
+
+    .status-pill,
+    .back-link {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 10px 14px;
+      background: rgba(255, 255, 255, 0.08);
+      color: #ebf6ff;
+      font-weight: 850;
+      text-decoration: none;
+      white-space: nowrap;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    }
+
+    .panel {
+      position: relative;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.03)),
+        var(--panel);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.18;
+      background:
+        radial-gradient(circle at 12% 18%, rgba(126, 214, 255, 0.36), transparent 22%),
+        radial-gradient(circle at 84% 22%, rgba(105, 224, 168, 0.28), transparent 18%),
+        linear-gradient(125deg, rgba(255, 213, 106, 0.1), transparent 32%);
+    }
+
+    .screen {
+      position: relative;
+      display: none;
+      padding: clamp(20px, 4vw, 34px);
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    .start-layout {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 26px;
+      align-items: center;
+    }
+
+    .hero-board {
+      display: grid;
+      gap: 14px;
+      min-height: 360px;
+      padding: 18px;
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(180deg, rgba(126, 214, 255, 0.14), rgba(9, 21, 36, 0.82)),
+        rgba(255, 255, 255, 0.04);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+      overflow: hidden;
+      align-content: end;
+    }
+
+    .hero-title {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .hero-chip {
+      border-radius: 999px;
+      padding: 9px 14px;
+      font-weight: 900;
+      color: #102033;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.18);
+    }
+
+    .hero-chip.noun {
+      background: var(--noun);
+    }
+
+    .hero-chip.verb {
+      background: var(--verb);
+    }
+
+    .hero-chip.adjective {
+      background: var(--adjective);
+    }
+
+    .hero-lane {
+      display: grid;
+      gap: 10px;
+    }
+
+    .lane-card {
+      display: grid;
+      grid-template-columns: 104px 1fr;
+      gap: 12px;
+      align-items: center;
+      padding: 12px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: rgba(8, 19, 32, 0.62);
+      box-shadow: 0 16px 34px rgba(0, 0, 0, 0.18);
+    }
+
+    .lane-label {
+      display: grid;
+      place-items: center;
+      min-height: 58px;
+      border-radius: 16px;
+      font-weight: 950;
+      color: #0e2031;
+    }
+
+    .lane-label.noun {
+      background: linear-gradient(135deg, var(--noun), #bcecff);
+    }
+
+    .lane-label.verb {
+      background: linear-gradient(135deg, var(--verb), #bdf6d6);
+    }
+
+    .lane-label.adjective {
+      background: linear-gradient(135deg, var(--adjective), #ffe8a6);
+    }
+
+    .floating-words {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .floating-word {
+      padding: 9px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.08);
+      color: #f4fbff;
+      font-weight: 850;
+    }
+
+    .start-form {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    input {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px 16px;
+      color: #eef8ff;
+      background: rgba(255, 255, 255, 0.08);
+      outline: none;
+    }
+
+    input::placeholder {
+      color: rgba(238, 248, 255, 0.54);
+    }
+
+    input:focus {
+      border-color: rgba(126, 214, 255, 0.86);
+      box-shadow: 0 0 0 4px rgba(126, 214, 255, 0.15);
+    }
+
+    .button {
+      border: 0;
+      border-radius: 16px;
+      padding: 14px 18px;
+      color: #102033;
+      background: linear-gradient(135deg, var(--mint), var(--sky));
+      font-weight: 950;
+      cursor: pointer;
+      box-shadow: 0 18px 38px rgba(126, 214, 255, 0.22);
+      transition: transform 160ms ease, filter 160ms ease, box-shadow 160ms ease;
+    }
+
+    .button:hover:not(:disabled) {
+      transform: translateY(-2px);
+      filter: brightness(1.03);
+      box-shadow: 0 24px 50px rgba(105, 224, 168, 0.24);
+    }
+
+    .button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+      filter: none !important;
+    }
+
+    .button.secondary {
+      color: #e8f4ff;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--line);
+      box-shadow: none;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .stat {
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.09);
+    }
+
+    .stat span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 850;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .stat strong {
+      display: block;
+      margin-top: 6px;
+      font-size: 1.12rem;
+    }
+
+    .progress {
+      height: 12px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      margin-bottom: 22px;
+    }
+
+    #progress-fill {
+      width: 0;
+      height: 100%;
+      background: linear-gradient(90deg, var(--mint), var(--sun), var(--sky), var(--rose));
+      transition: width 220ms ease;
+    }
+
+    .question-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .tag-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      padding: 8px 11px;
+      background: rgba(255, 255, 255, 0.08);
+      color: #eaf6ff;
+      font-size: 0.84rem;
+      font-weight: 850;
+    }
+
+    .question {
+      margin-bottom: 16px;
+      font-size: clamp(1.32rem, 3vw, 2rem);
+      line-height: 1.24;
+    }
+
+    .question-note {
+      margin-bottom: 18px;
+      color: var(--muted);
+      line-height: 1.56;
+    }
+
+    .round-banner {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .round-step {
+      padding: 12px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .round-step.active {
+      color: #0d2033;
+      background: linear-gradient(135deg, rgba(126, 214, 255, 0.94), rgba(105, 224, 168, 0.94));
+      border-color: transparent;
+    }
+
+    .choice-grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    .answer {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      width: 100%;
+      min-height: 60px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      color: #f0f8ff;
+      background: rgba(255, 255, 255, 0.08);
+      text-align: left;
+      cursor: pointer;
+      font-weight: 850;
+      transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+    }
+
+    .answer::before {
+      content: attr(data-badge);
+      display: grid;
+      place-items: center;
+      flex: 0 0 38px;
+      height: 38px;
+      border-radius: 12px;
+      color: #0d2033;
+      background: var(--sun);
+      font-weight: 950;
+    }
+
+    .answer:hover:not(:disabled) {
+      transform: translateY(-1px);
+      border-color: rgba(126, 214, 255, 0.48);
+      background: rgba(126, 214, 255, 0.16);
+    }
+
+    .answer.correct {
+      border-color: rgba(105, 224, 168, 0.7);
+      background: rgba(105, 224, 168, 0.18);
+      color: #d8ffe9;
+    }
+
+    .answer.correct::before {
+      content: "OK";
+      background: var(--mint);
+    }
+
+    .answer.wrong {
+      border-color: rgba(255, 139, 139, 0.74);
+      background: rgba(255, 139, 139, 0.16);
+      color: #ffdede;
+    }
+
+    .answer.wrong::before {
+      content: "X";
+      background: var(--wrong);
+    }
+
+    .drag-shell {
+      display: none;
+      gap: 14px;
+    }
+
+    .drag-shell.active {
+      display: grid;
+    }
+
+    .drag-panel {
+      padding: 16px;
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.06);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+
+    .drag-panel h3 {
+      margin-bottom: 10px;
+      font-size: 1rem;
+    }
+
+    .drag-help {
+      color: var(--muted);
+      font-size: 0.94rem;
+      line-height: 1.55;
+      margin-bottom: 12px;
+    }
+
+    .dropzone {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      min-height: 88px;
+      padding: 14px;
+      border-radius: 20px;
+      border: 1px dashed rgba(255, 255, 255, 0.26);
+      background: rgba(8, 18, 30, 0.38);
+    }
+
+    .dropzone.active-drop {
+      border-color: rgba(126, 214, 255, 0.86);
+      background: rgba(126, 214, 255, 0.1);
+    }
+
+    .word-card {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 78px;
+      min-height: 48px;
+      padding: 10px 14px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      color: #0e2031;
+      font-weight: 900;
+      background: linear-gradient(135deg, #fef5d5, #fffdf5);
+      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.18);
+      cursor: grab;
+      touch-action: none;
+      user-select: none;
+    }
+
+    .word-card[data-kind="noun"] {
+      background: linear-gradient(135deg, var(--noun), #d6f4ff);
+    }
+
+    .word-card[data-kind="verb"] {
+      background: linear-gradient(135deg, var(--verb), #d8ffe8);
+    }
+
+    .word-card[data-kind="adjective"] {
+      background: linear-gradient(135deg, var(--adjective), #fff0b6);
+    }
+
+    .word-card[data-kind="function"] {
+      background: linear-gradient(135deg, #ffd4c0, #fff0df);
+    }
+
+    .word-card.dragging {
+      opacity: 0.82;
+      cursor: grabbing;
+      transform: scale(1.04);
+    }
+
+    .word-card.selected {
+      border-color: #ffffff;
+      box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.22), 0 16px 32px rgba(0, 0, 0, 0.18);
+    }
+
+    .actions,
+    .feedback-actions,
+    .result-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .actions,
+    .feedback-actions,
+    .result-actions {
+      justify-content: flex-end;
+    }
+
+    .actions {
+      margin-top: 12px;
+    }
+
+    .feedback {
+      min-height: 70px;
+      margin-top: 16px;
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px solid transparent;
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.07);
+      line-height: 1.6;
+      font-weight: 780;
+    }
+
+    .feedback.correct {
+      border-color: rgba(105, 224, 168, 0.42);
+      color: #d4ffe4;
+      background: rgba(105, 224, 168, 0.14);
+    }
+
+    .feedback.wrong {
+      border-color: rgba(255, 139, 139, 0.42);
+      color: #ffe0e0;
+      background: rgba(255, 139, 139, 0.13);
+    }
+
+    .feedback-actions {
+      display: none;
+    }
+
+    .feedback-actions.active {
+      display: flex;
+    }
+
+    .result-wrap {
+      max-width: 780px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .result-badge {
+      display: grid;
+      place-items: center;
+      width: 96px;
+      height: 96px;
+      margin: 0 auto 16px;
+      border-radius: 24px;
+      color: white;
+      background: linear-gradient(135deg, var(--sun), var(--peach), var(--sky));
+      box-shadow: 0 20px 52px rgba(126, 214, 255, 0.28);
+      font-size: 2.3rem;
+      font-weight: 950;
+    }
+
+    .scoreline {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin: 22px 0;
+    }
+
+    .score-chip {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 10px 13px;
+      background: rgba(255, 255, 255, 0.08);
+      font-weight: 900;
+    }
+
+    .submit-status {
+      min-height: 28px;
+      color: var(--muted);
+      font-weight: 850;
+      margin-bottom: 14px;
+    }
+
+    .submit-status.success {
+      color: var(--mint);
+    }
+
+    .submit-status.warning {
+      color: var(--sun);
+    }
+
+    .teacher-note {
+      border: 1px solid rgba(255, 213, 106, 0.38);
+      border-radius: 20px;
+      padding: 16px;
+      margin: 18px 0;
+      background: rgba(255, 213, 106, 0.11);
+      color: #fff3c9;
+      line-height: 1.62;
+    }
+
+    .explanation-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin: 18px 0;
+    }
+
+    .rule {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .rule h3 {
+      margin-bottom: 8px;
+      font-size: 1.05rem;
+    }
+
+    .rule p,
+    .rule li {
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .rule ul {
+      margin: 10px 0 0;
+      padding-left: 18px;
+    }
+
+    .rule strong {
+      color: #ffffff;
+    }
+
+    .burst {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 10;
+      animation: pop 850ms ease-out forwards;
+    }
+
+    @keyframes pop {
+      from {
+        opacity: 1;
+        transform: translate(0, 0) scale(1);
+      }
+      to {
+        opacity: 0;
+        transform: translate(var(--x), var(--y)) scale(0);
+      }
+    }
+
+    @media (max-width: 900px) {
+      .topbar,
+      .question-head {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .start-layout,
+      .explanation-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .round-banner {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .start-form {
+        grid-template-columns: 1fr;
+      }
+
+      .status-pill,
+      .back-link {
+        white-space: normal;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .stats,
+      .round-banner {
+        grid-template-columns: 1fr;
+      }
+
+      .lane-card {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="mark">NV</div>
+        <div>
+          <h1>Noun Verb Adjective Challenge</h1>
+          <p class="subtitle">Sort words, fill sentence gaps, build stronger sentences, and repair scrambled English with live word cards.</p>
+        </div>
+      </div>
+      <div class="status-pill" id="top-status">Ready</div>
+    </header>
+
+    <section class="panel">
+      <div class="screen active" id="start-screen">
+        <div class="start-layout">
+          <div>
+            <h2>Start The Three-Round Challenge</h2>
+            <p class="muted">Write your name, then move from word types to sentence control. The words come from the ESL Lounge A1 vocabulary list, but the sentence work gets steadily harder as you go.</p>
+            <div class="start-form">
+              <input id="student-name" maxlength="28" autocomplete="off" placeholder="Student name" />
+              <button class="button" id="start-button" type="button">Start</button>
+            </div>
+            <div class="button-row">
+              <button class="button secondary" id="start-explanation" type="button">Explanation</button>
+            </div>
+          </div>
+
+          <div class="hero-board" aria-hidden="true">
+            <div class="hero-title">
+              <span class="hero-chip noun">Nouns</span>
+              <span class="hero-chip verb">Verbs</span>
+              <span class="hero-chip adjective">Adjectives</span>
+            </div>
+
+            <div class="hero-lane">
+              <div class="lane-card">
+                <div class="lane-label noun">Round 1</div>
+                <div class="floating-words">
+                  <span class="floating-word">ticket</span>
+                  <span class="floating-word">museum</span>
+                  <span class="floating-word">homework</span>
+                </div>
+              </div>
+
+              <div class="lane-card">
+                <div class="lane-label verb">Round 2</div>
+                <div class="floating-words">
+                  <span class="floating-word">explain</span>
+                  <span class="floating-word">travel</span>
+                  <span class="floating-word">carry</span>
+                </div>
+              </div>
+
+              <div class="lane-card">
+                <div class="lane-label adjective">Round 3</div>
+                <div class="floating-words">
+                  <span class="floating-word">friendly</span>
+                  <span class="floating-word">quiet</span>
+                  <span class="floating-word">important</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="screen" id="quiz-screen">
+        <div class="stats">
+          <div class="stat"><span>Student</span><strong id="stat-student">-</strong></div>
+          <div class="stat"><span>Score</span><strong id="stat-score">0</strong></div>
+          <div class="stat"><span>Streak</span><strong id="stat-streak">0</strong></div>
+          <div class="stat"><span>Correct</span><strong id="stat-correct">0</strong></div>
+          <div class="stat"><span>Round</span><strong id="stat-round">1</strong></div>
+        </div>
+
+        <div class="progress"><div id="progress-fill"></div></div>
+
+        <div class="round-banner" id="round-banner">
+          <div class="round-step">1. Identify Word Type</div>
+          <div class="round-step">2. Choose The Missing Word</div>
+          <div class="round-step">3. Build A Sentence</div>
+        </div>
+
+        <div class="question-head">
+          <div class="tag-row">
+            <span class="tag" id="question-count">Question 1 / 30</span>
+            <span class="tag" id="question-type">Word Type</span>
+          </div>
+          <span class="tag" id="question-round">Round 1</span>
+        </div>
+
+        <h2 class="question" id="question-text">Loading...</h2>
+        <p class="question-note" id="question-note">Read carefully and choose the best answer.</p>
+
+        <div class="choice-grid" id="answers"></div>
+
+        <div class="drag-shell" id="drag-shell">
+          <div class="drag-panel">
+            <h3 id="drag-target-title">Build Zone</h3>
+            <p class="drag-help" id="drag-help">Drag or tap cards into the sentence area.</p>
+            <div class="dropzone" id="sentence-zone" data-zone="sentence"></div>
+          </div>
+
+          <div class="drag-panel">
+            <h3>Word Pool</h3>
+            <p class="drag-help">Move the cards. On phones, you can tap a card to send it to the other area.</p>
+            <div class="dropzone" id="pool-zone" data-zone="pool"></div>
+          </div>
+
+          <div class="actions">
+            <button class="button secondary" id="move-left" type="button">Move Left</button>
+            <button class="button secondary" id="move-right" type="button">Move Right</button>
+            <button class="button secondary" id="move-to-pool" type="button">To Pool</button>
+            <button class="button secondary" id="move-to-sentence" type="button">To Sentence</button>
+            <button class="button secondary" id="reset-drag" type="button">Reset Cards</button>
+            <button class="button" id="submit-drag" type="button">Check Sentence</button>
+          </div>
+        </div>
+
+        <div class="feedback" id="feedback"></div>
+        <div class="feedback-actions" id="feedback-actions">
+          <button class="button" id="next-button" type="button">Next</button>
+        </div>
+      </div>
+
+      <div class="screen" id="result-screen">
+        <div class="result-wrap">
+          <div class="result-badge" id="result-badge">A</div>
+          <h2 id="result-title">Challenge Complete</h2>
+          <p class="muted" id="result-message">Your result will appear here.</p>
+          <div class="scoreline">
+            <div class="score-chip" id="final-score">Score: 0</div>
+            <div class="score-chip" id="final-correct">Correct: 0 / 30</div>
+            <div class="score-chip" id="final-rank">Rank: Word Explorer</div>
+          </div>
+          <div class="submit-status" id="submit-status">Submitting result...</div>
+          <div class="result-actions">
+            <button class="button secondary" id="play-again" type="button">Play Again</button>
+            <button class="button" id="result-explanation" type="button">Explanation</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="screen" id="explanation-screen">
+        <h2>Nouns, Verbs, Adjectives, And Better Simple Sentences</h2>
+        <p class="muted">This lesson starts with word type recognition, but the final goal is sentence control. At A2 level, students should not only name the word type. They should use it correctly in a fuller sentence.</p>
+
+        <div class="teacher-note">
+          Use this question again and again: <strong>What job is this word doing in the sentence?</strong> A noun often names a person, thing, place, or idea. A verb shows an action or state. An adjective gives extra information about a noun. When students know each job, sentence building becomes much easier.
+        </div>
+
+        <div class="explanation-grid">
+          <div class="rule">
+            <h3>1. Nouns name people, places, things, or ideas</h3>
+            <p>A noun can be concrete or more abstract. In this game, words like <strong>ticket</strong>, <strong>museum</strong>, and <strong>homework</strong> come from the ESL Lounge A1 list, but the sentences around them are more developed.</p>
+            <ul>
+              <li><strong>The museum</strong> opened early today.</li>
+              <li>My brother finished his <strong>homework</strong> after dinner.</li>
+            </ul>
+          </div>
+
+          <div class="rule">
+            <h3>2. Verbs show actions or states</h3>
+            <p>Verbs are the engine of the sentence. In A2 work, students need to notice tense, meaning, and where the verb fits.</p>
+            <ul>
+              <li>We <strong>travel</strong> by train in summer.</li>
+              <li>The guide will <strong>explain</strong> the rule again.</li>
+            </ul>
+          </div>
+
+          <div class="rule">
+            <h3>3. Adjectives describe nouns</h3>
+            <p>Adjectives usually come before the noun, or after <strong>be</strong>. They make sentences more natural and more precise.</p>
+            <ul>
+              <li>She wore a <strong>warm</strong> jacket.</li>
+              <li>The library is <strong>quiet</strong> in the morning.</li>
+            </ul>
+          </div>
+
+          <div class="rule">
+            <h3>4. Stronger A2 sentences add detail</h3>
+            <p>Instead of tiny sentences, A2 students can handle fuller patterns such as subject + verb + object + time/place detail.</p>
+            <ul>
+              <li><strong>My cousin will play the guitar after school.</strong></li>
+              <li><strong>The friendly waiter carried our drinks carefully.</strong></li>
+            </ul>
+          </div>
+
+          <div class="rule">
+            <h3>5. Building a sentence means choosing the right order</h3>
+            <p>English often follows a clear pattern: subject, verb, object, then extra information like place or time. Some questions in this game ask students to build a sentence from a pool and ignore extra cards.</p>
+          </div>
+        </div>
+
+        <div class="teacher-note">
+          Source note: the word bank for this game was taken from the ESL Lounge A1 vocabulary list page chosen for this lesson. The challenge level rises through sentence design, not through very rare vocabulary.
+        </div>
+
+        <div class="result-actions">
+          <button class="button secondary" id="back-button" type="button">Back</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const SUBMISSION_URL = "https://script.google.com/macros/s/AKfycbzemuwABx_r378H23gNRkisj2n_LW92T97voS5NwMfuLjH6O8sfW2bifcfUXYMlQzMcpg/exec";
+    const GAME_TITLE = "Noun Verb Adjective Challenge";
+
+    const roundOneBase = [
+      { round: 1, mode: "choice", label: "Identify Word Type", prompt: "What type of word is <strong>airport</strong>?", note: "Airport names a place, so it is a noun.", correct: "Noun", distractors: ["Verb", "Adjective"] },
+      { round: 1, mode: "choice", label: "Identify Word Type", prompt: "What type of word is <strong>homework</strong>?", note: "Homework names a thing or activity, so it is a noun.", correct: "Noun", distractors: ["Verb", "Adjective"] },
+      { round: 1, mode: "choice", label: "Identify Word Type", prompt: "What type of word is <strong>museum</strong>?", note: "Museum names a place, so it is a noun.", correct: "Noun", distractors: ["Verb", "Adjective"] },
+      { round: 1, mode: "choice", label: "Identify Word Type", prompt: "What type of word is <strong>ticket</strong>?", note: "Ticket names a thing, so it is a noun.", correct: "Noun", distractors: ["Verb", "Adjective"] },
+      { round: 1, mode: "choice", label: "Identify Word Type", prompt: "What type of word is <strong>arrive</strong>?", note: "Arrive shows an action or event, so it is a verb.", correct: "Verb", distractors: ["Noun", "Adjective"] },
+      { round: 1, mode: "choice", label: "Identify Word Type", prompt: "What type of word is <strong>carry</strong>?", note: "Carry shows an action, so it is a verb.", correct: "Verb", distractors: ["Noun", "Adjective"] },
+      { round: 1, mode: "choice", label: "Identify Word Type", prompt: "What type of word is <strong>explain</strong>?", note: "Explain shows an action with words, so it is a verb.", correct: "Verb", distractors: ["Noun", "Adjective"] },
+      { round: 1, mode: "choice", label: "Identify Word Type", prompt: "What type of word is <strong>amazing</strong>?", note: "Amazing describes a noun, so it is an adjective.", correct: "Adjective", distractors: ["Noun", "Verb"] },
+      { round: 1, mode: "choice", label: "Identify Word Type", prompt: "What type of word is <strong>friendly</strong>?", note: "Friendly describes the kind of person or place, so it is an adjective.", correct: "Adjective", distractors: ["Noun", "Verb"] },
+      { round: 1, mode: "choice", label: "Identify Word Type", prompt: "What type of word is <strong>important</strong>?", note: "Important gives extra information about a noun or idea, so it is an adjective.", correct: "Adjective", distractors: ["Noun", "Verb"] }
+    ];
+
+    const roundTwo = [
+      { round: 2, mode: "choice", label: "Choose The Missing Word", prompt: "We bought a warm ___ for our winter trip.", note: "Jacket is the only noun that fits naturally after warm in this sentence.", correct: "jacket", distractors: ["travel", "friendly", "explain"] },
+      { round: 2, mode: "choice", label: "Choose The Missing Word", prompt: "The teacher will ___ the homework after class.", note: "Explain is the verb that completes the sentence after will.", correct: "explain", distractors: ["museum", "busy", "ticket"] },
+      { round: 2, mode: "choice", label: "Choose The Missing Word", prompt: "My cousin studies in the library because it is very ___ there.", note: "Quiet is the adjective that describes the library.", correct: "quiet", distractors: ["carry", "window", "airport"] },
+      { round: 2, mode: "choice", label: "Choose The Missing Word", prompt: "Please show your ___ before you get on the train.", note: "Ticket is the noun that fits the travel context.", correct: "ticket", distractors: ["hungry", "travel", "friendly"] },
+      { round: 2, mode: "choice", label: "Choose The Missing Word", prompt: "My aunt feels ___ after the long journey.", note: "Tired is the adjective that describes how she feels.", correct: "tired", distractors: ["hotel", "write", "lesson"] },
+      { round: 2, mode: "choice", label: "Choose The Missing Word", prompt: "We need to ___ the form before the lesson begins.", note: "Complete is the verb that fits the phrase complete the form.", correct: "complete", distractors: ["mountain", "popular", "ticket"] },
+      { round: 2, mode: "choice", label: "Choose The Missing Word", prompt: "The restaurant is popular because the food is ___ .", note: "Delicious is the adjective that describes the food.", correct: "delicious", distractors: ["arrive", "office", "newspaper"] },
+      { round: 2, mode: "choice", label: "Choose The Missing Word", prompt: "Please ___ the window because it is cold outside.", note: "Close is the verb that matches the meaning of the sentence.", correct: "close", distractors: ["quiet", "garden", "special"] },
+      { round: 2, mode: "choice", label: "Choose The Missing Word", prompt: "Ben wants to buy a ___ present for his grandmother.", note: "Special is the adjective that fits before present.", correct: "special", distractors: ["swim", "station", "hungry"] },
+      { round: 2, mode: "choice", label: "Choose The Missing Word", prompt: "Our team will ___ at the station at half past eight.", note: "Arrive is the verb that fits the time and place idea here.", correct: "arrive", distractors: ["purple", "museum", "sandwich"] }
+    ];
+
+    const roundThree = [
+      {
+        round: 3,
+        mode: "build",
+        label: "Build A Sentence",
+        prompt: "Build the best sentence about school habits.",
+        instruction: "Use the cards to make one clear sentence. One extra card does not belong.",
+        answer: ["My", "brother", "will", "do", "his", "homework"],
+        pool: [
+          { text: "My", kind: "function" },
+          { text: "brother", kind: "noun" },
+          { text: "will", kind: "function" },
+          { text: "do", kind: "verb" },
+          { text: "his", kind: "function" },
+          { text: "homework", kind: "noun" },
+          { text: "after", kind: "function" },
+          { text: "quiet", kind: "adjective" }
+        ],
+        note: "This sentence uses a subject, a future verb phrase, and the object his homework."
+      },
+      {
+        round: 3,
+        mode: "build",
+        label: "Build A Sentence",
+        prompt: "Build the best sentence about a place in town.",
+        instruction: "Choose only the cards that create a natural sentence.",
+        answer: ["The", "museum", "will", "open", "tomorrow"],
+        pool: [
+          { text: "The", kind: "function" },
+          { text: "new", kind: "adjective" },
+          { text: "museum", kind: "noun" },
+          { text: "will", kind: "function" },
+          { text: "open", kind: "verb" },
+          { text: "tomorrow", kind: "function" },
+          { text: "at", kind: "function" },
+          { text: "travel", kind: "verb" }
+        ],
+        note: "The target sentence uses a simple future idea plus the time word tomorrow."
+      },
+      {
+        round: 3,
+        mode: "build",
+        label: "Build A Sentence",
+        prompt: "Build the best sentence about music practice.",
+        instruction: "Move the cards into a sentence that sounds natural in English.",
+        answer: ["Emma", "plays", "the", "guitar"],
+        pool: [
+          { text: "Emma", kind: "noun" },
+          { text: "plays", kind: "verb" },
+          { text: "the", kind: "function" },
+          { text: "guitar", kind: "noun" },
+          { text: "will", kind: "function" },
+          { text: "friendly", kind: "adjective" },
+          { text: "teacher", kind: "noun" },
+          { text: "important", kind: "adjective" }
+        ],
+        note: "This one is in the present simple: Emma plays the guitar."
+      },
+      {
+        round: 3,
+        mode: "build",
+        label: "Build A Sentence",
+        prompt: "Build the best sentence about travel plans.",
+        instruction: "Arrange a sentence with a clear action and place phrase.",
+        answer: ["We", "are", "traveling", "by", "bus"],
+        pool: [
+          { text: "We", kind: "function" },
+          { text: "are", kind: "verb" },
+          { text: "traveling", kind: "verb" },
+          { text: "by", kind: "function" },
+          { text: "bus", kind: "noun" },
+          { text: "will", kind: "function" },
+          { text: "airport", kind: "noun" },
+          { text: "amazing", kind: "adjective" }
+        ],
+        note: "This sentence uses the present continuous: we are traveling by bus."
+      },
+      {
+        round: 3,
+        mode: "build",
+        label: "Build A Sentence",
+        prompt: "Build the best sentence about project work.",
+        instruction: "Make one clear sentence and leave out the extra card.",
+        answer: ["The", "student", "finishes", "the", "project"],
+        pool: [
+          { text: "The", kind: "function" },
+          { text: "busy", kind: "adjective" },
+          { text: "student", kind: "noun" },
+          { text: "finishes", kind: "verb" },
+          { text: "the", kind: "function" },
+          { text: "project", kind: "noun" },
+          { text: "will", kind: "function" },
+          { text: "tonight", kind: "function" },
+          { text: "window", kind: "noun" }
+        ],
+        note: "This sentence is in the present simple, with a clear subject, verb, and object."
+      },
+      {
+        round: 3,
+        mode: "build",
+        label: "Build A Sentence",
+        prompt: "Build the best sentence about the classroom.",
+        instruction: "Use the cards to make a natural sentence with an object and a time phrase.",
+        answer: ["Our", "teacher", "explains", "the", "question"],
+        pool: [
+          { text: "Our", kind: "function" },
+          { text: "teacher", kind: "noun" },
+          { text: "explains", kind: "verb" },
+          { text: "the", kind: "function" },
+          { text: "question", kind: "noun" },
+          { text: "will", kind: "function" },
+          { text: "difficult", kind: "adjective" },
+          { text: "after", kind: "function" },
+          { text: "blue", kind: "adjective" }
+        ],
+        note: "This target sentence is short and uses the present simple."
+      },
+      {
+        round: 3,
+        mode: "build",
+        label: "Build A Sentence",
+        prompt: "Build the best sentence about a meal order.",
+        instruction: "Create one natural sentence and ignore the extra card.",
+        answer: ["The", "tourist", "is", "ordering", "a", "sandwich"],
+        pool: [
+          { text: "The", kind: "function" },
+          { text: "hungry", kind: "adjective" },
+          { text: "tourist", kind: "noun" },
+          { text: "is", kind: "verb" },
+          { text: "ordering", kind: "verb" },
+          { text: "a", kind: "function" },
+          { text: "sandwich", kind: "noun" },
+          { text: "will", kind: "function" },
+          { text: "cafe", kind: "noun" },
+          { text: "purple", kind: "adjective" }
+        ],
+        note: "This one uses the present continuous: is ordering."
+      },
+      {
+        round: 3,
+        mode: "build",
+        label: "Build A Sentence",
+        prompt: "Build the best sentence about carrying luggage.",
+        instruction: "Arrange the cards into one complete sentence.",
+        answer: ["My", "cousin", "carries", "a", "bag"],
+        pool: [
+          { text: "My", kind: "function" },
+          { text: "cousin", kind: "noun" },
+          { text: "carries", kind: "verb" },
+          { text: "a", kind: "function" },
+          { text: "big", kind: "adjective" },
+          { text: "bag", kind: "noun" },
+          { text: "will", kind: "function" },
+          { text: "hotel", kind: "noun" },
+          { text: "often", kind: "function" }
+        ],
+        note: "This sentence uses the present simple: my cousin carries a bag."
+      },
+      {
+        round: 3,
+        mode: "build",
+        label: "Build A Sentence",
+        prompt: "Build the best sentence about restaurant service.",
+        instruction: "Use the cards to make a clear sentence with an object and place phrase.",
+        answer: ["The", "waiter", "brings", "the", "food"],
+        pool: [
+          { text: "The", kind: "function" },
+          { text: "friendly", kind: "adjective" },
+          { text: "waiter", kind: "noun" },
+          { text: "brings", kind: "verb" },
+          { text: "the", kind: "function" },
+          { text: "food", kind: "noun" },
+          { text: "water", kind: "noun" },
+          { text: "will", kind: "function" },
+          { text: "cheap", kind: "adjective" }
+        ],
+        note: "This sentence is in the present simple and keeps the service idea very direct."
+      },
+      {
+        round: 3,
+        mode: "build",
+        label: "Build A Sentence",
+        prompt: "Build the best sentence about art.",
+        instruction: "Create one complete sentence and leave the extra card out.",
+        answer: ["Artists", "paint", "beautiful", "paintings"],
+        pool: [
+          { text: "Artists", kind: "noun" },
+          { text: "paint", kind: "verb" },
+          { text: "beautiful", kind: "adjective" },
+          { text: "paintings", kind: "noun" },
+          { text: "young", kind: "adjective" },
+          { text: "picture", kind: "noun" },
+          { text: "garden", kind: "noun" },
+          { text: "airport", kind: "noun" }
+        ],
+        note: "This final sentence uses a plural subject and the present simple."
+      }
+    ];
+
+    const questions = [...shuffle(roundOneBase), ...roundTwo, ...roundThree];
+
+    const state = {
+      student: "",
+      index: 0,
+      score: 0,
+      correct: 0,
+      streak: 0,
+      locked: false,
+      startTime: 0,
+      answers: [],
+      returnScreen: "start",
+      currentPool: [],
+      dragOriginPool: [],
+      selectedCardId: null
+    };
+
+    const screens = {
+      start: document.getElementById("start-screen"),
+      quiz: document.getElementById("quiz-screen"),
+      result: document.getElementById("result-screen"),
+      explanation: document.getElementById("explanation-screen")
+    };
+
+    const els = {
+      studentName: document.getElementById("student-name"),
+      startButton: document.getElementById("start-button"),
+      startExplanation: document.getElementById("start-explanation"),
+      topStatus: document.getElementById("top-status"),
+      statStudent: document.getElementById("stat-student"),
+      statScore: document.getElementById("stat-score"),
+      statStreak: document.getElementById("stat-streak"),
+      statCorrect: document.getElementById("stat-correct"),
+      statRound: document.getElementById("stat-round"),
+      progressFill: document.getElementById("progress-fill"),
+      roundBanner: document.getElementById("round-banner"),
+      questionCount: document.getElementById("question-count"),
+      questionType: document.getElementById("question-type"),
+      questionRound: document.getElementById("question-round"),
+      questionText: document.getElementById("question-text"),
+      questionNote: document.getElementById("question-note"),
+      answers: document.getElementById("answers"),
+      dragShell: document.getElementById("drag-shell"),
+      dragTargetTitle: document.getElementById("drag-target-title"),
+      dragHelp: document.getElementById("drag-help"),
+      sentenceZone: document.getElementById("sentence-zone"),
+      poolZone: document.getElementById("pool-zone"),
+      moveLeft: document.getElementById("move-left"),
+      moveRight: document.getElementById("move-right"),
+      moveToPool: document.getElementById("move-to-pool"),
+      moveToSentence: document.getElementById("move-to-sentence"),
+      resetDrag: document.getElementById("reset-drag"),
+      submitDrag: document.getElementById("submit-drag"),
+      feedback: document.getElementById("feedback"),
+      feedbackActions: document.getElementById("feedback-actions"),
+      nextButton: document.getElementById("next-button"),
+      resultBadge: document.getElementById("result-badge"),
+      resultTitle: document.getElementById("result-title"),
+      resultMessage: document.getElementById("result-message"),
+      finalScore: document.getElementById("final-score"),
+      finalCorrect: document.getElementById("final-correct"),
+      finalRank: document.getElementById("final-rank"),
+      submitStatus: document.getElementById("submit-status"),
+      playAgain: document.getElementById("play-again"),
+      resultExplanation: document.getElementById("result-explanation"),
+      backButton: document.getElementById("back-button")
+    };
+
+    function switchScreen(name) {
+      Object.values(screens).forEach(screen => screen.classList.remove("active"));
+      screens[name].classList.add("active");
+    }
+
+    function shuffle(items) {
+      const copy = [...items];
+      for (let index = copy.length - 1; index > 0; index--) {
+        const swapIndex = Math.floor(Math.random() * (index + 1));
+        [copy[index], copy[swapIndex]] = [copy[swapIndex], copy[index]];
+      }
+      return copy;
+    }
+
+    function stripPromptMarkup(text) {
+      const temp = document.createElement("div");
+      temp.innerHTML = text;
+      return temp.textContent || temp.innerText || "";
+    }
+
+    function startGame() {
+      state.student = els.studentName.value.trim() || "Student";
+      state.index = 0;
+      state.score = 0;
+      state.correct = 0;
+      state.streak = 0;
+      state.locked = false;
+      state.startTime = Date.now();
+      state.answers = [];
+      state.returnScreen = "start";
+      els.statStudent.textContent = state.student;
+      els.topStatus.textContent = "In progress";
+      updateStats();
+      switchScreen("quiz");
+      loadQuestion();
+    }
+
+    function loadQuestion() {
+      const question = questions[state.index];
+      state.locked = false;
+      state.selectedCardId = null;
+      els.questionCount.textContent = `Question ${state.index + 1} / ${questions.length}`;
+      els.questionType.textContent = question.label;
+      els.questionRound.textContent = `Round ${question.round}`;
+      els.questionText.innerHTML = question.prompt;
+      els.questionNote.textContent = question.instruction || "Read carefully and choose the best answer.";
+      els.progressFill.style.width = `${(state.index / questions.length) * 100}%`;
+      els.feedback.textContent = "";
+      els.feedback.className = "feedback";
+      els.feedbackActions.classList.remove("active");
+      els.answers.innerHTML = "";
+      els.dragShell.classList.remove("active");
+      els.answers.style.display = "grid";
+      els.statRound.textContent = question.round;
+      updateRoundBanner(question.round);
+
+      if (question.mode === "choice") {
+        const options = shuffle([question.correct, ...question.distractors]);
+        options.forEach((option, index) => {
+          const button = document.createElement("button");
+          button.className = "answer";
+          button.type = "button";
+          button.dataset.badge = String.fromCharCode(65 + index);
+          button.textContent = option;
+          button.addEventListener("click", () => chooseAnswer(option, button));
+          els.answers.appendChild(button);
+        });
+      } else {
+        els.answers.style.display = "none";
+        els.dragShell.classList.add("active");
+        els.dragTargetTitle.textContent = "Build Zone";
+        els.dragHelp.textContent = question.instruction;
+        setupDragQuestion(question);
+      }
+      unlockDragUI();
+    }
+
+    function updateRoundBanner(activeRound) {
+      Array.from(els.roundBanner.children).forEach((step, index) => {
+        step.classList.toggle("active", index + 1 === activeRound);
+      });
+    }
+
+    function chooseAnswer(choice, buttonElement) {
+      if (state.locked) return;
+      const question = questions[state.index];
+      const isCorrect = choice === question.correct;
+
+      document.querySelectorAll(".answer").forEach(button => {
+        button.disabled = true;
+        if (button.textContent === question.correct) {
+          button.classList.add("correct");
+        }
+      });
+
+      if (!isCorrect) {
+        buttonElement.classList.add("wrong");
+      }
+
+      finishAnswer(isCorrect, choice, question.correct, question.note);
+    }
+
+    function setupDragQuestion(question) {
+      const sourceCards = shuffle(question.pool);
+
+      state.currentPool = sourceCards.map((card, index) => ({
+        id: `${state.index}-${index}-${card.text}`,
+        text: card.text,
+        kind: card.kind,
+        zone: "pool"
+      }));
+
+      state.dragOriginPool = sourceCards.map(card => card.text);
+      state.selectedCardId = null;
+
+      renderDragZones();
+    }
+
+    function renderDragZones() {
+      els.poolZone.innerHTML = "";
+      els.sentenceZone.innerHTML = "";
+
+      const sentenceCards = state.currentPool.filter(card => card.zone === "sentence");
+      const poolCards = state.currentPool.filter(card => card.zone === "pool");
+
+      sentenceCards.forEach(card => els.sentenceZone.appendChild(createWordCard(card)));
+      poolCards.forEach(card => els.poolZone.appendChild(createWordCard(card)));
+    }
+
+    function createWordCard(card) {
+      const button = document.createElement("button");
+      button.className = "word-card";
+      button.type = "button";
+      button.textContent = card.text;
+      button.draggable = true;
+      button.dataset.id = card.id;
+      button.dataset.kind = card.kind;
+      if (state.selectedCardId === card.id) {
+        button.classList.add("selected");
+      }
+      button.addEventListener("click", () => selectCard(card.id));
+      button.addEventListener("dragstart", event => {
+        event.dataTransfer.setData("text/plain", card.id);
+        button.classList.add("dragging");
+        state.selectedCardId = card.id;
+      });
+      button.addEventListener("dragend", () => {
+        button.classList.remove("dragging");
+      });
+      button.addEventListener("dragover", event => {
+        event.preventDefault();
+      });
+      button.addEventListener("drop", event => {
+        event.preventDefault();
+        const draggedId = event.dataTransfer.getData("text/plain");
+        const zoneName = button.parentElement.dataset.zone;
+        moveCardToZone(draggedId, zoneName, card.id);
+      });
+      return button;
+    }
+
+    function selectCard(cardId) {
+      if (state.locked) return;
+      state.selectedCardId = state.selectedCardId === cardId ? null : cardId;
+      renderDragZones();
+    }
+
+    function moveCardToZone(cardId, zoneName, beforeCardId = null) {
+      const card = state.currentPool.find(item => item.id === cardId);
+      if (!card || state.locked) return;
+      if (beforeCardId && beforeCardId === cardId) return;
+      card.zone = zoneName;
+      state.currentPool = state.currentPool.filter(item => item.id !== cardId);
+
+      if (!beforeCardId) {
+        state.currentPool.push(card);
+      } else {
+        const insertIndex = state.currentPool.findIndex(item => item.id === beforeCardId);
+        if (insertIndex === -1) {
+          state.currentPool.push(card);
+        } else {
+          state.currentPool.splice(insertIndex, 0, card);
+        }
+      }
+
+      state.selectedCardId = cardId;
+      renderDragZones();
+    }
+
+    function moveSelectedCard(direction) {
+      if (state.locked || !state.selectedCardId) return;
+      const currentIndex = state.currentPool.findIndex(card => card.id === state.selectedCardId);
+      if (currentIndex === -1) return;
+
+      const card = state.currentPool[currentIndex];
+      const siblings = state.currentPool.filter(item => item.zone === card.zone);
+      const siblingIndex = siblings.findIndex(item => item.id === card.id);
+      const targetSibling = direction === "left" ? siblings[siblingIndex - 1] : siblings[siblingIndex + 1];
+
+      if (!targetSibling) return;
+
+      state.currentPool.splice(currentIndex, 1);
+      const targetIndex = state.currentPool.findIndex(item => item.id === targetSibling.id);
+      const insertIndex = direction === "left" ? targetIndex : targetIndex + 1;
+      state.currentPool.splice(insertIndex, 0, card);
+      renderDragZones();
+    }
+
+    function sendSelectedCard(zoneName) {
+      if (state.locked || !state.selectedCardId) return;
+      moveCardToZone(state.selectedCardId, zoneName);
+    }
+
+    function resetDragQuestion() {
+      if (state.locked) return;
+      const question = questions[state.index];
+      setupDragQuestion(question);
+    }
+
+    function readSentenceZone() {
+      return state.currentPool
+        .filter(card => card.zone === "sentence")
+        .map(card => card.text);
+    }
+
+    function submitDragAnswer() {
+      if (state.locked) return;
+      const question = questions[state.index];
+      const chosenWords = readSentenceZone();
+      const expected = question.answer;
+      const isCorrect = chosenWords.length === expected.length && chosenWords.every((word, index) => word === expected[index]);
+      const studentAnswer = chosenWords.join(" ");
+      const correctAnswer = expected.join(" ");
+
+      if (!isCorrect) {
+        state.streak = 0;
+        updateStats();
+        els.feedback.className = "feedback wrong";
+        els.feedback.textContent = `Not quite. Answer: ${correctAnswer}. ${question.note} You can move the cards again or use Reset Cards, then check again.`;
+        playWrong();
+        return;
+      }
+
+      finishAnswer(true, studentAnswer || "(no sentence built)", correctAnswer, question.note);
+    }
+
+    function finishAnswer(isCorrect, studentAnswer, correctAnswer, note) {
+      const question = questions[state.index];
+      const scoreBefore = state.score;
+      state.locked = true;
+
+      if (isCorrect) {
+        state.correct++;
+        state.streak++;
+        state.score += 110 + (state.streak >= 3 ? 25 : 0);
+        els.feedback.className = "feedback correct";
+        els.feedback.textContent = state.streak >= 3
+          ? `Correct. Streak bonus earned. ${note}`
+          : `Correct. ${note}`;
+        playCorrect();
+        burst(["#69e0a8", "#7ed6ff", "#ffd56a"]);
+      } else {
+        state.streak = 0;
+        els.feedback.className = "feedback wrong";
+        els.feedback.textContent = `Answer: ${correctAnswer}. ${note}`;
+        playWrong();
+      }
+
+      state.answers.push({
+        questionNumber: state.index + 1,
+        question: stripPromptMarkup(question.prompt),
+        type: question.label.toLowerCase(),
+        studentAnswer,
+        correctAnswer,
+        isCorrect,
+        pointsEarned: state.score - scoreBefore
+      });
+
+      lockDragUI();
+      updateStats();
+      els.feedbackActions.classList.add("active");
+    }
+
+    function lockDragUI() {
+      document.querySelectorAll(".word-card").forEach(card => {
+        card.disabled = true;
+        card.draggable = false;
+      });
+      els.moveLeft.disabled = true;
+      els.moveRight.disabled = true;
+      els.moveToPool.disabled = true;
+      els.moveToSentence.disabled = true;
+      els.resetDrag.disabled = true;
+      els.submitDrag.disabled = true;
+    }
+
+    function unlockDragUI() {
+      const question = questions[state.index];
+      const isDragRound = question.mode === "build";
+      els.moveLeft.disabled = !isDragRound;
+      els.moveRight.disabled = !isDragRound;
+      els.moveToPool.disabled = !isDragRound;
+      els.moveToSentence.disabled = !isDragRound;
+      els.resetDrag.disabled = !isDragRound;
+      els.submitDrag.disabled = !isDragRound;
+    }
+
+    function nextQuestion() {
+      state.index++;
+      if (state.index >= questions.length) {
+        showResults();
+      } else {
+        loadQuestion();
+      }
+    }
+
+    function updateStats() {
+      els.statScore.textContent = state.score;
+      els.statStreak.textContent = state.streak;
+      els.statCorrect.textContent = state.correct;
+    }
+
+    function showResults() {
+      els.progressFill.style.width = "100%";
+      const percentage = Math.round((state.correct / questions.length) * 100);
+      const rank = percentage >= 90 ? "Sentence Architect" : percentage >= 78 ? "Word Engineer" : percentage >= 60 ? "Pattern Builder" : "Language Starter";
+      els.resultBadge.textContent = percentage >= 90 ? "A" : percentage >= 78 ? "B" : percentage >= 60 ? "C" : "D";
+      els.resultTitle.textContent = `Finished, ${state.student}`;
+      els.resultMessage.textContent = percentage >= 78
+        ? "Strong work. You are not only spotting word types. You are using them to control fuller English sentences."
+        : "Good practice. Review the explanation and try again, especially in the build and repair rounds.";
+      els.finalScore.textContent = `Score: ${state.score}`;
+      els.finalCorrect.textContent = `Correct: ${state.correct} / ${questions.length}`;
+      els.finalRank.textContent = `Rank: ${rank}`;
+      els.topStatus.textContent = "Complete";
+      switchScreen("result");
+      playFinish();
+      burst(["#ffd56a", "#ff9e7a", "#7ed6ff", "#69e0a8"], 30);
+      submitResult();
+    }
+
+    function buildSubmission() {
+      return {
+        studentName: state.student,
+        gameTitle: GAME_TITLE,
+        score: state.score,
+        correct: state.correct,
+        total: questions.length,
+        timeSpentSeconds: Math.round((Date.now() - state.startTime) / 1000),
+        answers: state.answers
+      };
+    }
+
+    async function submitResult() {
+      const submission = buildSubmission();
+      els.submitStatus.className = "submit-status";
+      els.submitStatus.textContent = "Submitting result to teacher sheet...";
+
+      try {
+        await fetch(SUBMISSION_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: {
+            "Content-Type": "text/plain;charset=utf-8"
+          },
+          body: JSON.stringify(submission)
+        });
+
+        els.submitStatus.className = "submit-status success";
+        els.submitStatus.textContent = "Result submitted. Open the explanation if you want to review the language patterns.";
+      } catch (error) {
+        els.submitStatus.className = "submit-status warning";
+        els.submitStatus.textContent = `Could not submit automatically. Backup: ${state.student} | ${state.score} | ${state.correct}/${questions.length}`;
+      }
+    }
+
+    function playTone(frequency, duration, type = "sine", delay = 0, volume = 0.08) {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContext) return;
+
+      const audio = new AudioContext();
+      const oscillator = audio.createOscillator();
+      const gain = audio.createGain();
+      const start = audio.currentTime + delay;
+
+      oscillator.frequency.value = frequency;
+      oscillator.type = type;
+      gain.gain.setValueAtTime(volume, start);
+      gain.gain.exponentialRampToValueAtTime(0.001, start + duration);
+      oscillator.connect(gain);
+      gain.connect(audio.destination);
+      oscillator.start(start);
+      oscillator.stop(start + duration);
+    }
+
+    function playCorrect() {
+      playTone(660, 0.1, "triangle", 0, 0.07);
+      playTone(880, 0.12, "triangle", 0.08, 0.06);
+    }
+
+    function playWrong() {
+      playTone(220, 0.16, "sawtooth", 0, 0.045);
+      playTone(175, 0.18, "sine", 0.08, 0.04);
+    }
+
+    function playFinish() {
+      playTone(523, 0.1, "triangle", 0, 0.06);
+      playTone(659, 0.12, "triangle", 0.09, 0.06);
+      playTone(784, 0.16, "triangle", 0.19, 0.055);
+    }
+
+    function burst(colors, count = 16) {
+      for (let index = 0; index < count; index++) {
+        const dot = document.createElement("span");
+        dot.className = "burst";
+        dot.style.left = `${window.innerWidth / 2}px`;
+        dot.style.top = `${Math.min(window.innerHeight * 0.55, 420)}px`;
+        dot.style.background = colors[index % colors.length];
+        dot.style.setProperty("--x", `${Math.random() * 280 - 140}px`);
+        dot.style.setProperty("--y", `${Math.random() * 200 - 140}px`);
+        document.body.appendChild(dot);
+        setTimeout(() => dot.remove(), 900);
+      }
+    }
+
+    [els.poolZone, els.sentenceZone].forEach(zone => {
+      zone.addEventListener("dragover", event => {
+        event.preventDefault();
+        if (!state.locked) zone.classList.add("active-drop");
+      });
+      zone.addEventListener("dragleave", () => zone.classList.remove("active-drop"));
+      zone.addEventListener("drop", event => {
+        event.preventDefault();
+        zone.classList.remove("active-drop");
+        const cardId = event.dataTransfer.getData("text/plain");
+        moveCardToZone(cardId, zone.dataset.zone);
+      });
+    });
+
+    els.startButton.addEventListener("click", startGame);
+    els.startExplanation.addEventListener("click", () => {
+      state.returnScreen = "start";
+      switchScreen("explanation");
+    });
+    els.nextButton.addEventListener("click", nextQuestion);
+    els.moveLeft.addEventListener("click", () => moveSelectedCard("left"));
+    els.moveRight.addEventListener("click", () => moveSelectedCard("right"));
+    els.moveToPool.addEventListener("click", () => sendSelectedCard("pool"));
+    els.moveToSentence.addEventListener("click", () => sendSelectedCard("sentence"));
+    els.resetDrag.addEventListener("click", resetDragQuestion);
+    els.submitDrag.addEventListener("click", submitDragAnswer);
+    els.playAgain.addEventListener("click", () => {
+      els.topStatus.textContent = "Ready";
+      switchScreen("start");
+    });
+    els.resultExplanation.addEventListener("click", () => {
+      state.returnScreen = "result";
+      switchScreen("explanation");
+    });
+    els.backButton.addEventListener("click", () => switchScreen(state.returnScreen));
+    els.studentName.addEventListener("keydown", event => {
+      if (event.key === "Enter") startGame();
+    });
+
+  </script>
+</body>
+</html>

@@ -1,6 +1,6 @@
 # English Language Practice Project Notes
 
-Last updated: 2026-05-30
+Last updated: 2026-06-14
 
 ## Purpose
 
@@ -42,15 +42,16 @@ For each new game:
 5. Use 20 questions unless the user asks for a different number.
 6. Mix question modes where suitable, such as multiple choice and fill in the blank.
 7. Shuffle multiple-choice answer options at runtime.
-8. Keep the answer flow: answer -> feedback/explanation -> student clicks `Next`.
-9. Include sound effects, polished styling, and a classroom-friendly game feel.
-10. Include subtle/simple visual assets automatically when useful, and mention where they were added.
-11. Add a generous `Explanation` page, especially when the game will be used during a lesson.
-12. Add an `Explanation` button on the first/start page so students can read the lesson before starting if they want.
-13. Submit results to the existing Apps Script URL and preserve the standard payload.
-14. Add the game to the correct section page with `Open` and `Copy Link` controls.
-15. Update `PROJECT_NOTES.md` with the new game title, source, folder, and direct student link.
-16. Commit and push changes to GitHub.
+8. Run a spelling and spelling-variant consistency review across prompts, answers, explanations, and UI labels before launch.
+9. Keep the answer flow: answer -> feedback/explanation -> student clicks `Next`, unless the user asks for a retry mechanic in a specific round.
+10. Include sound effects, polished styling, and a classroom-friendly game feel.
+11. Include subtle/simple visual assets automatically when useful, and mention where they were added.
+12. Add a generous `Explanation` page, especially when the game will be used during a lesson.
+13. Add an `Explanation` button on the first/start page so students can read the lesson before starting if they want.
+14. Submit results to the existing Apps Script URL and preserve the standard payload.
+15. Add the game to the correct section page with `Open` and `Copy Link` controls.
+16. Update `PROJECT_NOTES.md` with the new game title, source, folder, and direct student link.
+17. Commit and push changes to GitHub.
 
 For grammar games, update `grammar/index.html`.
 
@@ -114,6 +115,8 @@ English-Language-Practice/
     articles-adventure/
       index.html
     word-order-workshop/
+      index.html
+    noun-verb-adjective-challenge/
       index.html
 ```
 
@@ -391,6 +394,25 @@ Vocabulary games should still use:
 
 Current grammar game:
 
+- Title: `Noun Verb Adjective Challenge`
+- Topic: A2-style recognition and sentence-building work with nouns, verbs, adjectives, and simple sentence creation
+- Source page: `https://esl-lounge.com/student/reference/a1-cefr-vocabulary-word-list.php`
+- Project copy lives at: `games/noun-verb-adjective-challenge/index.html`
+- Direct student link: `https://drmostafahammad.github.io/English-Language-practice/games/noun-verb-adjective-challenge/`
+- Question count: 30
+- Round structure:
+  - Round 1: identify word type with 10 randomized noun/verb/adjective items
+  - Round 2: choose the missing word in context
+  - Round 3: build a sentence from a shuffled word pool
+- Uses live draggable word cards plus mobile-safe left/right and send-to-zone controls.
+- Round 3 allows students to reset and try again when a sentence is wrong.
+- Uses A1 source vocabulary from ESL Lounge, but the sentence tasks rise toward an A2 classroom level.
+- Student-facing spelling has been normalized for consistency instead of preserving every source-list spelling variant.
+- Includes an `Explanation` button on the first page before the game starts.
+- Uses an animated HTML/CSS visual style instead of a separate image asset.
+
+- Previous highlighted grammar game:
+
 - Title: `Possessive Pronouns Quest`
 - Topic: A1 possessive pronouns: `mine`, `yours`, `his`, `hers`, `ours`, and `theirs`
 - Source page: `https://learnenglish.britishcouncil.org/free-resources/grammar/english-grammar-reference/possessives-pronouns`
@@ -526,6 +548,18 @@ Notes:
 - Exercises 1, 2, and 3 are mostly readable.
 - Exercise 1 dropdown options appear flattened inline, but can be inferred.
 - Best approach: create original questions inspired by the topic, not copied wholesale.
+
+ESL Lounge A1 vocabulary word list page:
+
+```text
+https://esl-lounge.com/student/reference/a1-cefr-vocabulary-word-list.php
+```
+
+Notes:
+
+- The page is readable as plain HTML and clearly labels parts of speech such as nouns, verbs, and adjectives.
+- It is useful as a source bank for controlled classroom vocabulary, especially when the lesson focus is grammar or sentence building rather than advanced lexical difficulty.
+- Best approach: use the listed words as the source bank, then create original sentence tasks at the user's requested CEFR level.
 
 British Council prepositions of place page:
 
@@ -679,6 +713,6 @@ Current local state:
 - Root `index.html` is now a two-track homepage.
 - `grammar/index.html` is the current grammar game-library page.
 - `vocabulary/index.html` is now the live vocabulary game-library page.
-- Published grammar games: `Possessive Pronouns Quest`, `Possessive Adjectives Quest`, `Countable And Uncountable Quest`, `Prepositions Place Quest`, `Articles Adventure`, `Word Order Workshop`.
+- Published grammar games: `Possessive Pronouns Quest`, `Possessive Adjectives Quest`, `Countable And Uncountable Quest`, `Prepositions Place Quest`, `Articles Adventure`, `Word Order Workshop`, `Noun Verb Adjective Challenge`.
 - Published vocabulary games: `Travel Check-In Challenge`.
 - The same Google Sheet and Apps Script web app URL should be reused for future games unless the user asks for a fresh backend.
